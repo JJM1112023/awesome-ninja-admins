@@ -258,6 +258,55 @@
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://goaccess.io/"><b>GoAccess</b></a> - real-time web log analyzer and interactive viewer in the terminal.<br>
 </p>
 
+#### DevOps & Cloud
+
+##### :black_small_square: Kubernetes
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://kubernetes.io/docs/reference/kubectl/"><b>kubectl</b></a> - official Kubernetes command-line tool for deploying and managing cluster resources.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://k9scli.io/"><b>k9s</b></a> - terminal UI for managing and navigating Kubernetes clusters in real time.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://helm.sh/"><b>Helm</b></a> - package manager for Kubernetes using versioned, templated charts.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://k3s.io/"><b>k3s</b></a> - lightweight Kubernetes distribution designed for edge, IoT, and resource-constrained environments.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/ahmetb/kubectx"><b>kubectx</b></a> - fast tool for switching between Kubernetes clusters and namespaces.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/stern/stern"><b>Stern</b></a> - multi-pod log tailing for Kubernetes with regex pod/container filtering.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://minikube.sigs.k8s.io/"><b>Minikube</b></a> - run a local Kubernetes cluster for development and testing.<br>
+</p>
+
+##### :black_small_square: Infrastructure as Code
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.terraform.io/"><b>Terraform</b></a> - infrastructure automation using declarative HCL configuration files.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://opentofu.org/"><b>OpenTofu</b></a> - open-source, community-driven fork of Terraform under the Linux Foundation.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.pulumi.com/"><b>Pulumi</b></a> - infrastructure as Code using real programming languages: Python, Go, TypeScript, and more.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/gruntwork-io/terragrunt"><b>Terragrunt</b></a> - thin Terraform wrapper that adds DRY configs, locking, and dependency management.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/runatlantis/atlantis"><b>Atlantis</b></a> - Terraform pull request automation via GitOps with GitHub, GitLab, and Bitbucket.<br>
+</p>
+
+##### :black_small_square: CI/CD
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://argo-cd.readthedocs.io/"><b>ArgoCD</b></a> - declarative GitOps continuous delivery for Kubernetes applications.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://fluxcd.io/"><b>Flux</b></a> - GitOps continuous delivery for Kubernetes with automated reconciliation.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://woodpecker-ci.org/"><b>Woodpecker CI</b></a> - community-driven Drone fork using Docker containers for pipeline steps.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://jenkins-ci.org/"><b>Jenkins</b></a> - extensible open-source automation server with a vast plugin ecosystem.<br>
+</p>
+
+##### :black_small_square: Cloud CLIs
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://aws.amazon.com/cli/"><b>AWS CLI</b></a> - official command-line interface for managing Amazon Web Services resources.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://cloud.google.com/cli"><b>Google Cloud CLI</b></a> - official CLI for managing Google Cloud Platform services and resources.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://learn.microsoft.com/cli/azure"><b>Azure CLI</b></a> - official command-line interface for managing Microsoft Azure resources.<br>
+</p>
+
+##### :black_small_square: Service Mesh
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://istio.io/"><b>Istio</b></a> - service mesh providing traffic management, security, and observability for microservices.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://linkerd.io/"><b>Linkerd</b></a> - lightweight, security-first service mesh for Kubernetes with minimal overhead.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://cilium.io/"><b>Cilium</b></a> - eBPF-based networking, security, and observability for Kubernetes clusters.<br>
+</p>
+
 #### Infrastructure
 
 ##### :black_small_square: Containers & Virtualization
