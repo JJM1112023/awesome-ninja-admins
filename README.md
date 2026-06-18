@@ -58,6 +58,11 @@
 <p>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://ohmyz.sh/"><b>Oh My ZSH!</b></a> - the best framework for managing your Zsh configuration.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/Bash-it/bash-it"><b>bash-it</b></a> - a community Bash framework.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://fishshell.com/"><b>fish</b></a> - smart and user-friendly command line shell with autosuggestions and syntax highlighting.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/nushell/nushell"><b>nushell</b></a> - modern shell written in Rust that treats data as structured tables.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://starship.rs/"><b>starship</b></a> - minimal, blazing-fast, infinitely customizable cross-shell prompt written in Rust.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/nvbn/thefuck"><b>thefuck</b></a> - magnificent app that corrects your previous console command.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/tldr-pages/tldr"><b>tldr</b></a> - simplified, community-driven man pages with practical examples.<br>
 </p>
 
 ##### :black_small_square: Managers
@@ -66,6 +71,24 @@
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://midnight-commander.org/"><b>Midnight Commander</b></a> - visual file manager, licensed under GNU General Public License.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.gnu.org/software/screen/"><b>screen</b></a> - full-screen window manager that multiplexes a physical terminal.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/tmux/tmux/wiki"><b>tmux</b></a> - terminal multiplexer, lets you switch easily between several programs in one terminal.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/ranger/ranger"><b>ranger</b></a> - console file manager with VI key bindings and a preview pane.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/jarun/nnn"><b>nnn</b></a> - fast, featureful terminal file manager and disk usage analyzer.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/sxyazi/yazi"><b>yazi</b></a> - blazing fast terminal file manager built on async I/O.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/jesseduffield/lazydocker"><b>lazydocker</b></a> - simple terminal UI for Docker and docker-compose.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/jesseduffield/lazygit"><b>lazygit</b></a> - simple terminal UI for git commands.<br>
+</p>
+
+##### :black_small_square: Text &amp; Search
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/sharkdp/bat"><b>bat</b></a> - a cat clone with syntax highlighting and Git integration.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/eza-community/eza"><b>eza</b></a> - modern, maintained replacement for ls with colour and icons.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/junegunn/fzf"><b>fzf</b></a> - general-purpose command-line fuzzy finder for files, history, and more.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/BurntSushi/ripgrep"><b>ripgrep</b></a> - recursively searches directories for a regex pattern, faster than grep.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/sharkdp/fd"><b>fd</b></a> - simple, fast, and user-friendly alternative to find.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/ajeetdsouza/zoxide"><b>zoxide</b></a> - smarter cd command that learns your most-used directories.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://stedolan.github.io/jq/"><b>jq</b></a> - lightweight and flexible command-line JSON processor.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/kislyuk/yq"><b>yq</b></a> - command-line YAML, JSON, XML, CSV, and TOML processor.<br>
 </p>
 
 ##### :black_small_square: Network
@@ -175,7 +198,26 @@ performance of any of your sites from across the globe.<br>
 ##### :black_small_square: Hacking
 
 <p>
-&nbsp;&nbsp;:small_orange_diamond: <a href="http://www.hackingarticles.in/"><b>Hacking Articles</b></a> - LRaj Chandel's Security & Hacking Blog.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="http://www.hackingarticles.in/"><b>Hacking Articles</b></a> - Raj Chandel's Security & Hacking Blog.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://gtfobins.github.io/"><b>GTFOBins</b></a> - curated list of Unix binaries that can be used to bypass local security restrictions.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://lolbas-project.github.io/"><b>LOLBAS</b></a> - Living Off The Land Binaries And Scripts — Windows equivalent of GTFOBins.<br>
+</p>
+
+##### :black_small_square: Penetration Testing Tools
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://nmap.org/"><b>nmap</b></a> - the industry-standard network exploration and security auditing tool.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="http://www.spiderfoot.net/"><b>SpiderFoot</b></a> - automated OSINT platform with 200+ modules and a web UI.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/laramies/theHarvester"><b>theHarvester</b></a> - gather emails, subdomains, hosts, and open ports from public sources.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/OWASP/Amass"><b>OWASP Amass</b></a> - in-depth attack surface mapping and asset discovery via multiple OSINT sources.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://dnsdumpster.com/"><b>DNSDumpster</b></a> - free online DNS reconnaissance service for domain research.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/robertdavidgraham/masscan"><b>Masscan</b></a> - internet-scale port scanner capable of scanning the entire internet in under 6 minutes.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/RustScan/RustScan"><b>RustScan</b></a> - blazing-fast port scanner that pipes results directly into Nmap.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.zaproxy.org/"><b>OWASP ZAP</b></a> - open-source web application security scanner for finding vulnerabilities.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.bettercap.org/"><b>Bettercap</b></a> - modular, portable MITM framework for network recon and attack.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/vanhauser-thc/thc-hydra"><b>Hydra</b></a> - fast, flexible online password attack tool supporting many protocols.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.ghidra-sre.org/"><b>Ghidra</b></a> - NSA-developed software reverse engineering suite.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://getgophish.com/"><b>Gophish</b></a> - open-source phishing campaign framework for security awareness testing.<br>
 </p>
 
 #### Blogs
