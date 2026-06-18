@@ -17,6 +17,7 @@
   <a href="https://awesome.re">
     <img src="https://awesome.re/badge.svg"
         alt="Awesome">
+  </a>
   <a href="https://github.com/trimstray/awesome-ninja-admins">
     <img src="https://img.shields.io/badge/Status-Ninja-red.svg?longCache=true"
         alt="Status">
@@ -32,7 +33,7 @@
   <a href="https://twitter.com/trimstray">trimstray</a> and
   <a href="https://github.com/trimstray/awesome-ninja-admins/graphs/contributors">
     contributors
-  </a>
+  </a></sub>
 </div>
 
 <br>
@@ -94,9 +95,8 @@
 ##### :black_small_square: Network
 
 <p>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://curl.haxx.se/"><b>Curl</b></a> - command line tool and library
-for transferring data with URLs.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/jkbrzt/httpie"><b>HTTPie</b></a> - a user-friendly HTTP client.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://curl.haxx.se/"><b>Curl</b></a> - command line tool and library for transferring data with URLs.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/jkbrzt/httpie"><b>HTTPie</b></a> - user-friendly HTTP client with JSON support, syntax highlighting, and intuitive syntax.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://gnutls.org/manual/html_node/gnutls_002dcli-Invocation.html"><b>gnutls-cli</b></a> - client program to set up a TLS connection to some other computer.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="http://netcat.sourceforge.net/"><b>netcat</b></a> - networking utility which reads and writes data across network connections, using the TCP/IP protocol.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.tcpdump.org/"><b>tcpdump</b></a> - powerful command-line packet analyzer.<br>
@@ -114,7 +114,7 @@ for transferring data with URLs.<br>
 
 <p>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.ssllabs.com/ssltest/"><b>SSL Server Test</b></a> - free online service performs a deep analysis of the configuration of any SSL web server.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://dev.ssllabs.com/ssltest/"><b>SSL Server Test (DEV)</b></a> - free online service performs a deep analysis of the configuration of any SSL web server.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://dev.ssllabs.com/ssltest/"><b>SSL Server Test (DEV)</b></a> - same as SSL Server Test but uses the development/preview API endpoint for testing latest grading changes.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.htbridge.com/ssl/"><b>ImmuniWeb® SSLScan</b></a> - test SSL/TLS (PCI DSS, HIPAA and NIST).<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://report-uri.com/home/tools"><b>Report URI</b></a> - monitoring security policies like CSP and HPKP.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://csp-evaluator.withgoogle.com/"><b>CSP Evaluator</b></a> - allows developers and security experts to check if a Content Security Policy.<br>
@@ -134,7 +134,7 @@ for transferring data with URLs.<br>
 <p>
 &nbsp;&nbsp;:small_orange_diamond: <a href="http://viewdns.info/"><b>ViewDNS</b></a> - one source for free DNS related tools and information.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://dnsspy.io/"><b>DNS Spy</b></a> - monitor, validate and verify your DNS configurations.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://dnslytics.com/"><b>DNSlytics</b></a> - online investigation tool.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://dnslytics.com/"><b>DNSlytics</b></a> - online DNS investigation tool for reverse IP, domain, and network intelligence lookups.<br>
 </p>
 
 ##### :black_small_square: Mail
@@ -149,26 +149,25 @@ for transferring data with URLs.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://censys.io/"><b>Censys</b></a> - platform that helps information security practitioners discover, monitor, and analyze devices.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.shodan.io/"><b>Shodan</b></a> - the world's first search engine for Internet-connected devices.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://viz.greynoise.io/table"><b>GreyNoise</b></a> - mass scanner (such as Shodan and Censys).<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.hardenize.com/"><b>Hardenize</b></a> - deploy the security standards.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.hardenize.com/"><b>Hardenize</b></a> - automated web security survey covering TLS, HSTS, CSP, DMARC, and related standards.<br>
 </p>
 
 ##### :black_small_square: Net-tools
 
 <p>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://toolbar.netcraft.com/site_report"><b>Netcraft</b></a> -  detailed report about the site, helping you to make informed choices about their integrity.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://securitytrails.com/"><b>Security Trails</b></a> - APIs for Security Companies, Researchers and Teams.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://toolbar.netcraft.com/site_report"><b>Netcraft</b></a> - detailed report about a site's hosting history, SSL, and technology stack.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://securitytrails.com/"><b>Security Trails</b></a> - historical DNS, WHOIS, and IP data API for threat intelligence and attack surface research.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://tools.keycdn.com/curl"><b>Online Curl</b></a> - curl test, analyze HTTP Response Headers.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="http://ping.eu/"><b>Ping.eu</b></a> - online Ping, Traceroute, DNS lookup, WHOIS and others.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://network-tools.com/"><b>Network-Tools</b></a> - network tools for webmasters, IT technicians & geeks.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.url-encode-decode.com/"><b>URL Encode/Decode</b></a> - tool from above to either encode or decode a string of text.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.url-encode-decode.com/"><b>URL Encode/Decode</b></a> - online tool to percent-encode or decode URL strings.<br>
 </p>
 
 ##### :black_small_square: Performance
 
 <p>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://gtmetrix.com/"><b>GTmetrix</b></a> - analyze your site’s speed and make it faster.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://performance.sucuri.net/"><b>Sucuri loadtimetester</b></a> - test here the
-performance of any of your sites from across the globe.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://performance.sucuri.net/"><b>Sucuri loadtimetester</b></a> - test the performance of your site from multiple locations across the globe.<br>
 </p>
 
 ##### :black_small_square: Passwords
@@ -203,23 +202,6 @@ performance of any of your sites from across the globe.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://lolbas-project.github.io/"><b>LOLBAS</b></a> - Living Off The Land Binaries And Scripts — Windows equivalent of GTFOBins.<br>
 </p>
 
-##### :black_small_square: Penetration Testing Tools
-
-<p>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://nmap.org/"><b>nmap</b></a> - the industry-standard network exploration and security auditing tool.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="http://www.spiderfoot.net/"><b>SpiderFoot</b></a> - automated OSINT platform with 200+ modules and a web UI.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/laramies/theHarvester"><b>theHarvester</b></a> - gather emails, subdomains, hosts, and open ports from public sources.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/OWASP/Amass"><b>OWASP Amass</b></a> - in-depth attack surface mapping and asset discovery via multiple OSINT sources.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://dnsdumpster.com/"><b>DNSDumpster</b></a> - free online DNS reconnaissance service for domain research.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/robertdavidgraham/masscan"><b>Masscan</b></a> - internet-scale port scanner capable of scanning the entire internet in under 6 minutes.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/RustScan/RustScan"><b>RustScan</b></a> - blazing-fast port scanner that pipes results directly into Nmap.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.zaproxy.org/"><b>OWASP ZAP</b></a> - open-source web application security scanner for finding vulnerabilities.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.bettercap.org/"><b>Bettercap</b></a> - modular, portable MITM framework for network recon and attack.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/vanhauser-thc/thc-hydra"><b>Hydra</b></a> - fast, flexible online password attack tool supporting many protocols.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.ghidra-sre.org/"><b>Ghidra</b></a> - NSA-developed software reverse engineering suite.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://getgophish.com/"><b>Gophish</b></a> - open-source phishing campaign framework for security awareness testing.<br>
-</p>
-
 #### Blogs
 
 <p>
@@ -228,10 +210,10 @@ performance of any of your sites from across the globe.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="http://lcamtuf.coredump.cx/"><b>Michał "lcamtuf" Zalewski</b></a> - "white hat" hacker, computer security expert.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://ma.ttias.be/"><b>Mattias Geniar</b></a> - developer, Sysadmin, Blogger, Podcaster and Public Speaker.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://nickcraver.com/"><b>Nick Craver</b></a> - Software Developer and Systems Administrator for Stack Exchange.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://robert.penz.name/"><b>Robert Penz</b></a> - IT security Expert.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://robert.penz.name/"><b>Robert Penz</b></a> - IT security expert writing about network security, malware analysis, and open-source tools.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://scotthelme.co.uk/"><b>Scott Helme</b></a> - Security Researcher, international speaker and founder of securityheaders.com and report-uri.com.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://security.szurek.pl/"><b>Kacper Szurek</b></a> - Detection Engineer at ESET.<br>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.troyhunt.com/"><b>Troy Hunt</b></a> -  Microsoft Regional Director and Microsoft Most Valuable Professional for Developer Security.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.troyhunt.com/"><b>Troy Hunt</b></a> - Microsoft MVP and security researcher, creator of Have I Been Pwned and advocate for developer security.<br>
 </p>
 
 #### Systems/Services
@@ -337,6 +319,23 @@ performance of any of your sites from across the globe.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://mitmproxy.org/"><b>mitmproxy</b></a> - interactive HTTPS proxy for intercepting, inspecting, and modifying network traffic.<br>
 </p>
 
+##### :black_small_square: Penetration Testing Tools
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://nmap.org/"><b>nmap</b></a> - the industry-standard network exploration and security auditing tool.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="http://www.spiderfoot.net/"><b>SpiderFoot</b></a> - automated OSINT platform with 200+ modules and a web UI.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/laramies/theHarvester"><b>theHarvester</b></a> - gather emails, subdomains, hosts, and open ports from public sources.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/OWASP/Amass"><b>OWASP Amass</b></a> - in-depth attack surface mapping and asset discovery via multiple OSINT sources.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://dnsdumpster.com/"><b>DNSDumpster</b></a> - free online DNS reconnaissance service for domain research.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/robertdavidgraham/masscan"><b>Masscan</b></a> - internet-scale port scanner capable of scanning the entire internet in under 6 minutes.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/RustScan/RustScan"><b>RustScan</b></a> - blazing-fast port scanner that pipes results directly into Nmap.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.zaproxy.org/"><b>OWASP ZAP</b></a> - open-source web application security scanner for finding vulnerabilities.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.bettercap.org/"><b>Bettercap</b></a> - modular, portable MITM framework for network recon and attack.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/vanhauser-thc/thc-hydra"><b>Hydra</b></a> - fast, flexible online password attack tool supporting many protocols.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.ghidra-sre.org/"><b>Ghidra</b></a> - NSA-developed software reverse engineering suite.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://getgophish.com/"><b>Gophish</b></a> - open-source phishing campaign framework for security awareness testing.<br>
+</p>
+
 #### One-liners
 
 <p>
@@ -356,4 +355,5 @@ performance of any of your sites from across the globe.<br>
 #### Other
 
 <p>
-&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.openbugbounty.org/"><b>Openbugbounty</b></a> - allows any security researcher reporting a vulnerability on any website.</p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.openbugbounty.org/"><b>Openbugbounty</b></a> - allows any security researcher reporting a vulnerability on any website.<br>
+</p>
