@@ -213,6 +213,88 @@ performance of any of your sites from across the globe.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://emeraldonion.org/"><b>Emerald Onion</b></a> - Seattle-based encrypted-transit internet service provider.<br>
 </p>
 
+#### Monitoring/Observability
+
+##### :black_small_square: System Monitoring
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://prometheus.io/"><b>Prometheus</b></a> - open-source monitoring system and time series database with a powerful query language.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://grafana.com/"><b>Grafana</b></a> - analytics and interactive visualization platform for metrics, logs, and traces.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://uptime.kuma.pet/"><b>Uptime Kuma</b></a> - self-hosted, modern uptime monitoring tool with a clean UI.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://nicolargo.github.io/glances/"><b>glances</b></a> - cross-platform, real-time system monitoring tool written in Python.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://gatus.io/"><b>Gatus</b></a> - automated service health dashboard driven by configuration.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.zabbix.com/"><b>Zabbix</b></a> - enterprise-class network and application monitoring with alerting.<br>
+</p>
+
+##### :black_small_square: Log Management
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://grafana.com/oss/loki/"><b>Loki</b></a> - horizontally-scalable, highly-available log aggregation system inspired by Prometheus.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.fluentd.org/"><b>Fluentd</b></a> - open-source data collector for unified logging layer.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://goaccess.io/"><b>GoAccess</b></a> - real-time web log analyzer and interactive viewer in the terminal.<br>
+</p>
+
+#### Infrastructure
+
+##### :black_small_square: Containers & Virtualization
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.docker.com/"><b>Docker</b></a> - platform for building, shipping, and running applications in containers.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://podman.io/"><b>Podman</b></a> - daemonless container engine, drop-in alternative to Docker.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.portainer.io/"><b>Portainer</b></a> - lightweight management UI for Docker, Swarm, and Kubernetes environments.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.proxmox.com/"><b>Proxmox VE</b></a> - open-source server virtualization management platform for VMs and containers.<br>
+</p>
+
+##### :black_small_square: Configuration Management
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.ansible.com/"><b>Ansible</b></a> - agentless IT automation tool for provisioning, configuration management, and deployment.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://saltproject.io/"><b>Salt</b></a> - event-driven IT automation, remote execution, and configuration management.<br>
+</p>
+
+##### :black_small_square: Backup & Recovery
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://restic.net/"><b>restic</b></a> - fast, secure, verifiable backup program supporting multiple backends.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.borgbackup.org/"><b>BorgBackup</b></a> - deduplicating archiver with compression, encryption, and authenticated data integrity.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://rclone.org/"><b>rclone</b></a> - command-line program for syncing files to and from cloud storage providers.<br>
+</p>
+
+##### :black_small_square: VPN
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.wireguard.com/"><b>WireGuard</b></a> - extremely simple, fast, and modern VPN using state-of-the-art cryptography.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://openvpn.net/"><b>OpenVPN</b></a> - full-featured SSL/TLS VPN solution with flexible client authentication.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/juanfont/headscale"><b>Headscale</b></a> - self-hosted, open-source implementation of the Tailscale control server.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/sshuttle/sshuttle"><b>sshuttle</b></a> - poor man's VPN — routes traffic over an SSH connection without root on the server.<br>
+</p>
+
+#### Security
+
+##### :black_small_square: Identity & Access Management
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.keycloak.org/"><b>Keycloak</b></a> - open-source identity and access management with SSO, OAuth 2.0, and SAML.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.authelia.com/"><b>Authelia</b></a> - open-source authentication and authorization server providing 2FA for your apps.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://goauthentik.io/"><b>authentik</b></a> - flexible, versatile identity provider supporting OAuth 2.0, SAML, LDAP, and RADIUS.<br>
+</p>
+
+##### :black_small_square: Network Security & Firewall
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://opnsense.org/"><b>OPNsense</b></a> - FreeBSD-based open-source firewall and router with a modern web interface.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.pfsense.org/"><b>pfSense CE</b></a> - trusted open-source FreeBSD-based firewall and router platform.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.wazuh.com/"><b>Wazuh</b></a> - open-source unified XDR and SIEM platform for threat detection and response.<br>
+</p>
+
+##### :black_small_square: Network Troubleshooting
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.wireshark.org/"><b>Wireshark</b></a> - world's foremost network protocol analyzer for deep packet inspection.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.bitwizard.nl/mtr/"><b>mtr</b></a> - combines traceroute and ping into a single powerful network diagnostic tool.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://mitmproxy.org/"><b>mitmproxy</b></a> - interactive HTTPS proxy for intercepting, inspecting, and modifying network traffic.<br>
+</p>
+
 #### One-liners
 
 <p>
@@ -224,6 +306,7 @@ performance of any of your sites from across the globe.<br>
 
 <p>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/kahun/awesome-sysadmin"><b>Awesome Sysadmin</b></a> - amazingly awesome open source sysadmin resources.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/awesome-foss/awesome-sysadmin"><b>Awesome Sysadmin (FOSS)</b></a> - maintained community fork with 1000+ open-source sysadmin tools across 40+ categories.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/alebcay/awesome-shell"><b>Awesome Shell</b></a> - awesome command-line frameworks, toolkits, guides and gizmos.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/Hack-with-Github/Awesome-Hacking"><b>Awesome-Hacking</b></a> - awesome lists for hackers, pentesters and security researchers.<br>
 </p>

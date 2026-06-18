@@ -12,17 +12,22 @@ This is a curated "Awesome" list repository — a collection of tools, manuals, 
 
 ```
 .
-├── README.md          # Main curated list (the actual deliverable)
-├── CONTRIBUTING.md    # Contribution standards
+├── README.md            # Main curated list (the actual deliverable)
+├── CLAUDE.md            # This file — AI assistant guidance
+├── CLAUDE.local.md      # Personal/local overrides (gitignored, do not commit)
+├── CONTRIBUTING.md      # Contribution standards
 ├── CODE_OF_CONDUCT.md
-├── LICENSE.md         # GNU license
-├── .travis.yml        # CI configuration
-├── .gitignore         # Ignores log/ directory
+├── LICENSE.md           # GNU license
+├── .travis.yml          # CI configuration
+├── .gitignore           # Ignores log/ directory
+├── .claude/
+│   ├── skills/          # Reusable workflow skills (SKILL.md files)
+│   └── agents/          # Custom subagent definitions
 ├── doc/
-│   └── img/           # Project images (awesome_ninja_admins.png)
-├── src/               # Bash source scripts (currently placeholder)
-├── lib/               # Bash library files (currently placeholder)
-└── skel/              # Skeleton/template files (currently placeholder)
+│   └── img/             # Project images (awesome_ninja_admins.png)
+├── src/                 # Bash source scripts (currently placeholder)
+├── lib/                 # Bash library files (currently placeholder)
+└── skel/                # Skeleton/template files (currently placeholder)
 ```
 
 ## Development Workflow
@@ -30,18 +35,20 @@ This is a curated "Awesome" list repository — a collection of tools, manuals, 
 ### Branches
 
 - `master` — stable, production branch
-- `testing` — integration branch; all pull requests target this branch first
+- `testing` — integration branch; **all pull requests target this branch first**
 - Feature branches are named descriptively (e.g., `claude/claude-md-docs-7aqmmy`)
 
 ### Making Changes
 
 1. Base changes on the latest `master`
-2. Submit pull requests to the **`testing`** branch, not `master`
+2. **IMPORTANT: Submit pull requests to the `testing` branch, NOT `master`**
 3. Every commit **must** include a signed-off-by line (see below)
 
 ### Commit Signatures
 
-All commits require a signed-off-by line. Install the git hook to add it automatically:
+**IMPORTANT: All commits require a signed-off-by line. Never commit without it.**
+
+Install the git hook to add it automatically:
 
 ```bash
 # Add to .git/hooks/prepare-commit-msg
@@ -78,11 +85,11 @@ If a non-critical warning like SC2154 appears and cannot be fixed, suppress it i
 
 ### CI (Travis CI)
 
-CI runs ShellCheck on `master` and `testing` branches. It installs shellcheck from the Debian unstable repository to get a recent version. There is no GitHub Actions workflow — only `.travis.yml`.
+CI runs ShellCheck on `master` and `testing` branches only. It installs shellcheck from the Debian unstable repository to get a recent version. There is no GitHub Actions workflow — only `.travis.yml`.
 
 ## Content Conventions (README.md)
 
-The curated list uses a specific HTML-in-Markdown format. Follow these patterns exactly when adding entries.
+The curated list uses a specific HTML-in-Markdown format. **Follow these patterns exactly** when adding entries.
 
 ### Section headers
 
@@ -107,6 +114,19 @@ Example:
 </p>
 ```
 
+### Existing categories in README.md
+
+- CLI Tools → Shells, Managers, Network, Databases
+- Web Tools → SSL, HTTP Headers, DNS, Mail, Mass scanners, Net-tools, Performance, Passwords
+- Manuals/Howtos/Tutorials → Bash, Unix tutorials, Hacking
+- Blogs
+- Systems/Services → Systems, HTTP(s) Services, Security/hardening
+- One-liners
+- Lists
+- Other
+
+When adding entries, place them in the most appropriate existing category before creating a new one.
+
 ## Bash Script Standards
 
 When writing scripts for `src/` or `lib/`, follow these references:
@@ -119,12 +139,42 @@ Key conventions:
 - Use `su -` for root login (not `su`)
 - All scripts must pass `shellcheck -s bash -e 1072,1094 -x`
 
+## Claude Code Features Available
+
+### Importing other files
+
+CLAUDE.md can import additional context files using `@path/to/file` syntax:
+```markdown
+See @README.md for the current list content.
+See @CONTRIBUTING.md for contribution rules.
+```
+
+### CLAUDE.local.md
+
+Create `CLAUDE.local.md` in the project root for personal session overrides (e.g., your name/email for signed commits). **Add it to `.gitignore` — do not commit it.**
+
+### Hooks
+
+Use `.claude/settings.json` to define hooks that run automatically on events:
+- **PostToolUse** after file edits — e.g., auto-run shellcheck on edited Bash files
+- **Stop** — run a check before Claude ends a turn
+
+### Skills
+
+Place `SKILL.md` files in `.claude/skills/<name>/` for reusable workflows specific to this repo (e.g., a skill for adding a new README entry in the correct format).
+
+### Subagents
+
+Define custom subagents in `.claude/agents/` for specialized tasks like reviewing README entries for formatting consistency.
+
 ## What AI Assistants Should Know
 
 - **This is primarily a docs repo.** Most contributions are new entries in `README.md`, not code changes.
 - **No build step.** There is no `npm install`, `make`, or compile step. Changes are immediately ready.
 - **No tests to run** beyond ShellCheck (which only applies to Bash scripts, not Markdown).
-- **Signed commits are required.** Never commit without the signed-off-by line.
-- **PR target is `testing`**, not `master`.
+- **IMPORTANT: Signed commits are required.** Never commit without the signed-off-by line.
+- **IMPORTANT: PR target is `testing`**, not `master`.
 - **`src/`, `lib/`, `skel/` are currently empty** (contain only `.gitkeep`). Do not delete these directories.
 - **`log/` is gitignored** — do not commit anything to that directory.
+- **When compacting context**, preserve: the signed-off-by requirement, the PR target branch, and any list of modified files.
+- **Explore before editing README.md** — read the current file first to avoid duplicate entries and ensure correct category placement.
