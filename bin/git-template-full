@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Install git hooks for the awesome-ninja-admins project.
+# Run once after cloning to enforce signed-off-by on every commit.
+
+set -euo pipefail
+
+# shellcheck source=lib/common.sh
+source "$(dirname "${BASH_SOURCE[0]}")/../lib/common.sh"
+
+install_signoff_hook() {
+  local hooks_dir="$1"
+  local hook_file="${hooks_dir}/prepare-commit-msg"
+
+  cat > "${hook_file}" <<'HOOK'
+#!/usr/bin/env bash
+SOB=$(git var GIT_AUTHOR_IDENT | sed -n 's/^\(.*>\).*$/- signed-off-by: \1/p')
+grep -qs "^${SOB}" "$1" || echo "${SOB}" >> "$1"
+HOOK
+
+  chmod +x "${hook_file}"
+  printf 'Installed: %s\n' "${hook_file}"
+}
+
+main() {
+  local root_dir
+  if ! root_dir="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+    print_error "Not inside a git repository"
+    exit 1
+  fi
+
+  local hooks_dir="${root_dir}/.git/hooks"
+
+  if [[ ! -d "${hooks_dir}" ]]; then
+    print_error "Hooks directory not found: ${hooks_dir}"
+    exit 1
+  fi
+
+  print_header "Installing git hooks"
+  install_signoff_hook "${hooks_dir}"
+  printf '\nDone. Every commit will now include a signed-off-by line.\n'
+}
+
+main "$@"
