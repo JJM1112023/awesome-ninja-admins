@@ -2,6 +2,10 @@
 
 This file provides guidance for AI assistants working with the **awesome-ninja-admins** repository.
 
+## Project Type
+
+This is an **awesome-list** repository. Keep entries alphabetized within categories, ensure all links point to valid `http://` or `https://` URLs, and follow the HTML-in-Markdown entry format documented below. When adding entries, always read `README.md` first to avoid duplicates and place items in the correct existing category.
+
 ## Project Overview
 
 This is a curated "Awesome" list repository — a collection of tools, manuals, blogs, hacks, and resources for system administrators (Ninja Admins). It is primarily a documentation project with the content living in `README.md`, but it also scaffolds Bash scripts in `src/`, `lib/`, and `skel/` directories.
@@ -43,6 +47,16 @@ This is a curated "Awesome" list repository — a collection of tools, manuals, 
 1. Base changes on the latest `master`
 2. **IMPORTANT: Submit pull requests to the `testing` branch, NOT `master`**
 3. Every commit **must** include a signed-off-by line (see below)
+
+### Git Hooks
+
+The repo uses a `prepare-commit-msg` git hook to enforce signed-off-by on every commit. After cloning, run the **one-time manual setup**:
+
+```bash
+bash bin/git-template-full
+```
+
+Without this step, commits will be missing the required signed-off-by line.
 
 ### Commit Signatures
 
