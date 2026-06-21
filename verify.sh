@@ -4,6 +4,9 @@
 #   MULTI-AGENT SYSTEM — FINAL VERIFICATION SCRIPT
 # ═══════════════════════════════════════════════════════════
 
+# Must be run from the project root; cd there automatically when invoked via path.
+cd "$(dirname "$0")" || { echo "ERROR: cannot cd to script directory"; exit 1; }
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -30,7 +33,7 @@ section "📦 [1/8] CHECKING PREREQUISITES"
 
 # Docker
 if command -v docker &>/dev/null; then
-  VER=$(docker --version | grep -oP '\d+\.\d+')
+  VER=$(docker --version | grep -Eo '[0-9]+\.[0-9]+' | head -1)
   log_pass "Docker installed → $VER"
 else
   log_fail "Docker not found — install Docker Desktop"
@@ -109,24 +112,23 @@ section "🐳 [2/8] CHECKING DOCKER CONTAINERS"
 
 EXPECTED=("agent_api" "agent_redis" "agent_prometheus"
           "agent_grafana" "agent_ui")
-ALL_UP=true
 
 for container in "${EXPECTED[@]}"; do
   STATUS=$(docker inspect -f '{{.State.Status}}' "$container" 2>/dev/null)
   if [ "$STATUS" = "running" ]; then
     HEALTH=$(docker inspect -f '{{.State.Health.Status}}' \
              "$container" 2>/dev/null)
-    if [ -n "$HEALTH" ] && [ "$HEALTH" != "healthy" ]; then
+    if [ -z "$HEALTH" ]; then
+      log_pass "$container is running (no healthcheck configured)"
+    elif [ "$HEALTH" != "healthy" ]; then
       log_warn "$container is running but health=$HEALTH"
     else
       log_pass "$container is running"
     fi
   elif [ -z "$STATUS" ]; then
     log_fail "$container doesn't exist — run: docker compose up -d"
-    ALL_UP=false
   else
     log_fail "$container status=$STATUS (expected: running)"
-    ALL_UP=false
   fi
 done
 
@@ -150,7 +152,7 @@ section "🌐 [3/8] CHECKING API GATEWAY"
 
 # Health endpoint
 HEALTH=$(curl -sf --max-time 5 http://localhost:8000/health 2>/dev/null)
-if echo "$HEALTH" | grep -q "healthy"; then
+if echo "$HEALTH" | grep -q '"healthy"'; then
   log_pass "GET /health → healthy"
 else
   log_fail "GET /health failed (response: $HEALTH)"
@@ -194,8 +196,12 @@ section "🔐 [4/8] CHECKING AUTHENTICATION"
 # ───────────────────────────────────────────────────────────
 
 # Load credentials from .env
-ADMIN_USER=$(grep ADMIN_USERNAME .env 2>/dev/null | cut -d= -f2 | tr -d '"' || echo "admin")
-ADMIN_PASS=$(grep ADMIN_PASSWORD .env 2>/dev/null | cut -d= -f2 | tr -d '"' || echo "admin123")
+# Anchored grep + -f2- preserves values that contain = (e.g. base64 passwords).
+# Explicit empty-check fallback because the pipeline exit code is tr's (always 0).
+ADMIN_USER=$(grep "^ADMIN_USERNAME=" .env 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"')
+[ -z "$ADMIN_USER" ] && ADMIN_USER="admin"
+ADMIN_PASS=$(grep "^ADMIN_PASSWORD=" .env 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"')
+[ -z "$ADMIN_PASS" ] && ADMIN_PASS="admin123"
 
 # JWT Login
 LOGIN_RESP=$(curl -sf --max-time 10 \
@@ -280,8 +286,7 @@ else
     python3 -c "import sys,json; d=json.load(sys.stdin); \
     print(d.get('status','unknown'))" 2>/dev/null)
 
-  if [ "$CODING_STATUS" = "completed" ] || \
-     echo "$CODING" | grep -q "result"; then
+  if [ "$CODING_STATUS" = "completed" ]; then
     log_pass "POST /agents/coding → completed successfully"
     CODING_JOB=$(echo "$CODING" | \
       python3 -c "import sys,json; \
@@ -300,7 +305,10 @@ else
     -d '{"task":"In one sentence, what is Python?","async_mode":false}' \
     2>/dev/null)
 
-  if echo "$RESEARCH" | grep -q "result"; then
+  RESEARCH_STATUS=$(echo "$RESEARCH" | \
+    python3 -c "import sys,json; d=json.load(sys.stdin); \
+    print(d.get('status','unknown'))" 2>/dev/null)
+  if [ "$RESEARCH_STATUS" = "completed" ]; then
     log_pass "POST /agents/research → completed successfully"
   else
     log_fail "Research agent failed → $(echo "$RESEARCH" | head -c 200)"
@@ -315,7 +323,10 @@ else
     -d '{"task":"Create a SQLite DB called test.db with a users table (id, name, age). Insert 3 rows. Query all rows.","async_mode":false}' \
     2>/dev/null)
 
-  if echo "$DATA" | grep -q "result"; then
+  DATA_STATUS=$(echo "$DATA" | \
+    python3 -c "import sys,json; d=json.load(sys.stdin); \
+    print(d.get('status','unknown'))" 2>/dev/null)
+  if [ "$DATA_STATUS" = "completed" ]; then
     log_pass "POST /agents/data → completed successfully"
   else
     log_fail "Data agent failed → $(echo "$DATA" | head -c 200)"
@@ -371,10 +382,14 @@ if [ -n "$API_KEY" ]; then
     http://localhost:8000/agents/jobs \
     -H "X-API-Key: $API_KEY" 2>/dev/null)
 
-  if echo "$JOBS" | grep -q "jobs"; then
-    JOB_COUNT=$(echo "$JOBS" | \
-      python3 -c "import sys,json; \
-      print(len(json.load(sys.stdin).get('jobs',{})))" 2>/dev/null)
+  JOB_COUNT=$(echo "$JOBS" | \
+    python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+j = d.get('jobs')
+print(len(j) if isinstance(j, (dict, list)) else -1)
+" 2>/dev/null)
+  if [ -n "$JOB_COUNT" ] && [ "$JOB_COUNT" -ge 0 ] 2>/dev/null; then
     log_pass "GET /agents/jobs → $JOB_COUNT jobs found"
   else
     log_fail "GET /agents/jobs failed"
@@ -385,7 +400,7 @@ if [ -n "$API_KEY" ]; then
     http://localhost:8000/admin/metrics \
     -H "Authorization: Bearer $TOKEN" 2>/dev/null)
 
-  if echo "$ADMIN_METRICS" | grep -q "jobs"; then
+  if echo "$ADMIN_METRICS" | python3 -c "import sys,json; d=json.load(sys.stdin); exit(0 if 'system' in d else 1)" 2>/dev/null; then
     log_pass "GET /admin/metrics → system metrics available"
     CPU=$(echo "$ADMIN_METRICS" | \
       python3 -c "import sys,json; \
@@ -461,8 +476,8 @@ else
 fi
 
 # Grafana datasource
-GRAFANA_PASS=$(grep GRAFANA_PASSWORD .env 2>/dev/null | \
-  cut -d= -f2 | tr -d '"' || echo "admin123")
+GRAFANA_PASS=$(grep "^GRAFANA_PASSWORD=" .env 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"')
+[ -z "$GRAFANA_PASS" ] && GRAFANA_PASS="admin123"
 GRAFANA_DS=$(curl -sf --max-time 5 \
   -u "admin:$GRAFANA_PASS" \
   http://localhost:3000/api/datasources 2>/dev/null)
@@ -507,15 +522,17 @@ else
   log_fail "Redis not responding to PING"
 fi
 
-# Redis write/read test
-docker exec agent_redis \
-  redis-cli set test_verify "hello" EX 10 &>/dev/null
+# Redis write/read test — capture SET output to distinguish write vs read failures
+SET_OUT=$(docker exec agent_redis \
+  redis-cli set test_verify "hello" EX 10 2>/dev/null)
 READ_BACK=$(docker exec agent_redis \
   redis-cli get test_verify 2>/dev/null)
 if [ "$READ_BACK" = "hello" ]; then
   log_pass "Redis read/write test passed"
+elif [ "$SET_OUT" != "OK" ]; then
+  log_fail "Redis write failed (SET returned: $SET_OUT)"
 else
-  log_fail "Redis read/write test failed"
+  log_fail "Redis read failed after successful write"
 fi
 
 # ───────────────────────────────────────────────────────────
