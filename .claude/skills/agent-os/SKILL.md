@@ -1,49 +1,62 @@
 ---
 name: agent-os
-description: Hermes Agent Operating System — the full stack of agents, skills, and tools that work together as a personal AI operating system. Entry point for understanding how all Hermes components fit together.
+description: Agentic OS — the full Agent Operating System running at localhost:3737/hermes. Covers the sidebar layout, agent roster, orchestration tools, and navigation tabs inside the Hermes web UI.
 user-invocable: true
 ---
 
-# Agent Operating System (Agent OS)
+# Agentic OS (localhost:3737/hermes)
 
 ## What it is
-A personal AI operating system built on top of Hermes Agent. Rather than a single agent doing everything, Agent OS is a coordinated team of specialized agents, skills, and integrations that operate together — like apps on a phone, but each app is an AI agent.
+A locally-hosted web UI for the full Agent Operating System, built on Hermes (Nous Research agent). Runs at `localhost:3737/hermes`.
 
-## Core components
+## Sidebar structure
 
-| Component | Role |
-|-----------|------|
-| **Hermes Agent** | The runtime — routes tasks, manages memory, connects platforms |
-| **Hermes Oracle** | SEO + content publishing agent (Twitter trends → WordPress posts) |
-| **Hermes Jarvis** | Voice interface — hands-free control via ChatGPT real-time audio |
-| **Skills (.md files)** | Reusable workflows loaded on demand |
-| **Memory layer** | Persistent context across sessions (Obsidian / NotebookLM MCP) |
-| **Paperclip** | Orchestrates teams of sub-agents for complex multi-step work |
-| **MCP integrations** | External tool connections (Obsidian, NotebookLM, browsers, etc.) |
+### WORKSPACE
+- **Mission Control** — top-level dashboard and overview
 
-## Two operating modes
+### AGENT ORCHESTRATION
+- **Paperclip** — lead orchestrator for multi-agent task delegation
+- **AI Agent Mastermind** — strategic planning and direction
+- **Pipeline** — sequential task chains and workflow routing
+- **Agent Kanban** — task board for tracking agent work across stages
 
-### Auto mode
-- Faster execution
-- Hermes acts without asking for confirmation
-- Use for trusted, repeatable workflows (posting, sending, scheduling)
+### AGENTS
+- **Claude** — Anthropic's Claude (coding, writing, reasoning)
+- **OpenClaw** — open-source agent variant
+- **Hermes** — Nous Research agent; the core runtime (sessions, skills, kanban, chat)
+- **Antigravity** — specialized agent (extended capabilities)
 
-### Agent mode
-- More control — Hermes confirms before acting
-- Use for high-stakes or one-off tasks (sending outreach, publishing new content)
+## Hermes agent tabs
+When you select Hermes in the sidebar, the top nav shows:
 
-## Adjusting permissions
-Permissions are set per toolset in Hermes config. Tighten permissions for:
-- External API calls (emails, social posts)
-- File writes outside the project
-- Any destructive or irreversible actions
+| Tab | What it does |
+|-----|-------------|
+| **Chat** | Text conversation with Hermes |
+| **Talk** | Voice input (push-to-talk) |
+| **Hermes-Jarvis** | Full voice interface with orb UI and wake word |
+| **Hermes Oracle** | SEO content + WordPress publishing |
+| **Studio** | Build and test with Hermes-Jarvis (95+ creations) |
+| **Sessions** | Browse and resume past conversations |
+| **Workspace** | File and project management |
+| **MCPs** | Manage connected MCP servers |
+| **Manage** | Agent settings and configuration |
+| **Control Room** | System status and tool permissions |
+| **Goal Mode** | Set persistent goals Claude pursues across sessions |
 
-## Learning path
-1. Start with one tool — master it before adding more (avoid tool hopping)
-2. n8n → good for visual workflow builders and legacy integrations
-3. MCP → good for Claude/Hermes native tool connections (no-code, more powerful)
-4. Claude Code → good for local dev, coding tasks, complex agent orchestration
-5. Hermes Agent OS → brings all of the above together under one runtime
+## Hermes-Jarvis Studio
+Shows a gallery of 95 creations built with Hermes-Jarvis, including:
+- Keyword Gap Tool Dashboard
+- Agent Rush Browser Delegation
+- Prompt Heist Stealth Prompt Engineering
+- Pulse Habit Tracker
+- Stillness Meditation
+- Animated Sudoku Solver, Snake Game, Text Diffusion demos
+- Speed Race comparisons, model-switching tools, and more
 
-## Getting updates
-The Agent OS zip (latest agents, skills, configs) is distributed via the AI Profit Boardroom community. Updates include new agents, model switches, and community-built workflows.
+## Quick start
+```
+1. Start Hermes: run the Hermes Agent server
+2. Open browser → localhost:3737/hermes
+3. Select agent from sidebar (Hermes for most tasks)
+4. Pick tab: Chat, Jarvis, Oracle, or Goal Mode
+```
