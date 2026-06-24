@@ -202,6 +202,7 @@
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.youtube.com/watch?v=-IozMG9x0dI"><b>Claude Code Advanced Course (Nick Saraev)</b></a> - 3-hour deep-dive: advanced CLAUDE.md, agent harnesses, parallelization, stochastic consensus, autoresearch, browser automation, workspace org, and security.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/nousresearch/hermes-agent"><b>Hermes Agent /learn command</b></a> - teach Hermes once from any URL, PDF, doc, or code folder; it distills the content into a reusable skill.md that auto-loads in future sessions.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://hermes-agent.nousresearch.com/"><b>Hermes Agent OS</b></a> - full Agent Operating System: Oracle (SEO posts), Jarvis (voice control), Paperclip agent teams, Obsidian memory layer, and morning brief automation.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://21st.dev"><b>21st.dev</b></a> - copy-paste premium React and Tailwind components: hero sections, navbars, pricing tables, and cards built for AI-generated sites.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://buildpartner.ai/"><b>BuildPartner</b></a> - AI-accelerated product development on Claude Code; build SaaS products 10x faster without hiring a CTO or senior engineer.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://lovable.dev/"><b>Lovable AI</b></a> - prompt-to-app AI builder; describe a web app in plain English and get a working full-stack app deployed in minutes.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://opencode.ai/"><b>Opencode</b></a> - open-source AI coding agent; drop-in alternative to Claude Code for running agentic harnesses locally.<br>
@@ -427,5 +428,8 @@
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.hlprotools.com/"><b>HLProTools</b></a> - premium third-party add-ons and snapshots that extend GoHighLevel with pre-built workflows, templates, and automations.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.openbugbounty.org/"><b>Openbugbounty</b></a> - allows any security researcher reporting a vulnerability on any website.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://socialbee.com/"><b>SocialBee</b></a> - AI social media scheduler with category-based content recycling, team collaboration, and multi-platform publishing.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.awwwards.com"><b>Awwwards</b></a> - curated gallery of award-winning websites; use as a design reference for layout, motion, and visual innovation.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://dribbble.com"><b>Dribbble</b></a> - design inspiration community for UI mockups, hero layouts, color palettes, and component patterns.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.hostinger.com"><b>Hostinger</b></a> - affordable web hosting and domain registration; recommended deployment target for Claude-generated static sites.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.wavv.com/"><b>Wavv</b></a> - power dialer with triple-line calling, spam label protection, and CRM integration for high-volume outbound sales.<br>
 </p>
