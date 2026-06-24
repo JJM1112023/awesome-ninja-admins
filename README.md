@@ -198,6 +198,7 @@
 
 <p>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://code.claude.com/docs/en/best-practices"><b>Claude Code Best Practices</b></a> - official guide covering CLAUDE.md, plan mode, hooks, MCP, skills, subagents, and parallel sessions.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://code.claude.com/docs/en/claude-code-on-the-web"><b>Claude Managed Agents</b></a> - Anthropic-hosted agent runtime: agent/environment/session model, secrets vault, scheduling, Gmail/Slack integrations, and production deployment in four steps.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.youtube.com/watch?v=-IozMG9x0dI"><b>Claude Code Advanced Course (Nick Saraev)</b></a> - 3-hour deep-dive: advanced CLAUDE.md, agent harnesses, parallelization, stochastic consensus, autoresearch, browser automation, workspace org, and security.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/nousresearch/hermes-agent"><b>Hermes Agent /learn command</b></a> - teach Hermes once from any URL, PDF, doc, or code folder; it distills the content into a reusable skill.md that auto-loads in future sessions.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://hermes-agent.nousresearch.com/"><b>Hermes Agent OS</b></a> - full Agent Operating System: Oracle (SEO posts), Jarvis (voice control), Paperclip agent teams, Obsidian memory layer, and morning brief automation.<br>
