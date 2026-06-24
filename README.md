@@ -194,6 +194,13 @@
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.tecmint.com/"><b>TecMint</b></a> - the ideal Linux blog for Sysadmins & Geeks.<br>
 </p>
 
+##### :black_small_square: AI Tools &amp; Agents
+
+<p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://code.claude.com/docs/en/best-practices"><b>Claude Code Best Practices</b></a> - official guide covering CLAUDE.md, plan mode, hooks, MCP, skills, subagents, and parallel sessions.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/nousresearch/hermes-agent"><b>Hermes Agent /learn command</b></a> - teach Hermes once from any URL, PDF, doc, or code folder; it distills the content into a reusable skill.md that auto-loads in future sessions.<br>
+</p>
+
 ##### :black_small_square: Hacking
 
 <p>
