@@ -404,5 +404,6 @@
 #### Other
 
 <p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/nousresearch/hermes-agent"><b>Hermes Agent</b></a> - self-hosted, self-improving open-source AI agent with persistent memory, multi-platform messaging, and skill-building loop.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.openbugbounty.org/"><b>Openbugbounty</b></a> - allows any security researcher reporting a vulnerability on any website.<br>
 </p>
