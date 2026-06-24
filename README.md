@@ -203,6 +203,8 @@
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/nousresearch/hermes-agent"><b>Hermes Agent /learn command</b></a> - teach Hermes once from any URL, PDF, doc, or code folder; it distills the content into a reusable skill.md that auto-loads in future sessions.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://hermes-agent.nousresearch.com/"><b>Hermes Agent OS</b></a> - full Agent Operating System: Oracle (SEO posts), Jarvis (voice control), Paperclip agent teams, Obsidian memory layer, and morning brief automation.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://21st.dev"><b>21st.dev</b></a> - copy-paste premium React and Tailwind components: hero sections, navbars, pricing tables, and cards built for AI-generated sites.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://claude-seo.md"><b>Claude SEO</b></a> - 12 open-source Claude Code skills replacing a $5–10K/month SEO agency stack: parallel audits, schema generation, GEO optimization, PDF reports, sitemap, hreflang, and competitor analysis.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://rankenstein.pro"><b>Rankenstein Pro</b></a> - AI article creation system for SEO content at scale; used as the demo site in the Claude SEO audit walkthrough.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://buildpartner.ai/"><b>BuildPartner</b></a> - AI-accelerated product development on Claude Code; build SaaS products 10x faster without hiring a CTO or senior engineer.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://firecrawl.dev/"><b>Firecrawl</b></a> - crawl any URL and return clean structured markdown; used as a blueprint extractor for design references in Claude Code builds.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://glaido.com"><b>Glaido</b></a> - voice-to-text dictation tool for developers; speak prompts and code instructions directly into Claude Code and any editor.<br>
@@ -214,6 +216,7 @@
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://venice.ai/home"><b>Venice AI</b></a> - private, uncensored model hosting for executing agentic harnesses with open-source models instead of frontier APIs.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://vcinc.ai/"><b>Vibe Coding Incubator</b></a> - AI-first developer training: build real apps with LLMs, prompting patterns, and agentic workflows from idea to deployment.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://rankexpand.com/"><b>Rank Expand Academy</b></a> - agency + training program covering local SEO, AI automation, and Claude Code website builds that generate organic revenue for local businesses.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.skool.com/ai-marketing-hub"><b>AI Marketing Hub</b></a> - free 2,000+ member community for AI tools, marketing automation, and open-source Claude Code SEO skills; run by Daniel (Agrici Daniel).<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://wisprflow.com/"><b>Wispr Flow</b></a> - system-wide voice-to-text for Mac; dictate prompts, CLAUDE.md entries, and steering corrections into any app including Claude Code.<br>
 </p>
 
