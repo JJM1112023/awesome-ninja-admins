@@ -202,10 +202,12 @@
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.youtube.com/watch?v=-IozMG9x0dI"><b>Claude Code Advanced Course (Nick Saraev)</b></a> - 3-hour deep-dive: advanced CLAUDE.md, agent harnesses, parallelization, stochastic consensus, autoresearch, browser automation, workspace org, and security.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/nousresearch/hermes-agent"><b>Hermes Agent /learn command</b></a> - teach Hermes once from any URL, PDF, doc, or code folder; it distills the content into a reusable skill.md that auto-loads in future sessions.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://hermes-agent.nousresearch.com/"><b>Hermes Agent OS</b></a> - full Agent Operating System: Oracle (SEO posts), Jarvis (voice control), Paperclip agent teams, Obsidian memory layer, and morning brief automation.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://buildpartner.ai/"><b>BuildPartner</b></a> - AI-accelerated product development on Claude Code; build SaaS products 10x faster without hiring a CTO or senior engineer.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://lovable.dev/"><b>Lovable AI</b></a> - prompt-to-app AI builder; describe a web app in plain English and get a working full-stack app deployed in minutes.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://opencode.ai/"><b>Opencode</b></a> - open-source AI coding agent; drop-in alternative to Claude Code for running agentic harnesses locally.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://venice.ai/home"><b>Venice AI</b></a> - private, uncensored model hosting for executing agentic harnesses with open-source models instead of frontier APIs.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://vcinc.ai/"><b>Vibe Coding Incubator</b></a> - AI-first developer training: build real apps with LLMs, prompting patterns, and agentic workflows from idea to deployment.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://wisprflow.com/"><b>Wispr Flow</b></a> - system-wide voice-to-text for Mac; dictate prompts, CLAUDE.md entries, and steering corrections into any app including Claude Code.<br>
 </p>
 
 ##### :black_small_square: Hacking
