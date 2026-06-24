@@ -213,6 +213,7 @@
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://opencode.ai/"><b>Opencode</b></a> - open-source AI coding agent; drop-in alternative to Claude Code for running agentic harnesses locally.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://venice.ai/home"><b>Venice AI</b></a> - private, uncensored model hosting for executing agentic harnesses with open-source models instead of frontier APIs.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://vcinc.ai/"><b>Vibe Coding Incubator</b></a> - AI-first developer training: build real apps with LLMs, prompting patterns, and agentic workflows from idea to deployment.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://rankexpand.com/"><b>Rank Expand Academy</b></a> - agency + training program covering local SEO, AI automation, and Claude Code website builds that generate organic revenue for local businesses.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://wisprflow.com/"><b>Wispr Flow</b></a> - system-wide voice-to-text for Mac; dictate prompts, CLAUDE.md entries, and steering corrections into any app including Claude Code.<br>
 </p>
 
