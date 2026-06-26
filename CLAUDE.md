@@ -20,15 +20,17 @@ This is a curated "Awesome" list repository — a collection of tools, manuals, 
 ├── CLAUDE.md            # This file — AI assistant guidance
 ├── CLAUDE.local.md      # Personal/local overrides (gitignored, do not commit)
 ├── CONTRIBUTING.md      # Contribution standards
-├── CODE_OF_CONDUCT.md
-├── LICENSE.md           # GNU license
-├── .travis.yml          # CI configuration
-├── .gitignore           # Ignores log/ directory
+├── .travis.yml          # CI configuration (ShellCheck on master + testing only)
 ├── .claude/
-│   ├── skills/          # Reusable workflow skills (SKILL.md files)
-│   └── agents/          # Custom subagent definitions
-├── doc/
-│   └── img/             # Project images (awesome_ninja_admins.png)
+│   ├── settings.json    # Hooks: PostToolUse shellcheck + link-check; Stop signed-off reminder
+│   ├── skills/add-entry/SKILL.md  # /add-entry skill for README entries
+│   ├── agents/readme-reviewer.md  # readme-reviewer subagent
+│   └── hooks/check-readme-links.sh
+├── bin/
+│   └── git-template-full  # Run once after clone to install git hooks
+├── doc/img/             # Project images
+├── zero-brain/
+│   └── index.html       # Z.E.R.O. AI Second Brain dashboard (standalone HTML)
 ├── src/                 # Bash source scripts (currently placeholder)
 ├── lib/                 # Bash library files (currently placeholder)
 └── skel/                # Skeleton/template files (currently placeholder)
@@ -153,33 +155,28 @@ Key conventions:
 - Use `su -` for root login (not `su`)
 - All scripts must pass `shellcheck -s bash -e 1072,1094 -x`
 
-## Claude Code Features Available
+## Claude Code Tooling
 
-### Importing other files
+### Configured Hooks (`.claude/settings.json`)
 
-CLAUDE.md can import additional context files using `@path/to/file` syntax:
-```markdown
-See @README.md for the current list content.
-See @CONTRIBUTING.md for contribution rules.
-```
+**PostToolUse** (runs after every Edit/Write):
+- ShellCheck — auto-lints any file edited under `src/`, `lib/`, or `bin/`
+- Link checker — runs `.claude/hooks/check-readme-links.sh` to validate URLs in README.md
 
-### CLAUDE.local.md
-
-Create `CLAUDE.local.md` in the project root for personal session overrides (e.g., your name/email for signed commits). **Add it to `.gitignore` — do not commit it.**
-
-### Hooks
-
-Use `.claude/settings.json` to define hooks that run automatically on events:
-- **PostToolUse** after file edits — e.g., auto-run shellcheck on edited Bash files
-- **Stop** — run a check before Claude ends a turn
+**Stop** (runs when Claude ends a turn):
+- Warns if the last commit is missing a `signed-off-by` line
 
 ### Skills
 
-Place `SKILL.md` files in `.claude/skills/<name>/` for reusable workflows specific to this repo (e.g., a skill for adding a new README entry in the correct format).
+- **`/add-entry <Tool Name> <URL> [category]`** — reads README.md, checks for duplicates, inserts a correctly formatted entry, and commits with the signed-off-by line.
 
 ### Subagents
 
-Define custom subagents in `.claude/agents/` for specialized tasks like reviewing README entries for formatting consistency.
+- **`readme-reviewer`** — reviews README.md for format violations, duplicates, descriptions over 120 chars, and unclosed `<p>` blocks. Reports only; does not fix.
+
+### CLAUDE.local.md
+
+Create `CLAUDE.local.md` for personal session overrides (e.g., your name/email for signed commits). It is gitignored — do not commit it.
 
 ## What AI Assistants Should Know
 
