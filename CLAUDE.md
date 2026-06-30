@@ -8,7 +8,7 @@ This is an **awesome-list** repository. Keep entries alphabetized within categor
 
 ## Project Overview
 
-This is a curated "Awesome" list repository — a collection of tools, manuals, blogs, hacks, and resources for system administrators (Ninja Admins). It is primarily a documentation project with the content living in `README.md`, but it also scaffolds Bash scripts in `src/`, `lib/`, and `skel/` directories.
+This is a curated "Awesome" list repository — a collection of tools, manuals, blogs, hacks, and resources for system administrators (Ninja Admins). It is primarily a documentation project with the content living in `README.md`, but it also ships a set of Bash admin scripts in `src/` (backed by shared helpers in `lib/common.sh`).
 
 **Tech stack:** Markdown (content), Bash (scripts), ShellCheck (linting), Travis CI (CI/CD)
 
@@ -29,8 +29,8 @@ This is a curated "Awesome" list repository — a collection of tools, manuals, 
 │   └── agents/          # Custom subagent definitions
 ├── doc/
 │   └── img/             # Project images (awesome_ninja_admins.png)
-├── src/                 # Bash source scripts (currently placeholder)
-├── lib/                 # Bash library files (currently placeholder)
+├── src/                 # Bash source scripts (syshealth, diskusage, logclean, netdiag, sslcheck)
+├── lib/                 # Bash library files (common.sh — shared helpers)
 └── skel/                # Skeleton/template files (currently placeholder)
 ```
 
@@ -143,15 +143,28 @@ When adding entries, place them in the most appropriate existing category before
 
 ## Bash Script Standards
 
-When writing scripts for `src/` or `lib/`, follow these references:
+When writing scripts for `src/`, `lib/`, `bin/`, or the repo root, follow these references:
 - [Bash Hackers Wiki](http://wiki.bash-hackers.org/)
 - [Google Shell Style Guide](https://google.github.io/styleguide/shell.xml)
 - [bashstyle](https://github.com/progrium/bashstyle)
 
 Key conventions:
 - Use `#!/usr/bin/env bash` (not `#!/bin/bash`)
+- Use `set -euo pipefail` at the top of every script for safe error handling
 - Use `su -` for root login (not `su`)
 - All scripts must pass `shellcheck -s bash -e 1072,1094 -x`
+- Anchor `.env` key lookups with `^KEY=` and use `cut -d= -f2-` to preserve values containing `=`
+- Never rely on `|| fallback` at the end of a pipeline — check emptiness explicitly with `[ -z "$VAR" ]`
+
+## Code Review
+
+**IMPORTANT: Before requesting human review or committing any shell script, run a self-review pass:**
+
+1. Re-read the script top-to-bottom and ask: what input, state, or environment makes each line wrong?
+2. Check all grep patterns are anchored and won't match unintended substrings
+3. Check all pipeline fallbacks (`|| default`) actually fire when expected (they don't when the last command in the pipe exits 0)
+4. Verify every exit code that matters is captured, not silently swallowed with `&>/dev/null`
+5. Confirm all relative paths are guarded with a CWD check or `cd "$(dirname "$0")"`
 
 ## Claude Code Features Available
 
@@ -188,7 +201,7 @@ Define custom subagents in `.claude/agents/` for specialized tasks like reviewin
 - **No tests to run** beyond ShellCheck (which only applies to Bash scripts, not Markdown).
 - **IMPORTANT: Signed commits are required.** Never commit without the signed-off-by line.
 - **IMPORTANT: PR target is `testing`**, not `master`.
-- **`src/`, `lib/`, `skel/` are currently empty** (contain only `.gitkeep`). Do not delete these directories.
+- **`src/` and `lib/` hold real admin scripts** (`src/*.sh` + `lib/common.sh`); **`skel/` is still empty** (contains only `.gitkeep`). Do not delete the `.gitkeep` placeholders in empty directories.
 - **`log/` is gitignored** — do not commit anything to that directory.
 - **When compacting context**, preserve: the signed-off-by requirement, the PR target branch, and any list of modified files.
 - **Explore before editing README.md** — read the current file first to avoid duplicate entries and ensure correct category placement.
