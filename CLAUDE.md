@@ -8,7 +8,7 @@ This is an **awesome-list** repository. Keep entries alphabetized within categor
 
 ## Project Overview
 
-This is a curated "Awesome" list repository — a collection of tools, manuals, blogs, hacks, and resources for system administrators (Ninja Admins). It is primarily a documentation project with the content living in `README.md`, but it also scaffolds Bash scripts in `src/`, `lib/`, and `skel/` directories.
+This is a curated "Awesome" list repository — a collection of tools, manuals, blogs, hacks, and resources for system administrators (Ninja Admins). It is primarily a documentation project with the content living in `README.md`, but it also ships a set of Bash admin scripts in `src/` (backed by shared helpers in `lib/common.sh`).
 
 **Tech stack:** Markdown (content), Bash (scripts), ShellCheck (linting), Travis CI (CI/CD)
 
@@ -29,8 +29,8 @@ This is a curated "Awesome" list repository — a collection of tools, manuals, 
 │   └── agents/          # Custom subagent definitions
 ├── doc/
 │   └── img/             # Project images (awesome_ninja_admins.png)
-├── src/                 # Bash source scripts (currently placeholder)
-├── lib/                 # Bash library files (currently placeholder)
+├── src/                 # Bash source scripts (syshealth, diskusage, logclean, netdiag, sslcheck)
+├── lib/                 # Bash library files (common.sh — shared helpers)
 └── skel/                # Skeleton/template files (currently placeholder)
 ```
 
@@ -201,7 +201,7 @@ Define custom subagents in `.claude/agents/` for specialized tasks like reviewin
 - **No tests to run** beyond ShellCheck (which only applies to Bash scripts, not Markdown).
 - **IMPORTANT: Signed commits are required.** Never commit without the signed-off-by line.
 - **IMPORTANT: PR target is `testing`**, not `master`.
-- **`src/`, `lib/`, `skel/` are currently empty** (contain only `.gitkeep`). Do not delete these directories.
+- **`src/` and `lib/` hold real admin scripts** (`src/*.sh` + `lib/common.sh`); **`skel/` is still empty** (contains only `.gitkeep`). Do not delete the `.gitkeep` placeholders in empty directories.
 - **`log/` is gitignored** — do not commit anything to that directory.
 - **When compacting context**, preserve: the signed-off-by requirement, the PR target branch, and any list of modified files.
 - **Explore before editing README.md** — read the current file first to avoid duplicate entries and ensure correct category placement.
