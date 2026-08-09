@@ -56,6 +56,10 @@ gate "Second brain generator" - python3 test/gen_secondbrain_test.py
 
 gate "Vault integrity" - bash scripts/check-vault.sh
 
+# Skips itself (exit 0) when Playwright is missing, so this stays a SKIP
+# locally and real coverage in CI.
+gate "Z.E.R.O. console (browser)" node node test/console_test.mjs
+
 if python3 -c "import PIL" >/dev/null 2>&1; then
   gate "Icon generator" - python3 test/gen_icons_test.py
 else
