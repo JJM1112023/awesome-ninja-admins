@@ -38,6 +38,7 @@ How this repository is wired. Up: [[Home]]
 | Shell lint | `shellcheck -s bash -e 1072,1094 -x src/*.sh lib/common.sh` |
 | Functional tests | `bats test/` |
 | PWA shell | `bash scripts/validate-pwa.sh` |
+| Console behaviour | `node test/console_test.mjs` |
 | README quality | `bash scripts/check-readme.sh` |
 | Vault integrity | `bash scripts/check-vault.sh` |
 | Regenerate everything | `python3 scripts/gen_secondbrain.py` |
