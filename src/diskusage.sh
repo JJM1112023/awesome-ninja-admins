@@ -42,6 +42,13 @@ check_filesystems() {
     pct=$(printf '%s' "${line}" | awk '{print $5}' | tr -d '%')
     mount=$(printf '%s' "${line}" | awk '{print $6}')
 
+    # Skip rows whose USE% is not a plain integer (e.g. pseudo-filesystems
+    # that report "-"); an arithmetic compare on those aborts under set -e.
+    if ! [[ "${pct}" =~ ^[0-9]+$ ]]; then
+      printf 'SKIP:     %s\n' "${line}"
+      continue
+    fi
+
     if [[ "${pct}" -ge "${crit}" ]]; then
       printf 'CRITICAL: %s\n' "${line}"
       exit_code=2
