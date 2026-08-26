@@ -43,16 +43,31 @@ function installHardening(win, doc) {
   }
 
   win.copyText = function copyTextHardened(text, label) {
+    let value = String(text);
+
+    // The base console still builds LINK text from location.origin + pathname.
+    // In file:// mode that origin becomes the literal string "null". Preserve
+    // the node hash carried in the incoming text, but rebuild the URL from the
+    // iframe's actual current URL so both hosted and file-mode links are valid.
+    if (label === 'Link') {
+      const hashAt = value.indexOf('#node=');
+      if (hashAt >= 0) {
+        const url = new URL(win.location.href);
+        url.hash = value.slice(hashAt + 1);
+        value = url.href;
+      }
+    }
+
     const done = () => notify((label || 'Text') + ' copied');
     const blocked = () => notify('Copy blocked by the browser');
 
     if (win.navigator.clipboard && win.navigator.clipboard.writeText) {
-      win.navigator.clipboard.writeText(text).then(done, blocked);
+      win.navigator.clipboard.writeText(value).then(done, blocked);
       return;
     }
 
     const ta = doc.createElement('textarea');
-    ta.value = text;
+    ta.value = value;
     ta.setAttribute('readonly', '');
     ta.style.position = 'fixed';
     ta.style.opacity = '0';
@@ -63,18 +78,6 @@ function installHardening(win, doc) {
     ta.remove();
     copied ? done() : blocked();
   };
-
-  doc.addEventListener('click', (event) => {
-    const button = event.target.closest('[data-act="link"]');
-    if (!button || !win.selected) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    const url = new URL(win.location.href);
-    url.hash = 'node=' + encodeURIComponent(win.selected.id);
-    win.copyText(url.href, 'Link');
-  }, true);
 
   win.addEventListener('error', (event) => {
     console.error('Z.E.R.O. runtime error:', event.error || event.message);
