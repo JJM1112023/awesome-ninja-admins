@@ -28,14 +28,18 @@ def test_legacy_clipboard_checks_boolean_result() -> None:
     assert "copied ? done() : blocked()" in text
 
 
-def test_deep_link_uses_current_full_url() -> None:
+def test_deep_link_rebuilds_from_current_full_url() -> None:
     text = source()
+    assert "if (label === 'Link')" in text
+    assert "value.indexOf('#node=')" in text
     assert "new URL(win.location.href)" in text
-    assert "url.hash = 'node='" in text
-    assert "location.origin + location.pathname" not in text
+    assert "url.hash = value.slice(hashAt + 1)" in text
+    assert "win.selected" not in text
 
 
-def test_link_override_runs_in_capture_phase() -> None:
+def test_copy_override_normalizes_link_before_clipboard_write() -> None:
     text = source()
-    assert "stopImmediatePropagation" in text
-    assert "}, true);" in text
+    normalize = text.index("if (label === 'Link')")
+    clipboard = text.index("win.navigator.clipboard.writeText(value)")
+    assert normalize >= 0
+    assert clipboard > normalize
