@@ -8,7 +8,7 @@ source: .claude/skills/claude-security/SKILL.md
 
 # Claude Security
 
-Security practices for Claude Code projects — auto-mode classifier, OAuth, permission scoping, secrets management, and protecting against prompt injection.
+Secure Claude Code projects with current permission modes, scoped rules, protected data boundaries, MCP review, secret handling, prompt-injection defenses, and approval-gated external actions.
 
 Pillar: [[Agent Engine]] · Up: [[Home]]
 
@@ -17,13 +17,11 @@ Pillar: [[Agent Engine]] · Up: [[Home]]
 ## What is inside
 
 - Permission modes
-- Auto-mode classifier
-- OAuth and credential safety
-- Secrets management skill
-- Prompt injection protection
-- Permission allowlists
-- Hooks as a security gate
-- Security checklist
+- Permission rules
+- Secrets and data
+- MCP and plugins
+- Prompt-injection defenses
+- Verification
 
 ## Siblings in this pillar
 
@@ -31,6 +29,7 @@ Pillar: [[Agent Engine]] · Up: [[Home]]
 - [[agent-teams]]
 - [[agentic-harness]]
 - [[always-on-agents]]
+- [[as-os-build-guard]]
 - [[autoresearch]]
 - [[browser-automation]]
 - [[claude-managed-agents]]

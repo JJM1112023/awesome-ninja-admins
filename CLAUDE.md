@@ -12,6 +12,7 @@ This file provides guidance for AI assistants working with the **awesome-ninja-a
 
 - NEVER commit without a signed-off-by line
 - PR target is `testing` branch, NOT `master` (if `testing` doesn't exist yet, create it before opening a PR)
+- Automatically apply `.claude/skills/as-os-build-guard/SKILL.md` whenever work touches AI assistants, MCP, provider APIs or models, authentication, Copilot, GitHub Actions, Replit, Android tooling, or automation
 - ALWAYS read README.md before adding entries (avoid duplicates)
 - ALWAYS place entries in existing categories before creating new ones
 - Zero truncation — complete code blocks only
