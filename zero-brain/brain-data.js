@@ -3,7 +3,7 @@ window.__BRAIN__ = {
  "schema": 1,
  "repo": "https://github.com/JJM1112023/second-brain",
  "counts": {
-  "skills": 31,
+  "skills": 34,
   "pillars": 6,
   "categories": 12,
   "subcategories": 35,
@@ -757,6 +757,18 @@ window.__BRAIN__ = {
    "invoke": "/add-entry"
   },
   {
+   "id": "skill:add-readme-entry",
+   "kind": "skill",
+   "label": "add-readme-entry",
+   "color": "#dddd44",
+   "detail": "This skill should be used when the user asks to \"add a tool\", \"add an entry to the list\", \"insert a new resource\", or \"update README with a new link\". Enforces the HTML-in-Markdown format and correct category placement.",
+   "pillar": "maintenance",
+   "sections": [],
+   "links": [],
+   "path": ".claude/skills/add-readme-entry/SKILL.md",
+   "invoke": "/add-readme-entry"
+  },
+  {
    "id": "skill:review",
    "kind": "skill",
    "label": "review",
@@ -770,6 +782,30 @@ window.__BRAIN__ = {
    "links": [],
    "path": ".claude/skills/review/SKILL.md",
    "invoke": "/review"
+  },
+  {
+   "id": "skill:shellcheck-fix",
+   "kind": "skill",
+   "label": "shellcheck-fix",
+   "color": "#dddd44",
+   "detail": "This skill should be used when the user asks to \"fix shellcheck errors\", \"lint bash scripts\", \"validate scripts\", or \"check src/ files\". Runs shellcheck and resolves flagged issues.",
+   "pillar": "maintenance",
+   "sections": [],
+   "links": [],
+   "path": ".claude/skills/shellcheck-fix/SKILL.md",
+   "invoke": "/shellcheck-fix"
+  },
+  {
+   "id": "skill:signed-commit",
+   "kind": "skill",
+   "label": "signed-commit",
+   "color": "#dddd44",
+   "detail": "This skill should be used when the user asks to \"commit\", \"push changes\", \"make a commit\", or \"submit work\". Ensures signed-off-by line is always present.",
+   "pillar": "maintenance",
+   "sections": [],
+   "links": [],
+   "path": ".claude/skills/signed-commit/SKILL.md",
+   "invoke": "/signed-commit"
   },
   {
    "id": "pillar:arsenal",
@@ -1363,7 +1399,19 @@ window.__BRAIN__ = {
   },
   {
    "s": "pillar:maintenance",
+   "t": "skill:add-readme-entry"
+  },
+  {
+   "s": "pillar:maintenance",
    "t": "skill:review"
+  },
+  {
+   "s": "pillar:maintenance",
+   "t": "skill:shellcheck-fix"
+  },
+  {
+   "s": "pillar:maintenance",
+   "t": "skill:signed-commit"
   },
   {
    "s": "pillar:arsenal",

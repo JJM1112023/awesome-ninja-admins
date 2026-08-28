@@ -3,7 +3,7 @@ title: Home
 tags:
   - moc
   - home
-skills: 31
+skills: 34
 tools: 180
 ---
 
@@ -17,7 +17,7 @@ tools: 180
 - 🎙️ [[Jarvis Interface]] — How you talk to the brain — voice, dashboards, and the daily briefing. *(4 notes)*
 - 🤖 [[Agent Engine]] — The automation muscle — orchestration, parallelism, safety rails. *(11 notes)*
 - 💼 [[Business Launchpad]] — Turning the brain into revenue — the LLC, client sites, and service lines. *(9 notes)*
-- 🛠️ [[Repo Maintenance]] — Keeping the repository itself healthy and consistent. *(2 notes)*
+- 🛠️ [[Repo Maintenance]] — Keeping the repository itself healthy and consistent. *(5 notes)*
 - 🗡️ [[Tool Arsenal]] — The curated sysadmin tool library in README.md, grouped by domain. *(12 notes)*
 
 ## Fast lanes
@@ -31,7 +31,7 @@ tools: 180
 
 | Metric | Count |
 |---|---|
-| Skills | 31 |
+| Skills | 34 |
 | Pillars | 6 |
 | Tool categories | 12 |
 | Tool subcategories | 35 |
