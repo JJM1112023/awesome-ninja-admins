@@ -544,7 +544,7 @@ REGIONS.forEach((reg, ri) => {
 const cam = {
   yaw: 0.3, pitch: -0.1, zoom: 1,
   tYaw: 0.3, tPitch: -0.1, tZoom: 1,
-  auto: true,
+  auto: true, everTouched: false,
 };
 let focusedRegion = null;
 
@@ -620,7 +620,7 @@ canvas.addEventListener('pointerdown', e => {
   if (pointers.size === 1) {
     dragging = true; lastX = e.clientX; lastY = e.clientY;
     canvas.classList.add('dragging');
-    cam.auto = false;
+    cam.auto = false; cam.everTouched = true;
     // hold still ~650ms → wake (phone equivalent of spacebar)
     lpTimer = setTimeout(() => {
       if (pointers.size === 1) {
@@ -660,7 +660,8 @@ function endPointer(e) {
   if (pointers.size === 0) {
     dragging = false;
     canvas.classList.remove('dragging');
-    if (!focusedRegion) setTimeout(() => { if (!dragging) cam.auto = true; }, 4000);
+    // Do not resume idle spin after the user has interacted — a moving
+    // brain makes labels/buttons hard to tap on a phone.
   }
 }
 window.addEventListener('pointerup', endPointer);
@@ -829,8 +830,8 @@ function wake() {
     awake = false;
     tEl.classList.remove('awake');
     waveEl.classList.remove('on');
-    micChip.className = speechLive ? 'mic-chip live' : 'mic-chip';
-    micTxt.textContent = speechLive ? 'MIC LIVE · SAY "HEY ZERO"' : 'MIC OFFLINE · PRESS SPACE TO WAKE';
+    if (speechLive) { micChip.className = 'mic-chip live'; micTxt.textContent = 'MIC LIVE · SAY "HEY ZERO" · TAP TO STOP'; }
+    else setMicIdle();
   }, 4000);
 }
 
@@ -838,18 +839,33 @@ window.addEventListener('keydown', e => {
   if (e.code === 'Space' && e.target === document.body) { e.preventDefault(); wake(); }
 });
 
-let speechLive = false, speechBlocked = false, recRef = null;
-(function initSpeech() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { micTxt.textContent = 'NO MIC API · TAP HERE OR HOLD SCREEN TO WAKE'; return; }
+// ── Voice is fully OPT-IN. Nothing starts on load. ──
+// No auto-start and no restart loop — that flapping was breaking taps
+// on mobile. The mic only runs while the user has explicitly turned it
+// on, and it stops cleanly. Tap the chip to toggle voice; the chip also
+// works as a plain wake button when the Speech API is unavailable.
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let speechLive = false, recRef = null, wantVoice = false;
+
+function setMicIdle() {
+  if (awake) return;
+  micChip.className = 'mic-chip';
+  micTxt.textContent = SR ? 'VOICE OFF · TAP TO ENABLE "HEY ZERO"' : 'TAP OR HOLD SCREEN TO WAKE';
+}
+setMicIdle();
+
+function startVoice() {
+  if (!SR) { wake(); return; }          // no speech engine — chip is a wake button
+  if (speechLive) return;
+  wantVoice = true;
   try {
     const rec = recRef = new SR();
     rec.continuous = true;
     rec.interimResults = true;
     rec.lang = 'en-US';
     rec.onstart = () => {
-      speechLive = true; speechBlocked = false;
-      if (!awake) { micChip.className = 'mic-chip live'; micTxt.textContent = 'MIC LIVE · SAY "HEY ZERO"'; }
+      speechLive = true;
+      if (!awake) { micChip.className = 'mic-chip live'; micTxt.textContent = 'MIC LIVE · SAY "HEY ZERO" · TAP TO STOP'; }
     };
     rec.onresult = ev => {
       for (let i = ev.resultIndex; i < ev.results.length; i++) {
@@ -860,29 +876,34 @@ let speechLive = false, speechBlocked = false, recRef = null;
     rec.onerror = ev => {
       speechLive = false;
       if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') {
-        speechBlocked = true;   // don't auto-retry; needs a user tap
+        wantVoice = false;
         micChip.className = 'mic-chip';
-        micTxt.textContent = 'TAP HERE TO ENABLE MIC';
+        micTxt.textContent = 'MIC BLOCKED · ALLOW IN BROWSER, THEN TAP';
       }
     };
     rec.onend = () => {
       speechLive = false;
-      if (speechBlocked) return;
-      if (!awake) { micChip.className = 'mic-chip'; micTxt.textContent = 'MIC OFFLINE · TAP HERE OR HOLD SCREEN'; }
-      setTimeout(() => { try { rec.start(); } catch (_) {} }, 2000);
+      // Only resume if the user still wants voice on (no tight loop —
+      // a single delayed restart, and only while wantVoice is true).
+      if (wantVoice && !awake) { setTimeout(() => { if (wantVoice) { try { rec.start(); } catch (_) {} } }, 800); }
+      else setMicIdle();
     };
     rec.start();
-  } catch (_) { micTxt.textContent = 'MIC UNAVAILABLE · TAP HERE OR HOLD SCREEN TO WAKE'; }
-})();
+  } catch (_) { wantVoice = false; setMicIdle(); }
+}
 
-// Tap the mic chip: enable the mic (user gesture unlocks it on mobile),
-// or act as a wake button when speech isn't available at all.
+function stopVoice() {
+  wantVoice = false;
+  if (recRef) { try { recRef.stop(); } catch (_) {} }
+  speechLive = false;
+  setMicIdle();
+}
+
+// Tap chip = toggle voice on/off (or wake if no speech engine).
 micChip.addEventListener('click', () => {
-  if (recRef && !speechLive) {
-    speechBlocked = false;
-    try { recRef.start(); return; } catch (_) {}
-  }
-  if (!recRef) wake();
+  if (!SR) { wake(); return; }
+  if (wantVoice || speechLive) stopVoice();
+  else startVoice();
 });
 
 // ════════════════════════════════════════════════════════
