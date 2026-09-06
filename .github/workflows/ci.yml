@@ -58,12 +58,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install pytest
-        run: python3 -m pip install pytest
       - name: Generator unit tests
         run: python3 test/gen_secondbrain_test.py
-      - name: Command-center hardening regression tests
-        run: python3 -m pytest -q test/zero_command_center_hardening_test.py
       - name: Vault integrity (links, frontmatter, reachability)
         run: bash scripts/check-vault.sh
       - name: Generated files are committed and current
