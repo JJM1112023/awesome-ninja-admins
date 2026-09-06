@@ -86,6 +86,7 @@ PILLARS = [
             "n8n-vs-mcp",
             "human-validation",
             "claude-security",
+            "as-os-build-guard",
         ],
     },
     {

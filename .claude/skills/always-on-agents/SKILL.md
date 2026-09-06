@@ -1,146 +1,90 @@
 ---
 name: always-on-agents
-description: Always-on agentic OS — running 3 AI agents 24/7 for 30 days. Covers the complete stack: CLAUDE.md for persistent memory, MCP for tool connections, and a setup you can build in under 30 minutes.
+description: Design and operate bounded, observable, least-privilege background agents for AS-OS. Use for scheduled Claude Code work, MCP-connected automation, recurring monitoring, handoffs, retries, budgets, and approval gates.
 user-invocable: true
 ---
 
-# Always-On Agentic OS
+# Always-On Agent Operations
 
-## The experiment
-3 AI agents, running around the clock, for 30 days.
-Setup time: under 30 minutes.
-Stack: Claude Code + CLAUDE.md + MCP servers.
+Run background work as a controlled job system, not as an unrestricted assistant session.
 
-## Why CLAUDE.md is the backbone
+## Separate the persistent layers
 
-CLAUDE.md is not just instructions — it is the agent's **persistent memory and identity**.
+- `CLAUDE.md`: durable project facts and standing instructions. It is context, not memory or a security boundary.
+- `.claude/skills/<name>/SKILL.md`: reusable procedures loaded when relevant.
+- Claude auto memory: machine-local notes managed by Claude Code; inspect it with `/memory`.
+- Project state: explicit, versioned checkpoint or handoff files containing no secrets.
+- Job history: append-only execution metadata with timestamps, inputs, result status, and redacted errors.
 
-```
-Without CLAUDE.md:         With CLAUDE.md:
-Each session = amnesia      Each session = picks up where it left off
-Agent forgets context       Agent knows the project, the rules, the state
-You re-explain every run    Agent acts on standing orders
-```
+Never store credentials, private vault contents, or production data in any instruction, skill, state, or log file.
 
-For always-on agents, treat CLAUDE.md as the brain state that survives session restarts.
+## Bound every job
 
-## The three-layer CLAUDE.md stack
+Define before enabling a schedule:
 
-```
-~/.claude/CLAUDE.md          ← global agent identity (who this agent is)
-./CLAUDE.md                  ← project context (what this project is)
-./CLAUDE.local.md            ← runtime state (where we left off — gitignored)
-```
+1. One project and one data boundary.
+2. Exact inputs and allowed tools.
+3. Read-only default behavior.
+4. Maximum turns, runtime, retries, and spend.
+5. Idempotency key or duplicate-detection rule.
+6. Success, no-change, retryable-failure, and terminal-failure outcomes.
+7. Human approval before merge, publish, outreach, paid action, account change, or production mutation.
+8. Rollback and escalation path.
 
-**Global (~/.claude/CLAUDE.md)** — agent persona, default behaviors, tool preferences:
-```markdown
-# Identity
-You are a continuous operations agent. You run unattended.
-After each task, log your output to /log/session.md.
-Never stop for clarification on routine tasks — use best judgment.
-```
+Quiet success is valid: if a monitoring job finds no material change, record the check internally and send no alert.
 
-**Project (./CLAUDE.md)** — project rules, commit conventions, domain knowledge:
-```markdown
-# This project
-Monitoring target: [system/API/workflow]
-Alert threshold: [condition]
-Output format: [format]
-Escalation path: [where to route blockers]
-```
+## MCP rules
 
-**Local (./CLAUDE.local.md)** — current session state, handoff notes, temp context:
-```markdown
-# Session state
-Last run: 2026-06-24 07:00
-Last output: /log/2026-06-24.md
-Pending: [any open items]
-Next run: scheduled 08:00
-```
+- Start with no MCP servers and add only the smallest trusted set.
+- Prefer OAuth, OIDC, or workload identity over pasted long-lived tokens.
+- Keep experimental or credentialed servers local-scoped. Shared project definitions belong in project-root `.mcp.json` and must contain environment-variable references, never values.
+- Review command, URL, transport type, package or binary provenance, tool catalog, write capability, timeout, and data destination before approval.
+- Never grant a filesystem MCP server a broad workspace, home directory, personal vault, or unrelated project root.
+- Treat plugin-bundled MCP servers as executable integrations, not passive documentation.
+- Non-interactive, SDK, and cloud sessions cannot rely on an interactive project-server approval prompt. Omit or explicitly disable unneeded servers for unattended jobs.
+- Verify with `claude mcp list`, `claude mcp get <name>`, or `/mcp`; configuration written to disk is not proof of a healthy authenticated connection.
 
-## MCP: the tool layer
+## Permission modes
 
-MCP servers connect the agent to real systems without custom code:
+| Mode | Use |
+|---|---|
+| `plan` | Read-only investigation before a risky change |
+| `default` | Sensitive or unfamiliar projects |
+| `acceptEdits` | Local edits that will be reviewed immediately |
+| `auto` | Eligible, trusted staging work only; still require review and hard deny rules |
+| `dontAsk` | Locked-down CI with every required action pre-approved |
+| `bypassPermissions` | Disposable isolated container or VM only; never a normal workstation |
 
-| MCP Server | What it gives the agent |
-|------------|------------------------|
-| Gmail | Read/send email |
-| Slack | Post to channels, read threads |
-| Google Calendar | Check schedule, create events |
-| GitHub | Open PRs, read issues, push code |
-| Notion | Read/write workspace |
-| Filesystem | Read/write local files and logs |
+Auto mode is a research preview and does not replace approval gates. A chat instruction can be lost during compaction; encode non-negotiable boundaries in permission rules and infrastructure controls.
 
-**Add to your environment config** (not in code):
-```json
-{
-  "mcpServers": {
-    "gmail": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-gmail"] },
-    "slack": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-slack"] },
-    "filesystem": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "/workspace"] }
-  }
-}
-```
+## Safe recurring loop
 
-## The 30-minute agentic OS setup
+1. Load the bounded job specification and last checkpoint.
+2. Validate environment, dependency locks, authentication health, and budget.
+3. Acquire an idempotency lock.
+4. Read current state.
+5. Compute a proposed change or report.
+6. Stop at any configured approval boundary.
+7. Verify the result with project checks.
+8. Write a redacted checkpoint and audit record.
+9. Release the lock and emit one outcome.
 
-### Minute 0–5: Global CLAUDE.md
-Write your agent's standing orders. Who it is, how it behaves when unattended, where it logs.
+Use exponential backoff with a retry ceiling. Never retry an approval-held deployment as if it failed, and never repeat an external side effect without an idempotency guarantee.
 
-### Minute 5–10: Project CLAUDE.md
-Describe the specific project: what to monitor, what to produce, what to ignore.
+## Minimum rollout
 
-### Minute 10–15: MCP connections
-Add the MCP servers your agent needs. Start with 2–3 — filesystem always, then one comms tool.
+1. Run manually in `plan` mode with synthetic data.
+2. Run once in staging with external writes disabled.
+3. Enable a low-frequency schedule with strict budget and retry caps.
+4. Review logs and diffs after several successful runs.
+5. Enable one write capability at a time, retaining a human merge or publish gate.
 
-### Minute 15–20: First session test
-Run a session manually. Watch what the agent does. Fix any CLAUDE.md gaps you observe.
+## Verification checklist
 
-### Minute 20–25: Trigger setup
-Set the schedule (cron) or webhook. Use Claude Managed Agents or a cron job + Claude CLI.
-
-### Minute 25–30: Log path
-Confirm the agent writes a log each run. Logs are your only visibility into unattended runs.
-
-## What 30 days of running 3 agents taught
-
-**1. Log everything.** Unattended agents are invisible. The log is the only record of what happened.
-
-**2. CLAUDE.md drifts.** Revisit it weekly. Add rules that would have caught mistakes. Prune rules it already follows.
-
-**3. Fewer tools = more reliable.** Every MCP server is a failure point. Start minimal, add as needed.
-
-**4. Escalation path is mandatory.** The agent needs to know: "If I hit a blocker I can't resolve, where do I send it?" Email, Slack, or a file — but define it before running unattended.
-
-**5. Sessions do not share memory.** Each Claude Code session starts fresh unless you write state to disk and read it back. Use CLAUDE.local.md or a log file as the handoff.
-
-## State persistence pattern
-
-```markdown
-# In CLAUDE.md (or agent loop instructions):
-At the start of each session:
-  1. Read CLAUDE.local.md for current state
-  2. Read /log/latest.md for last output
-
-At the end of each session:
-  1. Write summary to /log/YYYY-MM-DD.md
-  2. Update CLAUDE.local.md with: last run date, pending items, next step
-```
-
-## Running 3 agents in parallel
-
-One machine, three agents, different roles:
-
-| Agent | Role | Schedule |
-|-------|------|----------|
-| Agent 1 | Monitoring / alerting | Every 15 min |
-| Agent 2 | Daily report generation | 7am daily |
-| Agent 3 | Inbox triage + response drafts | 8am + 12pm + 5pm |
-
-Use separate project directories with separate CLAUDE.md files. Each agent has its own identity and standing orders.
-
-## Key principle
-
-> CLAUDE.md is not documentation. It is the agent's operating system — the persistent layer that makes a stateless model behave like a continuous operator.
-
-The agent changes. The sessions end. CLAUDE.md stays.
+- Project and protected paths are explicit.
+- Secrets are outside the repository and logs.
+- MCP servers are minimal, verified, and scoped.
+- Schedules are idempotent, retry-bounded, and quiet on no change.
+- Model IDs, SDKs, pricing, and limits are pinned or checked before execution.
+- Merge, publish, outreach, spending, and production changes require approval.
+- Every job has an observable result and rollback path.

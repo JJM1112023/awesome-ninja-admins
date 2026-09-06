@@ -3,8 +3,8 @@ window.__BRAIN__ = {
  "schema": 1,
  "repo": "https://github.com/JJM1112023/second-brain",
  "counts": {
-  "skills": 31,
-  "pillars": 6,
+  "skills": 35,
+  "pillars": 7,
   "categories": 12,
   "subcategories": 35,
   "tools": 180
@@ -51,6 +51,13 @@ window.__BRAIN__ = {
    "emoji": "🗡️",
    "color": "#ff4444",
    "blurb": "The curated sysadmin tool library in README.md, grouped by domain."
+  },
+  {
+   "id": "unsorted",
+   "name": "Unsorted",
+   "emoji": "📥",
+   "color": "#8899aa",
+   "blurb": "Skills not yet assigned to a pillar. Add them to PILLARS in scripts/gen_secondbrain.py."
   }
  ],
  "nodes": [
@@ -344,22 +351,37 @@ window.__BRAIN__ = {
    "kind": "skill",
    "label": "always-on-agents",
    "color": "#cc44ff",
-   "detail": "Always-on agentic OS — running 3 AI agents 24/7 for 30 days. Covers the complete stack: CLAUDE.md for persistent memory, MCP for tool connections, and a setup you can build in under 30 minutes.",
+   "detail": "Design and operate bounded, observable, least-privilege background agents for AS-OS. Use for scheduled Claude Code work, MCP-connected automation, recurring monitoring, handoffs, retries, budgets, and approval gates.",
    "pillar": "agents",
    "sections": [
-    "The experiment",
-    "Why CLAUDE.md is the backbone",
-    "The three-layer CLAUDE.md stack",
-    "MCP: the tool layer",
-    "The 30-minute agentic OS setup",
-    "What 30 days of running 3 agents taught",
-    "State persistence pattern",
-    "Running 3 agents in parallel",
-    "Key principle"
+    "Separate the persistent layers",
+    "Bound every job",
+    "MCP rules",
+    "Permission modes",
+    "Safe recurring loop",
+    "Minimum rollout",
+    "Verification checklist"
    ],
    "links": [],
    "path": ".claude/skills/always-on-agents/SKILL.md",
    "invoke": "/always-on-agents"
+  },
+  {
+   "id": "skill:as-os-build-guard",
+   "kind": "skill",
+   "label": "as-os-build-guard",
+   "color": "#cc44ff",
+   "detail": "Automatically protect this AS-OS second-brain build from material changes in MCP, Claude/OpenAI APIs and models, Copilot, GitHub Actions, Replit, Android tooling, authentication, pricing, limits, and automation. Use whenever planning, changing, testing, deploying, reviewing, or resuming those surfaces.",
+   "pillar": "agents",
+   "sections": [
+    "Automatic workflow",
+    "Required checks",
+    "AS-OS boundaries",
+    "Verification"
+   ],
+   "links": [],
+   "path": ".claude/skills/as-os-build-guard/SKILL.md",
+   "invoke": "/as-os-build-guard"
   },
   {
    "id": "skill:autoresearch",
@@ -427,17 +449,15 @@ window.__BRAIN__ = {
    "kind": "skill",
    "label": "claude-security",
    "color": "#cc44ff",
-   "detail": "Security practices for Claude Code projects — auto-mode classifier, OAuth, permission scoping, secrets management, and protecting against prompt injection.",
+   "detail": "Secure Claude Code projects with current permission modes, scoped rules, protected data boundaries, MCP review, secret handling, prompt-injection defenses, and approval-gated external actions.",
    "pillar": "agents",
    "sections": [
     "Permission modes",
-    "Auto-mode classifier",
-    "OAuth and credential safety",
-    "Secrets management skill",
-    "Prompt injection protection",
-    "Permission allowlists",
-    "Hooks as a security gate",
-    "Security checklist"
+    "Permission rules",
+    "Secrets and data",
+    "MCP and plugins",
+    "Prompt-injection defenses",
+    "Verification"
    ],
    "links": [],
    "path": ".claude/skills/claude-security/SKILL.md",
@@ -779,6 +799,51 @@ window.__BRAIN__ = {
    "emoji": "🗡️",
    "detail": "The curated sysadmin tool library in README.md, grouped by domain.",
    "pillar": "arsenal"
+  },
+  {
+   "id": "pillar:unsorted",
+   "kind": "pillar",
+   "label": "UNSORTED",
+   "color": "#8899aa",
+   "emoji": "📥",
+   "detail": "Skills not yet assigned to a pillar. Add them to PILLARS in scripts/gen_secondbrain.py.",
+   "pillar": "unsorted"
+  },
+  {
+   "id": "skill:add-readme-entry",
+   "kind": "skill",
+   "label": "add-readme-entry",
+   "color": "#8899aa",
+   "detail": "This skill should be used when the user asks to \"add a tool\", \"add an entry to the list\", \"insert a new resource\", or \"update README with a new link\". Enforces the HTML-in-Markdown format and correct category placement.",
+   "pillar": "unsorted",
+   "sections": [],
+   "links": [],
+   "path": ".claude/skills/add-readme-entry/SKILL.md",
+   "invoke": "/add-readme-entry"
+  },
+  {
+   "id": "skill:shellcheck-fix",
+   "kind": "skill",
+   "label": "shellcheck-fix",
+   "color": "#8899aa",
+   "detail": "This skill should be used when the user asks to \"fix shellcheck errors\", \"lint bash scripts\", \"validate scripts\", or \"check src/ files\". Runs shellcheck and resolves flagged issues.",
+   "pillar": "unsorted",
+   "sections": [],
+   "links": [],
+   "path": ".claude/skills/shellcheck-fix/SKILL.md",
+   "invoke": "/shellcheck-fix"
+  },
+  {
+   "id": "skill:signed-commit",
+   "kind": "skill",
+   "label": "signed-commit",
+   "color": "#8899aa",
+   "detail": "This skill should be used when the user asks to \"commit\", \"push changes\", \"make a commit\", or \"submit work\". Ensures signed-off-by line is always present.",
+   "pillar": "unsorted",
+   "sections": [],
+   "links": [],
+   "path": ".claude/skills/signed-commit/SKILL.md",
+   "invoke": "/signed-commit"
   },
   {
    "id": "cat:cli-tools",
@@ -1295,6 +1360,10 @@ window.__BRAIN__ = {
   },
   {
    "s": "pillar:agents",
+   "t": "skill:as-os-build-guard"
+  },
+  {
+   "s": "pillar:agents",
    "t": "skill:autoresearch"
   },
   {
@@ -1364,6 +1433,18 @@ window.__BRAIN__ = {
   {
    "s": "pillar:maintenance",
    "t": "skill:review"
+  },
+  {
+   "s": "pillar:unsorted",
+   "t": "skill:add-readme-entry"
+  },
+  {
+   "s": "pillar:unsorted",
+   "t": "skill:shellcheck-fix"
+  },
+  {
+   "s": "pillar:unsorted",
+   "t": "skill:signed-commit"
   },
   {
    "s": "pillar:arsenal",

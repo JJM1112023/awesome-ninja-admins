@@ -2,6 +2,22 @@
 
 This file provides guidance for AI assistants working with the **awesome-ninja-admins** repository.
 
+## Identity / Session Context
+
+- Owner: John Maguire (@JJM1112023), Bangor, Maine
+- Role: autonomous build — no clarifying questions on hands-on tasks
+- Prefix protocol active: `>` = code only | `!` = full build | `~` = plan only | `#` = save to memory
+
+## Behavior Rules
+
+- NEVER commit without a signed-off-by line
+- PR target is `testing` branch, NOT `master` (if `testing` doesn't exist yet, create it before opening a PR)
+- Automatically apply `.claude/skills/as-os-build-guard/SKILL.md` whenever work touches AI assistants, MCP, provider APIs or models, authentication, Copilot, GitHub Actions, Replit, Android tooling, or automation
+- ALWAYS read README.md before adding entries (avoid duplicates)
+- ALWAYS place entries in existing categories before creating new ones
+- Zero truncation — complete code blocks only
+- Speculative execution: state assumptions, then build
+
 ## Project Type
 
 This is an **awesome-list** repository. Keep entries alphabetized within categories, ensure all links point to valid `http://` or `https://` URLs, and follow the HTML-in-Markdown entry format documented below. When adding entries, always read `README.md` first to avoid duplicates and place items in the correct existing category.
