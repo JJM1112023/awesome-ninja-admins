@@ -19,3 +19,8 @@ vault/Private/
 # Python bytecode — created whenever the test suite imports the generator.
 __pycache__/
 *.pyc
+
+# Local Playwright install for test/console_test.mjs (CI installs its own).
+node_modules/
+package.json
+package-lock.json
