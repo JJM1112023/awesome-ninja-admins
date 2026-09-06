@@ -40,7 +40,13 @@ run_dns() {
   require_cmd dig
   dig +short "${host}" A
   dig +short "${host}" AAAA
-  printf 'PTR: '; dig +short -x "$(dig +short "${host}" A | head -1)" 2>/dev/null || true
+  local a_record
+  a_record=$(dig +short "${host}" A | head -1)
+  if [[ -n "${a_record}" ]]; then
+    printf 'PTR: '; dig +short -x "${a_record}" 2>/dev/null || true
+  else
+    printf 'PTR: (no A record to reverse-look up)\n'
+  fi
 }
 
 run_traceroute() {

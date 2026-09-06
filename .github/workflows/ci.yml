@@ -6,12 +6,15 @@ on:
   pull_request:
     branches: [testing, master]
 
+permissions:
+  contents: read
+
 jobs:
   shellcheck:
     name: ShellCheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Install ShellCheck
         run: sudo apt-get update && sudo apt-get install -y shellcheck
       - name: ShellCheck version
@@ -29,7 +32,7 @@ jobs:
     name: Bats tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Install bats
         run: sudo apt-get update && sudo apt-get install -y bats
       - name: Bats version
@@ -41,7 +44,7 @@ jobs:
     name: PWA validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Validate PWA shell
         run: bash scripts/validate-pwa.sh
 
@@ -49,7 +52,7 @@ jobs:
     name: README checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Check README quality
         run: bash scripts/check-readme.sh
 
@@ -57,7 +60,7 @@ jobs:
     name: Second brain (vault + console data)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Generator unit tests
         run: python3 test/gen_secondbrain_test.py
       - name: Vault integrity (links, frontmatter, reachability)
@@ -76,8 +79,8 @@ jobs:
     name: Z.E.R.O. console (browser)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22'
       - name: Install Playwright + Chromium
@@ -91,7 +94,7 @@ jobs:
     name: Icon generator smoke test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Install Pillow
         run: python3 -m pip install --upgrade pillow
       - name: Run gen_icons smoke test

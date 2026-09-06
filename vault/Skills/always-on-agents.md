@@ -8,7 +8,7 @@ source: .claude/skills/always-on-agents/SKILL.md
 
 # Always On Agents
 
-Always-on agentic OS — running 3 AI agents 24/7 for 30 days. Covers the complete stack: CLAUDE.md for persistent memory, MCP for tool connections, and a setup you can build in under 30 minutes.
+Design and operate bounded, observable, least-privilege background agents for AS-OS. Use for scheduled Claude Code work, MCP-connected automation, recurring monitoring, handoffs, retries, budgets, and approval gates.
 
 Pillar: [[Agent Engine]] · Up: [[Home]]
 
@@ -16,21 +16,20 @@ Pillar: [[Agent Engine]] · Up: [[Home]]
 
 ## What is inside
 
-- The experiment
-- Why CLAUDE.md is the backbone
-- The three-layer CLAUDE.md stack
-- MCP: the tool layer
-- The 30-minute agentic OS setup
-- What 30 days of running 3 agents taught
-- State persistence pattern
-- Running 3 agents in parallel
-- Key principle
+- Separate the persistent layers
+- Bound every job
+- MCP rules
+- Permission modes
+- Safe recurring loop
+- Minimum rollout
+- Verification checklist
 
 ## Siblings in this pillar
 
 - [[agent-harness]]
 - [[agent-teams]]
 - [[agentic-harness]]
+- [[as-os-build-guard]]
 - [[autoresearch]]
 - [[browser-automation]]
 - [[claude-managed-agents]]
