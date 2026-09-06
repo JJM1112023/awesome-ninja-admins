@@ -37,7 +37,7 @@ warning — so nothing is ever silently lost.
 
 | Piece | Where it lives | What it is |
 |---|---|---|
-| **Tool library** | `README.md` | 180 curated tools across 12 categories |
+| **Tool library** | `README.md` | 193 curated tools across 12 categories |
 | **Skill library** | `.claude/skills/` | 35 reusable AI workflows |
 | **Obsidian mind map** | `vault/` | Generated vault — open in Obsidian, press `Ctrl/Cmd+G` |
 | **Z.E.R.O. console** | `zero-brain/` | Live browser dashboard over the same data |
@@ -111,15 +111,8 @@ warning — so nothing is ever silently lost.
 | Skill | What it does |
 |---|---|
 | `add-entry` | Add a new tool or resource entry to README.md in the correct format |
-| `review` | Write-review-fix loop for a shell script or the current branch's changed .sh files |
-
-### 📥 Unsorted
-
-*Skills not yet assigned to a pillar. Add them to PILLARS in scripts/gen_secondbrain.py.*
-
-| Skill | What it does |
-|---|---|
 | `add-readme-entry` | This skill should be used when the user asks to "add a tool", "add an entry to the list", "insert a new resource", or "update README with a new link". Enforces the HTML-in-Markdown format and correct category placement. |
+| `review` | Write-review-fix loop for a shell script or the current branch's changed .sh files |
 | `shellcheck-fix` | This skill should be used when the user asks to "fix shellcheck errors", "lint bash scripts", "validate scripts", or "check src/ files". Runs shellcheck and resolves flagged issues. |
 | `signed-commit` | This skill should be used when the user asks to "commit", "push changes", "make a commit", or "submit work". Ensures signed-off-by line is always present. |
 
@@ -127,14 +120,14 @@ warning — so nothing is ever silently lost.
 
 | Category | Subcategories | Tools |
 |---|---|---|
-| CLI Tools | 5 | 29 |
-| Web Tools | 8 | 28 |
-| Manuals/Howtos/Tutorials | 4 | 26 |
+| CLI Tools | 5 | 34 |
+| Web Tools | 8 | 29 |
+| Manuals/Howtos/Tutorials | 4 | 28 |
 | Blogs | 0 | 9 |
 | Systems/Services | 3 | 4 |
-| Monitoring/Observability | 2 | 9 |
+| Monitoring/Observability | 2 | 13 |
 | DevOps & Cloud | 5 | 22 |
-| Infrastructure | 4 | 13 |
+| Infrastructure | 4 | 14 |
 | Security | 4 | 21 |
 | One-liners | 0 | 2 |
 | Lists | 0 | 4 |

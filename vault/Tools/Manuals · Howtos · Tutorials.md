@@ -3,15 +3,17 @@ title: Manuals · Howtos · Tutorials
 tags:
   - tools
   - tools/manuals-howtos-tutorials
-tools: 26
+tools: 28
 ---
 
 # Manuals/Howtos/Tutorials
 
-26 curated tools. Pillar: [[Tool Arsenal]] · Up: [[Home]]
+28 curated tools. Pillar: [[Tool Arsenal]] · Up: [[Home]]
 
 ## Bash
 
+- [BashGuide](https://mywiki.wooledge.org/BashGuide) — Greg's Wiki guide to writing correct bash, home of the classic pitfalls and FAQ pages
+- [explainshell](https://explainshell.com/) — paste any shell one-liner and see each flag matched to its man-page documentation
 - [pure-bash-bible](https://github.com/dylanaraps/pure-bash-bible) — a collection of pure bash alternatives to external processes
 - [The Bash Hackers Wiki](http://wiki.bash-hackers.org/start) — hold documentation of any kind about GNU Bash
 

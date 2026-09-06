@@ -3,12 +3,12 @@ title: Web Tools
 tags:
   - tools
   - tools/web-tools
-tools: 28
+tools: 29
 ---
 
 # Web Tools
 
-28 curated tools. Pillar: [[Tool Arsenal]] · Up: [[Home]]
+29 curated tools. Pillar: [[Tool Arsenal]] · Up: [[Home]]
 
 ## SSL
 
@@ -19,6 +19,7 @@ tools: 28
 - [Report URI](https://report-uri.com/home/tools) — monitoring security policies like CSP and HPKP
 - [SSL Server Test](https://www.ssllabs.com/ssltest/) — free online service performs a deep analysis of the configuration of any SSL web server
 - [SSL Server Test (DEV)](https://dev.ssllabs.com/ssltest/) — same as SSL Server Test but uses the development/preview API endpoint for testing latest grading changes
+- [testssl.sh](https://testssl.sh/) — command-line tool that checks a server's TLS/SSL ciphers, protocols, and known flaws
 
 ## HTTP Headers
 

@@ -109,14 +109,19 @@ they never drift from the list below. Rebuild with `python3 scripts/gen_secondbr
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://curl.haxx.se/"><b>Curl</b></a> - command line tool and library for transferring data with URLs.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://gnutls.org/manual/html_node/gnutls_002dcli-Invocation.html"><b>gnutls-cli</b></a> - client program to set up a TLS connection to some other computer.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/jkbrzt/httpie"><b>HTTPie</b></a> - user-friendly HTTP client with JSON support, syntax highlighting, and intuitive syntax.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/esnet/iperf"><b>iperf3</b></a> - active network throughput measurement tool for TCP, UDP, and SCTP.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="http://netcat.sourceforge.net/"><b>netcat</b></a> - networking utility which reads and writes data across network connections, using the TCP/IP protocol.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.tcpdump.org/"><b>tcpdump</b></a> - powerful command-line packet analyzer.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/ducaale/xh"><b>xh</b></a> - fast, friendly HTTPie-style HTTP client written in Rust.<br>
 </p>
 
 ##### :black_small_square: Databases
 
 <p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/dbcli/litecli"><b>litecli</b></a> - SQLite CLI with autocompletion and syntax highlighting.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/dbcli/mycli"><b>mycli</b></a> - MySQL and MariaDB CLI with autocompletion and syntax highlighting.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/dbcli/pgcli"><b>pgcli</b></a> - postgres CLI with autocompletion and syntax highlighting.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/xo/usql"><b>usql</b></a> - universal command-line client covering Postgres, MySQL, SQLite, SQL Server, and more.<br>
 </p>
 
 #### Web Tools
@@ -131,6 +136,7 @@ they never drift from the list below. Rebuild with `python3 scripts/gen_secondbr
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://report-uri.com/home/tools"><b>Report URI</b></a> - monitoring security policies like CSP and HPKP.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.ssllabs.com/ssltest/"><b>SSL Server Test</b></a> - free online service performs a deep analysis of the configuration of any SSL web server.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://dev.ssllabs.com/ssltest/"><b>SSL Server Test (DEV)</b></a> - same as SSL Server Test but uses the development/preview API endpoint for testing latest grading changes.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://testssl.sh/"><b>testssl.sh</b></a> - command-line tool that checks a server's TLS/SSL ciphers, protocols, and known flaws.<br>
 </p>
 
 ##### :black_small_square: HTTP Headers
@@ -194,6 +200,8 @@ they never drift from the list below. Rebuild with `python3 scripts/gen_secondbr
 ##### :black_small_square: Bash
 
 <p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://mywiki.wooledge.org/BashGuide"><b>BashGuide</b></a> - Greg's Wiki guide to writing correct bash, home of the classic pitfalls and FAQ pages.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://explainshell.com/"><b>explainshell</b></a> - paste any shell one-liner and see each flag matched to its man-page documentation.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/dylanaraps/pure-bash-bible"><b>pure-bash-bible</b></a> - a collection of pure bash alternatives to external processes.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="http://wiki.bash-hackers.org/start"><b>The Bash Hackers Wiki</b></a> - hold documentation of any kind about GNU Bash.<br>
 </p>
@@ -277,9 +285,12 @@ they never drift from the list below. Rebuild with `python3 scripts/gen_secondbr
 ##### :black_small_square: System Monitoring
 
 <p>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://github.com/aristocratos/btop"><b>btop</b></a> - beautiful terminal resource monitor for CPU, memory, disks, network, and processes.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://gatus.io/"><b>Gatus</b></a> - automated service health dashboard driven by configuration.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://nicolargo.github.io/glances/"><b>glances</b></a> - cross-platform, real-time system monitoring tool written in Python.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://grafana.com/"><b>Grafana</b></a> - analytics and interactive visualization platform for metrics, logs, and traces.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://htop.dev/"><b>htop</b></a> - interactive process viewer, the classic top replacement.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://www.netdata.cloud/"><b>Netdata</b></a> - real-time, per-second metrics dashboards with zero-configuration auto-discovery.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://prometheus.io/"><b>Prometheus</b></a> - open-source monitoring system and time series database with a powerful query language.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://uptime.kuma.pet/"><b>Uptime Kuma</b></a> - self-hosted, modern uptime monitoring tool with a clean UI.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.zabbix.com/"><b>Zabbix</b></a> - enterprise-class network and application monitoring with alerting.<br>
@@ -290,6 +301,7 @@ they never drift from the list below. Rebuild with `python3 scripts/gen_secondbr
 <p>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.fluentd.org/"><b>Fluentd</b></a> - open-source data collector for unified logging layer.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://goaccess.io/"><b>GoAccess</b></a> - real-time web log analyzer and interactive viewer in the terminal.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://lnav.org/"><b>lnav</b></a> - advanced log file navigator that merges, colorizes, and queries logs with SQL.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://grafana.com/oss/loki/"><b>Loki</b></a> - horizontally-scalable, highly-available log aggregation system inspired by Prometheus.<br>
 </p>
 
@@ -364,6 +376,7 @@ they never drift from the list below. Rebuild with `python3 scripts/gen_secondbr
 
 <p>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://www.borgbackup.org/"><b>BorgBackup</b></a> - deduplicating archiver with compression, encryption, and authenticated data integrity.<br>
+&nbsp;&nbsp;:small_orange_diamond: <a href="https://kopia.io/"><b>Kopia</b></a> - fast, encrypted, deduplicated backups to cloud storage targets, with CLI and GUI.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://rclone.org/"><b>rclone</b></a> - command-line program for syncing files to and from cloud storage providers.<br>
 &nbsp;&nbsp;:small_orange_diamond: <a href="https://restic.net/"><b>restic</b></a> - fast, secure, verifiable backup program supporting multiple backends.<br>
 </p>

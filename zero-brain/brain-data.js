@@ -4,10 +4,10 @@ window.__BRAIN__ = {
  "repo": "https://github.com/JJM1112023/second-brain",
  "counts": {
   "skills": 35,
-  "pillars": 7,
+  "pillars": 6,
   "categories": 12,
   "subcategories": 35,
-  "tools": 180
+  "tools": 193
  },
  "pillars": [
   {
@@ -51,13 +51,6 @@ window.__BRAIN__ = {
    "emoji": "🗡️",
    "color": "#ff4444",
    "blurb": "The curated sysadmin tool library in README.md, grouped by domain."
-  },
-  {
-   "id": "unsorted",
-   "name": "Unsorted",
-   "emoji": "📥",
-   "color": "#8899aa",
-   "blurb": "Skills not yet assigned to a pillar. Add them to PILLARS in scripts/gen_secondbrain.py."
   }
  ],
  "nodes": [
@@ -777,6 +770,18 @@ window.__BRAIN__ = {
    "invoke": "/add-entry"
   },
   {
+   "id": "skill:add-readme-entry",
+   "kind": "skill",
+   "label": "add-readme-entry",
+   "color": "#dddd44",
+   "detail": "This skill should be used when the user asks to \"add a tool\", \"add an entry to the list\", \"insert a new resource\", or \"update README with a new link\". Enforces the HTML-in-Markdown format and correct category placement.",
+   "pillar": "maintenance",
+   "sections": [],
+   "links": [],
+   "path": ".claude/skills/add-readme-entry/SKILL.md",
+   "invoke": "/add-readme-entry"
+  },
+  {
    "id": "skill:review",
    "kind": "skill",
    "label": "review",
@@ -792,42 +797,12 @@ window.__BRAIN__ = {
    "invoke": "/review"
   },
   {
-   "id": "pillar:arsenal",
-   "kind": "pillar",
-   "label": "TOOL ARSENAL",
-   "color": "#ff4444",
-   "emoji": "🗡️",
-   "detail": "The curated sysadmin tool library in README.md, grouped by domain.",
-   "pillar": "arsenal"
-  },
-  {
-   "id": "pillar:unsorted",
-   "kind": "pillar",
-   "label": "UNSORTED",
-   "color": "#8899aa",
-   "emoji": "📥",
-   "detail": "Skills not yet assigned to a pillar. Add them to PILLARS in scripts/gen_secondbrain.py.",
-   "pillar": "unsorted"
-  },
-  {
-   "id": "skill:add-readme-entry",
-   "kind": "skill",
-   "label": "add-readme-entry",
-   "color": "#8899aa",
-   "detail": "This skill should be used when the user asks to \"add a tool\", \"add an entry to the list\", \"insert a new resource\", or \"update README with a new link\". Enforces the HTML-in-Markdown format and correct category placement.",
-   "pillar": "unsorted",
-   "sections": [],
-   "links": [],
-   "path": ".claude/skills/add-readme-entry/SKILL.md",
-   "invoke": "/add-readme-entry"
-  },
-  {
    "id": "skill:shellcheck-fix",
    "kind": "skill",
    "label": "shellcheck-fix",
-   "color": "#8899aa",
+   "color": "#dddd44",
    "detail": "This skill should be used when the user asks to \"fix shellcheck errors\", \"lint bash scripts\", \"validate scripts\", or \"check src/ files\". Runs shellcheck and resolves flagged issues.",
-   "pillar": "unsorted",
+   "pillar": "maintenance",
    "sections": [],
    "links": [],
    "path": ".claude/skills/shellcheck-fix/SKILL.md",
@@ -837,22 +812,31 @@ window.__BRAIN__ = {
    "id": "skill:signed-commit",
    "kind": "skill",
    "label": "signed-commit",
-   "color": "#8899aa",
+   "color": "#dddd44",
    "detail": "This skill should be used when the user asks to \"commit\", \"push changes\", \"make a commit\", or \"submit work\". Ensures signed-off-by line is always present.",
-   "pillar": "unsorted",
+   "pillar": "maintenance",
    "sections": [],
    "links": [],
    "path": ".claude/skills/signed-commit/SKILL.md",
    "invoke": "/signed-commit"
   },
   {
+   "id": "pillar:arsenal",
+   "kind": "pillar",
+   "label": "TOOL ARSENAL",
+   "color": "#ff4444",
+   "emoji": "🗡️",
+   "detail": "The curated sysadmin tool library in README.md, grouped by domain.",
+   "pillar": "arsenal"
+  },
+  {
    "id": "cat:cli-tools",
    "kind": "category",
    "label": "CLI Tools",
    "color": "#ff4444",
-   "detail": "29 curated tools across 5 subcategories.",
+   "detail": "34 curated tools across 5 subcategories.",
    "pillar": "arsenal",
-   "count": 29
+   "count": 34
   },
   {
    "id": "sub:cli-tools:shells",
@@ -886,36 +870,36 @@ window.__BRAIN__ = {
    "kind": "subcategory",
    "label": "Network",
    "color": "#ff8866",
-   "detail": "5 tools in CLI Tools.",
+   "detail": "7 tools in CLI Tools.",
    "pillar": "arsenal",
-   "count": 5
+   "count": 7
   },
   {
    "id": "sub:cli-tools:databases",
    "kind": "subcategory",
    "label": "Databases",
    "color": "#ff8866",
-   "detail": "1 tools in CLI Tools.",
+   "detail": "4 tools in CLI Tools.",
    "pillar": "arsenal",
-   "count": 1
+   "count": 4
   },
   {
    "id": "cat:web-tools",
    "kind": "category",
    "label": "Web Tools",
    "color": "#ff4444",
-   "detail": "28 curated tools across 8 subcategories.",
+   "detail": "29 curated tools across 8 subcategories.",
    "pillar": "arsenal",
-   "count": 28
+   "count": 29
   },
   {
    "id": "sub:web-tools:ssl",
    "kind": "subcategory",
    "label": "SSL",
    "color": "#ff8866",
-   "detail": "7 tools in Web Tools.",
+   "detail": "8 tools in Web Tools.",
    "pillar": "arsenal",
-   "count": 7
+   "count": 8
   },
   {
    "id": "sub:web-tools:http-headers",
@@ -985,18 +969,18 @@ window.__BRAIN__ = {
    "kind": "category",
    "label": "Manuals/Howtos/Tutorials",
    "color": "#ff4444",
-   "detail": "26 curated tools across 4 subcategories.",
+   "detail": "28 curated tools across 4 subcategories.",
    "pillar": "arsenal",
-   "count": 26
+   "count": 28
   },
   {
    "id": "sub:manuals-howtos-tutorials:bash",
    "kind": "subcategory",
    "label": "Bash",
    "color": "#ff8866",
-   "detail": "2 tools in Manuals/Howtos/Tutorials.",
+   "detail": "4 tools in Manuals/Howtos/Tutorials.",
    "pillar": "arsenal",
-   "count": 2
+   "count": 4
   },
   {
    "id": "sub:manuals-howtos-tutorials:unix-tutorials",
@@ -1084,27 +1068,27 @@ window.__BRAIN__ = {
    "kind": "category",
    "label": "Monitoring/Observability",
    "color": "#ff4444",
-   "detail": "9 curated tools across 2 subcategories.",
+   "detail": "13 curated tools across 2 subcategories.",
    "pillar": "arsenal",
-   "count": 9
+   "count": 13
   },
   {
    "id": "sub:monitoring-observability:system-monitoring",
    "kind": "subcategory",
    "label": "System Monitoring",
    "color": "#ff8866",
-   "detail": "6 tools in Monitoring/Observability.",
+   "detail": "9 tools in Monitoring/Observability.",
    "pillar": "arsenal",
-   "count": 6
+   "count": 9
   },
   {
    "id": "sub:monitoring-observability:log-management",
    "kind": "subcategory",
    "label": "Log Management",
    "color": "#ff8866",
-   "detail": "3 tools in Monitoring/Observability.",
+   "detail": "4 tools in Monitoring/Observability.",
    "pillar": "arsenal",
-   "count": 3
+   "count": 4
   },
   {
    "id": "cat:devops-cloud",
@@ -1165,9 +1149,9 @@ window.__BRAIN__ = {
    "kind": "category",
    "label": "Infrastructure",
    "color": "#ff4444",
-   "detail": "13 curated tools across 4 subcategories.",
+   "detail": "14 curated tools across 4 subcategories.",
    "pillar": "arsenal",
-   "count": 13
+   "count": 14
   },
   {
    "id": "sub:infrastructure:containers-virtualization",
@@ -1192,9 +1176,9 @@ window.__BRAIN__ = {
    "kind": "subcategory",
    "label": "Backup & Recovery",
    "color": "#ff8866",
-   "detail": "3 tools in Infrastructure.",
+   "detail": "4 tools in Infrastructure.",
    "pillar": "arsenal",
-   "count": 3
+   "count": 4
   },
   {
    "id": "sub:infrastructure:vpn",
@@ -1432,18 +1416,18 @@ window.__BRAIN__ = {
   },
   {
    "s": "pillar:maintenance",
-   "t": "skill:review"
-  },
-  {
-   "s": "pillar:unsorted",
    "t": "skill:add-readme-entry"
   },
   {
-   "s": "pillar:unsorted",
+   "s": "pillar:maintenance",
+   "t": "skill:review"
+  },
+  {
+   "s": "pillar:maintenance",
    "t": "skill:shellcheck-fix"
   },
   {
-   "s": "pillar:unsorted",
+   "s": "pillar:maintenance",
    "t": "skill:signed-commit"
   },
   {
@@ -1861,6 +1845,14 @@ window.__BRAIN__ = {
    "node": "sub:cli-tools:network"
   },
   {
+   "name": "iperf3",
+   "url": "https://github.com/esnet/iperf",
+   "desc": "active network throughput measurement tool for TCP, UDP, and SCTP",
+   "cat": "CLI Tools",
+   "sub": "Network",
+   "node": "sub:cli-tools:network"
+  },
+  {
    "name": "netcat",
    "url": "http://netcat.sourceforge.net/",
    "desc": "networking utility which reads and writes data across network connections, using the TCP/IP protocol",
@@ -1877,9 +1869,41 @@ window.__BRAIN__ = {
    "node": "sub:cli-tools:network"
   },
   {
+   "name": "xh",
+   "url": "https://github.com/ducaale/xh",
+   "desc": "fast, friendly HTTPie-style HTTP client written in Rust",
+   "cat": "CLI Tools",
+   "sub": "Network",
+   "node": "sub:cli-tools:network"
+  },
+  {
+   "name": "litecli",
+   "url": "https://github.com/dbcli/litecli",
+   "desc": "SQLite CLI with autocompletion and syntax highlighting",
+   "cat": "CLI Tools",
+   "sub": "Databases",
+   "node": "sub:cli-tools:databases"
+  },
+  {
+   "name": "mycli",
+   "url": "https://github.com/dbcli/mycli",
+   "desc": "MySQL and MariaDB CLI with autocompletion and syntax highlighting",
+   "cat": "CLI Tools",
+   "sub": "Databases",
+   "node": "sub:cli-tools:databases"
+  },
+  {
    "name": "pgcli",
    "url": "https://github.com/dbcli/pgcli",
    "desc": "postgres CLI with autocompletion and syntax highlighting",
+   "cat": "CLI Tools",
+   "sub": "Databases",
+   "node": "sub:cli-tools:databases"
+  },
+  {
+   "name": "usql",
+   "url": "https://github.com/xo/usql",
+   "desc": "universal command-line client covering Postgres, MySQL, SQLite, SQL Server, and more",
    "cat": "CLI Tools",
    "sub": "Databases",
    "node": "sub:cli-tools:databases"
@@ -1936,6 +1960,14 @@ window.__BRAIN__ = {
    "name": "SSL Server Test (DEV)",
    "url": "https://dev.ssllabs.com/ssltest/",
    "desc": "same as SSL Server Test but uses the development/preview API endpoint for testing latest grading changes",
+   "cat": "Web Tools",
+   "sub": "SSL",
+   "node": "sub:web-tools:ssl"
+  },
+  {
+   "name": "testssl.sh",
+   "url": "https://testssl.sh/",
+   "desc": "command-line tool that checks a server's TLS/SSL ciphers, protocols, and known flaws",
    "cat": "Web Tools",
    "sub": "SSL",
    "node": "sub:web-tools:ssl"
@@ -2107,6 +2139,22 @@ window.__BRAIN__ = {
    "cat": "Web Tools",
    "sub": "Passwords",
    "node": "sub:web-tools:passwords"
+  },
+  {
+   "name": "BashGuide",
+   "url": "https://mywiki.wooledge.org/BashGuide",
+   "desc": "Greg's Wiki guide to writing correct bash, home of the classic pitfalls and FAQ pages",
+   "cat": "Manuals/Howtos/Tutorials",
+   "sub": "Bash",
+   "node": "sub:manuals-howtos-tutorials:bash"
+  },
+  {
+   "name": "explainshell",
+   "url": "https://explainshell.com/",
+   "desc": "paste any shell one-liner and see each flag matched to its man-page documentation",
+   "cat": "Manuals/Howtos/Tutorials",
+   "sub": "Bash",
+   "node": "sub:manuals-howtos-tutorials:bash"
   },
   {
    "name": "pure-bash-bible",
@@ -2421,6 +2469,14 @@ window.__BRAIN__ = {
    "node": "sub:systems-services:security-hardening"
   },
   {
+   "name": "btop",
+   "url": "https://github.com/aristocratos/btop",
+   "desc": "beautiful terminal resource monitor for CPU, memory, disks, network, and processes",
+   "cat": "Monitoring/Observability",
+   "sub": "System Monitoring",
+   "node": "sub:monitoring-observability:system-monitoring"
+  },
+  {
    "name": "Gatus",
    "url": "https://gatus.io/",
    "desc": "automated service health dashboard driven by configuration",
@@ -2440,6 +2496,22 @@ window.__BRAIN__ = {
    "name": "Grafana",
    "url": "https://grafana.com/",
    "desc": "analytics and interactive visualization platform for metrics, logs, and traces",
+   "cat": "Monitoring/Observability",
+   "sub": "System Monitoring",
+   "node": "sub:monitoring-observability:system-monitoring"
+  },
+  {
+   "name": "htop",
+   "url": "https://htop.dev/",
+   "desc": "interactive process viewer, the classic top replacement",
+   "cat": "Monitoring/Observability",
+   "sub": "System Monitoring",
+   "node": "sub:monitoring-observability:system-monitoring"
+  },
+  {
+   "name": "Netdata",
+   "url": "https://www.netdata.cloud/",
+   "desc": "real-time, per-second metrics dashboards with zero-configuration auto-discovery",
    "cat": "Monitoring/Observability",
    "sub": "System Monitoring",
    "node": "sub:monitoring-observability:system-monitoring"
@@ -2480,6 +2552,14 @@ window.__BRAIN__ = {
    "name": "GoAccess",
    "url": "https://goaccess.io/",
    "desc": "real-time web log analyzer and interactive viewer in the terminal",
+   "cat": "Monitoring/Observability",
+   "sub": "Log Management",
+   "node": "sub:monitoring-observability:log-management"
+  },
+  {
+   "name": "lnav",
+   "url": "https://lnav.org/",
+   "desc": "advanced log file navigator that merges, colorizes, and queries logs with SQL",
    "cat": "Monitoring/Observability",
    "sub": "Log Management",
    "node": "sub:monitoring-observability:log-management"
@@ -2720,6 +2800,14 @@ window.__BRAIN__ = {
    "name": "BorgBackup",
    "url": "https://www.borgbackup.org/",
    "desc": "deduplicating archiver with compression, encryption, and authenticated data integrity",
+   "cat": "Infrastructure",
+   "sub": "Backup & Recovery",
+   "node": "sub:infrastructure:backup-recovery"
+  },
+  {
+   "name": "Kopia",
+   "url": "https://kopia.io/",
+   "desc": "fast, encrypted, deduplicated backups to cloud storage targets, with CLI and GUI",
    "cat": "Infrastructure",
    "sub": "Backup & Recovery",
    "node": "sub:infrastructure:backup-recovery"
