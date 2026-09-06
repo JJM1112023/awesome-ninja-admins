@@ -47,7 +47,14 @@ check_cert() {
   fi
 
   expiry_epoch=$(date -d "${expiry_date}" +%s 2>/dev/null \
-    || date -jf "%b %d %T %Y %Z" "${expiry_date}" +%s 2>/dev/null)
+    || date -jf "%b %d %T %Y %Z" "${expiry_date}" +%s 2>/dev/null) || expiry_epoch=""
+
+  if [[ -z "${expiry_epoch}" ]]; then
+    printf '%-40s  ERROR: could not parse expiry date [%s]\n' \
+      "${host}:${port}" "${expiry_date}"
+    return 1
+  fi
+
   now_epoch=$(date +%s)
   days_left=$(( (expiry_epoch - now_epoch) / 86400 ))
 

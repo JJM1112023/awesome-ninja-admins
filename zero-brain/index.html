@@ -1,0 +1,2199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Z.E.R.O. — an interactive knowledge graph over the awesome-ninja-admins skill library and curated sysadmin tool arsenal.">
+<meta name="theme-color" content="#000000">
+<title>Z.E.R.O. · AI Second Brain</title>
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="64x64" href="../icons/favicon-64.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cy: #4ff5d2;                        /* mint-aqua: the lit accent */
+  --cy-rgb: 79, 245, 210;
+  --dim: #6f8a92;
+  --panel: rgba(4, 12, 14, 0.84);
+  --line: rgba(var(--cy-rgb), 0.22);
+  --glow: rgba(var(--cy-rgb), 0.55);
+}
+
+html, body { height: 100%; }
+
+body {
+  background: #000;
+  color: #dfeaf2;
+  font-family: 'SFMono-Regular', 'JetBrains Mono', Consolas, 'Courier New', monospace;
+  overflow: hidden;
+  font-size: 13px;
+  -webkit-text-size-adjust: 100%;
+}
+
+canvas#c { position: fixed; inset: 0; cursor: grab; touch-action: none; }
+canvas#c.dragging { cursor: grabbing; }
+canvas#c.pointing { cursor: pointer; }
+
+/* ── HUD chrome ─────────────────────────────────── */
+.hud { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
+.hud > * { pointer-events: auto; }
+
+/* Framing brackets. Lit rather than drawn: a solid accent edge plus a bloom
+   cast both outward and inward, which is what reads as an illuminated HUD
+   instead of a thin border. */
+.corner {
+  position: absolute; width: 42px; height: 42px;
+  border-color: var(--cy); border-style: solid; pointer-events: none;
+  box-shadow: 0 0 14px -2px var(--glow), inset 0 0 14px -4px var(--glow);
+  opacity: .9;
+}
+.c-tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; border-top-left-radius: 3px; }
+.c-tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; border-top-right-radius: 3px; }
+.c-bl { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; border-bottom-left-radius: 3px; }
+.c-br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; border-bottom-right-radius: 3px; }
+
+.scanline {
+  position: absolute; left: 0; right: 0; height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(var(--cy-rgb), .16) 50%, transparent);
+  animation: scan 6s linear infinite;
+}
+@keyframes scan { from { top: 0 } to { top: 100% } }
+@media (prefers-reduced-motion: reduce) { .scanline { animation: none; opacity: .25 } }
+
+/* ── Top bar ────────────────────────────────────── */
+.topbar {
+  position: absolute; top: 14px; left: 50px; right: 50px;
+  display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+}
+.brand { flex: 0 0 auto; }
+.brand-name { font-size: 15px; font-weight: 800; letter-spacing: 5px; color: #fff; }
+.brand-sub { font-size: 9px; letter-spacing: 2px; color: var(--dim); margin-top: 3px; }
+
+.searchwrap { flex: 1 1 260px; max-width: 460px; position: relative; }
+.searchbox {
+  width: 100%; background: var(--panel); border: 1px solid var(--line);
+  color: #eaf6ff; font: inherit; font-size: 12px; padding: 9px 34px 9px 11px;
+  border-radius: 3px; outline: none; backdrop-filter: blur(8px);
+}
+.searchbox:focus { border-color: rgba(var(--cy-rgb), .65); box-shadow: 0 0 0 2px rgba(var(--cy-rgb), .12); }
+.searchbox::placeholder { color: #4d6070; }
+.search-kbd {
+  position: absolute; right: 9px; top: 8px; font-size: 9px; color: var(--dim);
+  border: 1px solid var(--line); border-radius: 3px; padding: 1px 5px; pointer-events: none;
+}
+.results {
+  position: absolute; top: 40px; left: 0; right: 0; max-height: 52vh; overflow-y: auto;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 3px;
+  backdrop-filter: blur(10px); display: none; z-index: 5;
+}
+.results.on { display: block; }
+.res {
+  padding: 7px 11px; border-bottom: 1px solid rgba(var(--cy-rgb), .08);
+  cursor: pointer; display: flex; gap: 9px; align-items: baseline;
+}
+.res:last-child { border-bottom: 0; }
+.res:hover, .res.sel { background: rgba(var(--cy-rgb), .10); }
+.res-kind { font-size: 8px; letter-spacing: 1px; color: #05121a; background: var(--cy); padding: 1px 4px; border-radius: 2px; flex: 0 0 auto; }
+.res-kind.tool { background: #ff8866; }
+.res-name { color: #eaf6ff; font-size: 12px; }
+.res-ctx { color: var(--dim); font-size: 10px; margin-left: auto; flex: 0 0 auto; }
+.res-empty { padding: 11px; color: var(--dim); font-size: 11px; }
+
+.toolbtns { display: flex; gap: 6px; margin-left: auto; }
+.tbtn {
+  background: var(--panel); border: 1px solid var(--line); color: var(--dim);
+  font: inherit; font-size: 9px; letter-spacing: 1.5px; padding: 7px 9px;
+  border-radius: 3px; cursor: pointer; backdrop-filter: blur(8px);
+}
+.tbtn:hover { color: var(--cy); border-color: rgba(var(--cy-rgb), .5); }
+.tbtn.on { color: #05121a; background: var(--cy); border-color: var(--cy); }
+
+/* ── Side panels ────────────────────────────────── */
+.panel {
+  position: absolute; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 3px; backdrop-filter: blur(10px); padding: 12px;
+  overflow-y: auto; overscroll-behavior: contain;
+}
+.p-left  { top: 92px; left: 22px;  width: 250px; max-height: calc(100vh - 190px); }
+.p-right { top: 92px; right: 22px; width: 340px; max-height: calc(100vh - 190px); }
+/* Taken down by the SYS / INFO buttons to hand the space back to the graph. */
+.panel.collapsed { display: none; }
+
+.p-title {
+  font-size: 9px; letter-spacing: 2.5px; color: var(--cy);
+  border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 9px;
+  text-shadow: 0 0 10px var(--glow);
+}
+.p-title .muted { color: var(--dim); float: right; letter-spacing: 1px; }
+
+.metric { display: flex; justify-content: space-between; font-size: 11px; padding: 3px 0; }
+.metric .k { color: var(--dim); }
+.metric .v { color: #fff; font-weight: 700; }
+
+.legend { margin-top: 12px; }
+.leg { display: flex; align-items: center; gap: 7px; font-size: 10px; padding: 3px 0; cursor: pointer; }
+.leg:hover .leg-name { color: #fff; }
+.leg-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.leg-name { color: #b9cddb; }
+.leg-n { margin-left: auto; color: var(--dim); }
+
+.road { margin-top: 12px; }
+.road-item { display: flex; gap: 7px; align-items: flex-start; font-size: 10.5px; padding: 4px 0; cursor: pointer; line-height: 1.35; }
+.road-box {
+  width: 12px; height: 12px; border: 1px solid var(--line); border-radius: 2px;
+  flex: 0 0 auto; margin-top: 1px; display: grid; place-items: center;
+  font-size: 9px; color: #05121a;
+}
+.road-item.done .road-box { background: #00ff9c; border-color: #00ff9c; }
+.road-item.done .road-label { color: var(--dim); text-decoration: line-through; }
+.road-label { color: #cadbe7; }
+
+/* Detail panel */
+.d-empty { color: var(--dim); font-size: 11px; line-height: 1.6; }
+.d-kind { font-size: 8px; letter-spacing: 2px; color: #05121a; padding: 2px 6px; border-radius: 2px; display: inline-block; }
+.d-name { font-size: 16px; font-weight: 800; color: #fff; margin: 8px 0 6px; word-break: break-word; }
+.d-desc { font-size: 11.5px; color: #b9cddb; line-height: 1.55; }
+.d-sec { font-size: 9px; letter-spacing: 2px; color: var(--cy); margin: 12px 0 5px; }
+.d-list { list-style: none; }
+.d-list li { font-size: 11px; color: #cadbe7; padding: 2.5px 0; line-height: 1.4; }
+.d-list a { color: var(--cy); text-decoration: none; word-break: break-all; }
+.d-list a:hover { text-decoration: underline; }
+.chiplink {
+  display: inline-block; font-size: 10px; color: #cadbe7; border: 1px solid var(--line);
+  border-radius: 2px; padding: 2px 7px; margin: 2px 3px 2px 0; cursor: pointer;
+}
+.chiplink:hover { color: #fff; border-color: rgba(var(--cy-rgb), .6); }
+.d-meta { font-size: 10px; color: var(--dim); margin-top: 10px; word-break: break-all; }
+
+/* ── Detail panel: header, stats, actions, tabs, editors ── */
+.d-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.d-fav {
+  background: none; border: none; color: var(--dim); font-size: 16px;
+  cursor: pointer; line-height: 1; padding: 0 2px;
+}
+.d-fav:hover { color: var(--cy); }
+.d-fav.on { color: var(--cy); text-shadow: 0 0 9px rgba(var(--cy-rgb), .85); }
+
+.d-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 10px 0 4px; }
+.d-stat {
+  background: rgba(var(--cy-rgb), .05); border: 1px solid var(--line);
+  border-radius: 3px; padding: 7px 4px; text-align: center;
+}
+.d-stat b {
+  display: block; font-size: 17px; font-weight: 800; color: var(--cy);
+  text-shadow: 0 0 12px rgba(var(--cy-rgb), .5);
+}
+.d-stat span { font-size: 8px; letter-spacing: 1.6px; color: var(--dim); }
+
+.d-acts { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0 2px; }
+
+.d-tabs { display: flex; gap: 2px; margin: 12px 0 10px; border-bottom: 1px solid var(--line); }
+.d-tab {
+  background: none; border: none; border-bottom: 2px solid transparent;
+  color: var(--dim); font: inherit; font-size: 9px; letter-spacing: 2px;
+  padding: 6px 9px; cursor: pointer;
+}
+.d-tab:hover { color: #cfe6f3; }
+.d-tab.on { color: var(--cy); border-bottom-color: var(--cy); text-shadow: 0 0 10px rgba(var(--cy-rgb), .6); }
+
+.d-note, .d-input {
+  width: 100%; background: rgba(0,0,0,.45); border: 1px solid var(--line);
+  border-radius: 3px; color: #eaf6ff; font: inherit; font-size: 11.5px;
+  padding: 8px; outline: none; resize: vertical;
+}
+.d-note:focus, .d-input:focus {
+  border-color: rgba(var(--cy-rgb), .65); box-shadow: 0 0 0 2px rgba(var(--cy-rgb), .12);
+}
+.d-note::placeholder, .d-input::placeholder { color: #4d6070; }
+
+.d-table { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+.d-table th, .d-table td {
+  text-align: left; padding: 5px 4px; border-bottom: 1px solid rgba(var(--cy-rgb), .10);
+  vertical-align: top; word-break: break-word;
+}
+.d-table th { color: var(--dim); font-weight: 400; letter-spacing: 1px; width: 44%; }
+.d-table td { color: #cadbe7; }
+
+/* ── Mission control ─────────────────────────────────────────── */
+.mc {
+  position: fixed; inset: 0; z-index: 40; display: flex;
+  background: #01070a; overflow: hidden;
+}
+.mc[hidden] { display: none; }
+
+.mc-rail {
+  width: 214px; flex: 0 0 214px; border-right: 1px solid var(--line);
+  padding: 16px 12px; display: flex; flex-direction: column; gap: 3px;
+  background: rgba(0,0,0,.5);
+}
+.mc-brand {
+  font-size: 14px; font-weight: 800; letter-spacing: 5px; color: #fff;
+  text-shadow: 0 0 16px var(--glow); margin-bottom: 16px;
+}
+.mc-brand span {
+  display: block; font-size: 8px; letter-spacing: 2.4px;
+  color: var(--dim); margin-top: 4px; font-weight: 400;
+}
+.mc-nav {
+  background: none; border: 1px solid transparent; border-radius: 3px;
+  color: var(--dim); font: inherit; font-size: 9.5px; letter-spacing: 1.8px;
+  padding: 9px 10px; text-align: left; cursor: pointer;
+}
+.mc-nav:hover { color: #cfe6f3; border-color: var(--line); }
+.mc-nav.on {
+  color: var(--cy); border-color: var(--line);
+  background: rgba(var(--cy-rgb), .07); text-shadow: 0 0 10px var(--glow);
+}
+.mc-rail-foot { margin-top: auto; }
+
+.mc-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.mc-strip {
+  display: flex; flex-wrap: wrap; gap: 22px; padding: 13px 20px;
+  border-bottom: 1px solid var(--line); font-size: 9px; letter-spacing: 1.5px;
+}
+.mc-strip div span { color: var(--dim); }
+.mc-strip div b { color: var(--cy); font-weight: 700; margin-left: 7px; }
+
+.mc-body { flex: 1; overflow-y: auto; padding: 18px 20px 30px; }
+.mc-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+
+.mc-card {
+  background: rgba(4,14,16,.72); border: 1px solid var(--line);
+  border-radius: 4px; padding: 13px 14px 15px;
+}
+.mc-card > h3 {
+  font-size: 9px; letter-spacing: 2.4px; color: var(--cy); font-weight: 400;
+  border-bottom: 1px solid var(--line); padding-bottom: 7px; margin-bottom: 11px;
+  text-shadow: 0 0 10px var(--glow); display: flex; justify-content: space-between;
+}
+.mc-card > h3 em { font-style: normal; color: var(--dim); letter-spacing: 1.4px; }
+
+/* Big readouts, as in the reference dashboards */
+.mc-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; }
+.mc-tile {
+  background: rgba(var(--cy-rgb), .05); border: 1px solid var(--line);
+  border-radius: 3px; padding: 11px 6px; text-align: center;
+}
+.mc-tile b {
+  display: block; font-size: 22px; font-weight: 800; color: var(--cy);
+  text-shadow: 0 0 14px var(--glow); line-height: 1.1;
+}
+.mc-tile span { font-size: 8px; letter-spacing: 1.5px; color: var(--dim); }
+
+.mc-row {
+  display: grid; grid-template-columns: 30px 1fr auto; gap: 9px;
+  align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(var(--cy-rgb), .09);
+  font-size: 11px; color: #cadbe7;
+}
+.mc-row:last-child { border-bottom: none; }
+.mc-row .pri {
+  font-size: 8.5px; letter-spacing: 1px; text-align: center; border-radius: 2px;
+  padding: 2px 0; background: rgba(var(--cy-rgb), .12); color: var(--cy);
+}
+.mc-row.done .lbl { color: var(--dim); text-decoration: line-through; }
+.mc-row .lbl { cursor: pointer; }
+.mc-row .lbl:hover { color: #fff; }
+
+.badge {
+  font-size: 8px; letter-spacing: 1.3px; padding: 3px 7px; border-radius: 2px;
+  border: 1px solid var(--line); color: var(--dim); white-space: nowrap;
+}
+.badge.ok   { color: #05121a; background: var(--cy); border-color: var(--cy); }
+.badge.warn { color: #ffcf6b; border-color: rgba(255,207,107,.45); }
+.badge.live { color: var(--cy); border-color: rgba(var(--cy-rgb), .5); }
+
+.bar { height: 4px; border-radius: 2px; background: rgba(var(--cy-rgb), .12); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--cy); box-shadow: 0 0 10px var(--glow); }
+
+.mc-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 9px; }
+.mc-mini {
+  border: 1px solid var(--line); border-radius: 3px; padding: 10px;
+  cursor: pointer; background: rgba(0,0,0,.3);
+}
+.mc-mini:hover { border-color: rgba(var(--cy-rgb), .55); background: rgba(var(--cy-rgb), .06); }
+.mc-mini .nm { font-size: 11px; color: #eaf6ff; margin-bottom: 7px; word-break: break-word; }
+.mc-mini .ct { font-size: 8.5px; color: var(--dim); letter-spacing: 1.2px; }
+.mc-mini .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 5px; }
+
+.mc-feed { font-size: 10.5px; }
+.mc-feed div { padding: 6px 0; border-bottom: 1px solid rgba(var(--cy-rgb), .09); color: #cadbe7; }
+.mc-feed div:last-child { border-bottom: none; }
+.mc-feed time { color: var(--dim); font-size: 9px; float: right; }
+.mc-empty { color: var(--dim); font-size: 10.5px; line-height: 1.6; }
+
+@media (max-width: 820px) {
+  .mc-rail { width: 132px; flex-basis: 132px; }
+  .mc-brand { font-size: 11px; letter-spacing: 3px; }
+  .mc-grid { grid-template-columns: minmax(0, 1fr); }
+  .mc-card { min-width: 0; }
+}
+code { background: rgba(var(--cy-rgb), .10); padding: 1px 4px; border-radius: 2px; color: #a9f5e2; }
+
+/* Capture */
+.cap-input {
+  width: 100%; background: rgba(0,0,0,.5); border: 1px solid var(--line); color: #eaf6ff;
+  font: inherit; font-size: 11px; padding: 7px; border-radius: 3px; resize: vertical;
+  min-height: 52px; outline: none;
+}
+.cap-input:focus { border-color: rgba(var(--cy-rgb), .6); }
+.cap-row { display: flex; gap: 6px; margin-top: 6px; }
+.cap-note { font-size: 10.5px; color: #cadbe7; border-left: 2px solid var(--line); padding: 4px 0 4px 7px; margin-top: 6px; line-height: 1.4; position: relative; }
+.cap-note time { display: block; color: var(--dim); font-size: 9px; margin-top: 2px; }
+.cap-del { position: absolute; right: 0; top: 3px; color: var(--dim); cursor: pointer; font-size: 12px; padding: 0 3px; }
+.cap-del:hover { color: #ff6644; }
+
+/* ── Bottom bar ─────────────────────────────────── */
+.bottombar {
+  position: absolute; bottom: 16px; left: 50px; right: 50px;
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+}
+.status { font-size: 9.5px; letter-spacing: 1.5px; color: var(--dim); }
+.status .on { color: #00ff9c; }
+.status .warn { color: #ffb020; }
+.hint { font-size: 9px; letter-spacing: 1.2px; color: #3d5162; margin-left: auto; text-align: right; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 70px; transform: translateX(-50%);
+  background: rgba(var(--cy-rgb), .14); border: 1px solid rgba(var(--cy-rgb), .5);
+  color: #d9f4ff; font-size: 11px; padding: 8px 14px; border-radius: 3px;
+  z-index: 40; opacity: 0; transition: opacity .25s; pointer-events: none;
+}
+.toast.on { opacity: 1; }
+
+.banner {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  background: #3a1010; border-bottom: 1px solid #ff5544; color: #ffd9d4;
+  font-size: 11.5px; padding: 9px 14px; line-height: 1.5;
+}
+.banner code { background: rgba(255,255,255,.12); color: #fff; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: rgba(var(--cy-rgb), .22); border-radius: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ── Narrow screens: panels become toggled sheets ── */
+@media (max-width: 900px) {
+  .topbar { left: 14px; right: 14px; top: 12px; }
+  .bottombar { left: 14px; right: 14px; bottom: 12px; }
+  .corner { display: none; }
+  .p-left, .p-right {
+    top: auto; bottom: 56px; left: 14px; right: 14px; width: auto;
+    max-height: 46vh; display: none;
+  }
+  .p-left.open, .p-right.open { display: block; }
+  .hint { display: none; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="c" aria-label="Knowledge graph" role="img"></canvas>
+
+<div class="hud">
+  <div class="corner c-tl"></div><div class="corner c-tr"></div>
+  <div class="corner c-bl"></div><div class="corner c-br"></div>
+  <div class="scanline"></div>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-name">Z.E.R.O.</div>
+      <div class="brand-sub">SECOND BRAIN · KNOWLEDGE GRAPH</div>
+    </div>
+
+    <div class="searchwrap">
+      <input id="q" class="searchbox" type="search" autocomplete="off" spellcheck="false"
+             placeholder="Search skills, tools, categories…" aria-label="Search the second brain">
+      <span class="search-kbd">/</span>
+      <div id="results" class="results" role="listbox"></div>
+    </div>
+
+    <div class="toolbtns">
+      <button class="tbtn" id="btn-left"  type="button" title="System panel">SYS</button>
+      <button class="tbtn" id="btn-right" type="button" title="Detail panel">INFO</button>
+      <button class="tbtn" id="btn-mic"   type="button" title="Voice search">MIC</button>
+      <button class="tbtn" id="btn-mc"    type="button" title="Mission control (M)">MC</button>
+      <button class="tbtn" id="btn-reset" type="button" title="Reset the camera">RESET</button>
+    </div>
+  </div>
+
+  <!-- ── Left: system + legend + roadmap ── -->
+  <aside class="panel p-left" id="p-left">
+    <div class="p-title">SYSTEM <span class="muted" id="sys-uptime">00:00:00</span></div>
+    <div class="metric"><span class="k">skills</span><span class="v" id="m-skills">–</span></div>
+    <div class="metric"><span class="k">tools</span><span class="v" id="m-tools">–</span></div>
+    <div class="metric"><span class="k">categories</span><span class="v" id="m-cats">–</span></div>
+    <div class="metric"><span class="k">graph nodes</span><span class="v" id="m-nodes">–</span></div>
+    <div class="metric"><span class="k">graph links</span><span class="v" id="m-edges">–</span></div>
+
+    <div class="legend">
+      <div class="p-title" style="margin-top:14px">PILLARS <span class="muted">click to focus</span></div>
+      <div id="legend"></div>
+    </div>
+
+    <div class="road">
+      <div class="p-title" style="margin-top:14px">ROADMAP <span class="muted" id="road-count"></span></div>
+      <div id="roadmap"></div>
+    </div>
+  </aside>
+
+  <!-- ── Right: node detail + capture inbox ── -->
+  <aside class="panel p-right" id="p-right">
+    <div class="p-title">DETAIL</div>
+    <div id="detail">
+      <div class="d-empty">
+        Click any node in the graph, or search above.<br><br>
+        Pillars sit at the centre of each cluster. Skills orbit their pillar; tool
+        categories fan out into their subcategories.
+      </div>
+    </div>
+
+    <div class="p-title" style="margin-top:16px">CAPTURE <span class="muted" id="cap-count"></span></div>
+    <textarea id="cap-input" class="cap-input" placeholder="Capture a thought — stored locally, exports as Markdown for the vault…"></textarea>
+    <div class="cap-row">
+      <button class="tbtn" id="cap-add"    type="button">ADD</button>
+      <button class="tbtn" id="cap-export" type="button">EXPORT .MD</button>
+      <button class="tbtn" id="cap-clear"  type="button">CLEAR</button>
+    </div>
+    <div id="cap-list"></div>
+  </aside>
+
+  <div class="bottombar">
+    <div class="status">
+      <span id="st-mode" class="on">● GRAPH LIVE</span> ·
+      <span id="st-sel">NO SELECTION</span> ·
+      <span id="st-mic">MIC OFF</span>
+    </div>
+    <div class="hint">DRAG TO ORBIT · SCROLL TO ZOOM · CLICK A NODE · PRESS / TO SEARCH · ESC TO CLEAR</div>
+  </div>
+</div>
+
+<!-- ── Mission control: a full-screen command centre over the same data ── -->
+<div class="mc" id="mc" hidden>
+  <div class="mc-rail">
+    <div class="mc-brand">Z.E.R.O.<span>COMMAND CENTER</span></div>
+    <button class="mc-nav on" data-view="dashboard" type="button">DASHBOARD</button>
+    <button class="mc-nav" data-view="missions"  type="button">MISSION QUEUE</button>
+    <button class="mc-nav" data-view="nexus"     type="button">KNOWLEDGE NEXUS</button>
+    <button class="mc-nav" data-view="agents"    type="button">AGENT ROSTER</button>
+    <button class="mc-nav" data-view="activity"  type="button">AUDIT TRAIL</button>
+    <button class="mc-nav" data-view="vitals"    type="button">SYSTEM VITALS</button>
+    <div class="mc-rail-foot">
+      <button class="tbtn" id="mc-close" type="button">◄ BACK TO GRAPH</button>
+    </div>
+  </div>
+
+  <div class="mc-main">
+    <div class="mc-strip" id="mc-strip"></div>
+    <div class="mc-body" id="mc-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="brain-data.js"></script>
+<script>
+'use strict';
+
+// ════════════════════════════════════════════════════════════════
+//  Z.E.R.O. — a real knowledge graph over brain-data.js
+//  Data is generated by scripts/gen_secondbrain.py from the repo:
+//  .claude/skills/*/SKILL.md + README.md → pillars, skills, tools.
+// ════════════════════════════════════════════════════════════════
+const DATA = window.__BRAIN__ || null;
+
+if (!DATA) {
+  const b = document.createElement('div');
+  b.className = 'banner';
+  b.innerHTML = 'Z.E.R.O. could not load <code>brain-data.js</code>. ' +
+    'Regenerate it with <code>python3 scripts/gen_secondbrain.py</code>, ' +
+    'then reload this page.';
+  document.body.appendChild(b);
+}
+
+const $ = (id) => document.getElementById(id);
+const nodes = DATA ? DATA.nodes.map((n) => Object.assign({}, n)) : [];
+const byId = new Map(nodes.map((n) => [n.id, n]));
+const edges = DATA
+  ? DATA.edges.filter((e) => byId.has(e.s) && byId.has(e.t))
+  : [];
+
+// Adjacency, used for layout, highlighting, and the "neighbours" list.
+const adj = new Map(nodes.map((n) => [n.id, []]));
+for (const e of edges) { adj.get(e.s).push(e.t); adj.get(e.t).push(e.s); }
+
+// ── Layout: deterministic clustered sphere, then relaxed ────────
+// Pillars land on a Fibonacci sphere; each node's children fan outward from
+// their parent. A fixed number of relaxation passes then separates clusters
+// that would otherwise interpenetrate. There is still no randomness anywhere —
+// same input, same graph, every load — so the map stays memorable instead of
+// rearranging on every visit.
+const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+
+function spherePoints(count, radius, seed) {
+  const out = [];
+  for (let i = 0; i < count; i++) {
+    const y = count === 1 ? 0 : 1 - (i / (count - 1)) * 2;
+    const r = Math.sqrt(Math.max(0, 1 - y * y));
+    const th = i * GOLDEN + seed;
+    out.push([Math.cos(th) * r * radius, y * radius, Math.sin(th) * r * radius]);
+  }
+  return out;
+}
+
+// Fixed-iteration force relaxation. The breadth-first pass gets the topology
+// right but leaves sibling clusters overlapping; repulsion plus edge springs
+// pulls them apart. Every term is a pure function of the seeded positions, so
+// this stays reproducible — it is a refinement of the layout, not a simulation.
+function relax(pillars) {
+  if (nodes.length < 2) return;
+
+  const anchor = new Map(nodes.map((n) => [n.id, n.p.slice()]));
+  const pillarIds = new Set(pillars.map((p) => p.id));
+  const disp = new Map(nodes.map((n) => [n.id, [0, 0, 0]]));
+  const ITERS = 140;
+  const REPEL = 0.0016;
+  const FLOOR = 0.17;        // below this, nodes shove each other apart hard
+
+  for (let it = 0; it < ITERS; it++) {
+    const cool = 1 - it / ITERS;
+    for (const d of disp.values()) { d[0] = 0; d[1] = 0; d[2] = 0; }
+
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        let dx = a.p[0] - b.p[0], dy = a.p[1] - b.p[1], dz = a.p[2] - b.p[2];
+        let d2 = dx * dx + dy * dy + dz * dz;
+        if (d2 > 0.81) continue;                 // far enough to ignore
+        if (d2 < 1e-8) { dx = 1e-4; dy = 0; dz = 0; d2 = 1e-8; }
+        const d = Math.sqrt(d2);
+        const f = REPEL / d2 + (d < FLOOR ? (FLOOR - d) * 0.05 : 0);
+        const da = disp.get(a.id), db = disp.get(b.id);
+        da[0] += (dx / d) * f; da[1] += (dy / d) * f; da[2] += (dz / d) * f;
+        db[0] -= (dx / d) * f; db[1] -= (dy / d) * f; db[2] -= (dz / d) * f;
+      }
+    }
+
+    for (const e of edges) {
+      const a = byId.get(e.s), b = byId.get(e.t);
+      const dx = b.p[0] - a.p[0], dy = b.p[1] - a.p[1], dz = b.p[2] - a.p[2];
+      const d = Math.hypot(dx, dy, dz) || 1e-4;
+      const rest = pillarIds.has(e.s) || pillarIds.has(e.t) ? 0.36 : 0.24;
+      const f = (d - rest) * 0.06;
+      const da = disp.get(e.s), db = disp.get(e.t);
+      da[0] += (dx / d) * f; da[1] += (dy / d) * f; da[2] += (dz / d) * f;
+      db[0] -= (dx / d) * f; db[1] -= (dy / d) * f; db[2] -= (dz / d) * f;
+    }
+
+    for (const n of nodes) {
+      const d = disp.get(n.id);
+      // Pillars barely budge: they are the shape of the map, and people
+      // navigate by remembering where each one sits.
+      const w = (pillarIds.has(n.id) ? 0.15 : 1) * cool;
+      n.p[0] += d[0] * w; n.p[1] += d[1] * w; n.p[2] += d[2] * w;
+
+      // A weak tether to the seeded spot preserves cluster identity, so a node
+      // never drifts across the graph into a neighbouring pillar's territory.
+      const a = anchor.get(n.id);
+      const pull = pillarIds.has(n.id) ? 0.05 : 0.012;
+      n.p[0] += (a[0] - n.p[0]) * pull;
+      n.p[1] += (a[1] - n.p[1]) * pull;
+      n.p[2] += (a[2] - n.p[2]) * pull;
+    }
+  }
+
+  // Renormalise back into the roughly-unit volume project() is tuned for.
+  let max = 0;
+  for (const n of nodes) max = Math.max(max, Math.hypot(n.p[0], n.p[1], n.p[2]));
+  if (max > 1e-6) {
+    const k = 0.95 / max;
+    for (const n of nodes) { n.p[0] *= k; n.p[1] *= k; n.p[2] *= k; }
+  }
+}
+
+(function layout() {
+  const pillars = nodes.filter((n) => n.kind === 'pillar');
+  const centres = spherePoints(pillars.length, 0.62, 0.7);
+  pillars.forEach((p, i) => { p.p = centres[i]; });
+
+  // Children are laid out breadth-first from the pillars outwards. Offsets are
+  // biased along the parent's own outward direction: a plain sphere around the
+  // parent sends roughly half of every generation back through the middle of
+  // the graph, which is what made the dense pillars read as one tangled ball.
+  const placed = new Set(pillars.map((p) => p.id));
+  let frontier = pillars.slice();
+  let radius = 0.34;
+  let depth = 0;
+
+  while (frontier.length) {
+    const next = [];
+    for (const parent of frontier) {
+      const kids = adj.get(parent.id)
+        .map((id) => byId.get(id))
+        .filter((n) => n && !placed.has(n.id));
+      if (!kids.length) continue;
+
+      const len = Math.hypot(parent.p[0], parent.p[1], parent.p[2]) || 1;
+      const out = [parent.p[0] / len, parent.p[1] / len, parent.p[2] / len];
+      // Fan wider when a parent has many children so big clusters stop bunching.
+      const spread = radius * (1 + Math.min(kids.length, 12) * 0.05);
+      const offsets = spherePoints(kids.length, spread, parent.p[0] * 9 + parent.p[2] * 4);
+
+      kids.forEach((kid, i) => {
+        const [ox, oy, oz] = offsets[i];
+        const push = spread * (depth === 0 ? 0.85 : 0.55);
+        kid.p = [
+          parent.p[0] + ox + out[0] * push,
+          parent.p[1] + oy + out[1] * push,
+          parent.p[2] + oz + out[2] * push,
+        ];
+        placed.add(kid.id);
+        next.push(kid);
+      });
+    }
+    frontier = next;
+    radius *= 0.62;
+    depth++;
+  }
+
+  // Anything the graph never reached still needs a position.
+  const strays = nodes.filter((n) => !n.p);
+  spherePoints(strays.length, 1.15, 2.1).forEach((pt, i) => { strays[i].p = pt; });
+
+  relax(pillars);
+
+  for (const n of nodes) {
+    n.sx = 0; n.sy = 0; n.ss = 1; n.sz = 0;
+    n.r = n.kind === 'pillar' ? 6.5 : n.kind === 'category' ? 4.2 : n.kind === 'skill' ? 3.4 : 2.6;
+    n.phase = (n.p[0] + n.p[1] * 2 + n.p[2] * 3) * 4;
+  }
+})();
+
+// ── Canvas + camera ─────────────────────────────────────────────
+const canvas = $('c');
+const ctx = canvas.getContext('2d');
+let DPR = Math.min(window.devicePixelRatio || 1, 2);
+let W = 0, H = 0, t = 0;
+
+const cam = { yaw: 0.4, pitch: -0.15, zoom: 1, tYaw: 0.4, tPitch: -0.15, tZoom: 1, auto: true };
+const CAM_HOME = { yaw: 0.4, pitch: -0.15, zoom: 1 };
+
+// ── Stage ───────────────────────────────────────────────────────
+// The panels are opaque and sit on top of a full-bleed canvas, so a graph
+// centred on the raw viewport hides nodes underneath the menus. `stage` is the
+// rectangle actually left over between the panels and the top/bottom bars, and
+// everything projects into its centre. Targets are eased in frame() so opening
+// or closing a panel glides the graph across instead of snapping it.
+const stage = { cx: 0, cy: 0, r: 1, tcx: 0, tcy: 0, tr: 1, ready: false };
+
+// A panel that is display:none reports zero width, which is how the mobile
+// breakpoint and the toggle buttons both hand us their state for free.
+function panelRect(id) {
+  const el = $(id);
+  return el && el.offsetWidth ? el.getBoundingClientRect() : null;
+}
+
+function measureStage() {
+  const GAP = 20;
+  let left = GAP, right = W - GAP;
+  const lp = panelRect('p-left');
+  const rp = panelRect('p-right');
+  if (lp) left = lp.right + GAP;
+  if (rp) right = rp.left - GAP;
+  // On a narrow window the panels can leave no usable middle. Better to let
+  // them overlap a full-width graph than to squeeze it into a sliver.
+  if (right - left < 260) { left = GAP; right = W - GAP; }
+
+  const top = 92;             // clears the search bar
+  const bottom = H - 66;      // clears the status/hint bar
+  stage.tcx = (left + right) / 2;
+  stage.tcy = (top + bottom) / 2;
+  stage.tr = Math.max(140, Math.min(right - left, bottom - top) * 0.5);
+
+  if (!stage.ready) {
+    stage.cx = stage.tcx; stage.cy = stage.tcy; stage.r = stage.tr;
+    stage.ready = true;
+  }
+}
+
+function project(x, y, z) {
+  const cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+  const x1 = x * cy + z * sy;
+  const z1 = -x * sy + z * cy;
+  const cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+  const y1 = y * cp - z1 * sp;
+  const z2 = y * sp + z1 * cp;
+  const persp = 3;
+  const s = persp / (persp - z2 * cam.zoom * 0.85);
+  const R = stage.r * 0.86 * cam.zoom;
+  return { x: stage.cx + x1 * R * s, y: stage.cy + y1 * R * s, s, z: z2 };
+}
+
+function resize() {
+  // devicePixelRatio changes with browser zoom and monitor moves; resize fires
+  // for both, so re-sampling here keeps the canvas sharp instead of blurry.
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  measureStage();
+}
+window.addEventListener('resize', resize);
+resize();
+
+const rgbCache = new Map();
+function rgb(hex) {
+  let v = rgbCache.get(hex);
+  if (!v) {
+    v = [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
+    rgbCache.set(hex, v);
+  }
+  return v;
+}
+
+// ── Selection / hover / search highlight state ──────────────────
+let selected = null;
+let hovered = null;
+let matches = new Set();      // ids matched by the current search
+let isolated = null;          // node id whose neighbourhood is pinned on
+let detailTab = 'info';       // which tab the detail panel is showing
+// Both live up here rather than beside the detail panel code: frame() starts
+// before that section runs, and emphasis() reads `isolated` on the first tick.
+const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+let reduceMotion = motionQuery.matches;
+if (motionQuery.addEventListener) {
+  motionQuery.addEventListener('change', (e) => { reduceMotion = e.matches; });
+}
+
+function relatedTo(id) {
+  if (!id) return null;
+  const set = new Set(adj.get(id) || []);
+  set.add(id);
+  return set;
+}
+
+function emphasis(node) {
+  // 1 = full, <1 = dimmed. Isolation is an explicit user action, so it wins
+  // over search, which in turn wins over an incidental selection.
+  if (isolated) {
+    const pinned = relatedTo(isolated);
+    if (pinned) return pinned.has(node.id) ? 1 : 0.04;
+  }
+  if (matches.size) return matches.has(node.id) ? 1 : 0.12;
+  const near = relatedTo(selected && selected.id);
+  if (near) return near.has(node.id) ? 1 : 0.2;
+  return 1;
+}
+
+// ── Render loop ─────────────────────────────────────────────────
+function frame() {
+  requestAnimationFrame(frame);
+  t += 0.016;
+
+  if (cam.auto && !reduceMotion) cam.tYaw += 0.0013;
+  cam.yaw += (cam.tYaw - cam.yaw) * 0.07;
+  cam.pitch += (cam.tPitch - cam.pitch) * 0.07;
+  cam.zoom += (cam.tZoom - cam.zoom) * 0.07;
+
+  // Glide toward the usable rect when a panel opens or closes.
+  stage.cx += (stage.tcx - stage.cx) * 0.10;
+  stage.cy += (stage.tcy - stage.cy) * 0.10;
+  stage.r += (stage.tr - stage.r) * 0.10;
+
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+
+  // The glow follows the stage so the lit centre stays behind the graph
+  // rather than behind a panel.
+  const glow = ctx.createRadialGradient(stage.cx, stage.cy, 0, stage.cx, stage.cy, stage.r * 1.5);
+  glow.addColorStop(0, 'rgba(14,48,52,0.55)');
+  glow.addColorStop(0.55, 'rgba(8,26,34,0.28)');
+  glow.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, W, H);
+
+  for (const n of nodes) {
+    const wob = reduceMotion ? 0 : Math.sin(t * 0.5 + n.phase) * 0.008;
+    const p = project(n.p[0] + wob, n.p[1] + wob * 0.7, n.p[2] - wob);
+    n.sx = p.x; n.sy = p.y; n.ss = p.s; n.sz = p.z;
+    n.em = emphasis(n);
+  }
+
+  // Edges and node glows are drawn additively, so where light overlaps it
+  // accumulates instead of painting over. That bloom is what separates a lit
+  // graph from a flat one — the diagram reads as energy rather than ink.
+  ctx.globalCompositeOperation = 'lighter';
+
+  ctx.lineWidth = 0.8;
+  for (const e of edges) {
+    const a = byId.get(e.s), b = byId.get(e.t);
+    const em = Math.min(a.em, b.em);
+    const depth = (a.sz + b.sz) / 2;
+    const alpha = (0.07 + 0.24 * (depth + 1) / 2) * em;
+    if (alpha < 0.012) continue;
+    const [ar, ag, ab] = rgb(a.color);
+    const [br, bg, bb] = rgb(b.color);
+    const grad = ctx.createLinearGradient(a.sx, a.sy, b.sx, b.sy);
+    grad.addColorStop(0, `rgba(${ar},${ag},${ab},${alpha})`);
+    grad.addColorStop(1, `rgba(${br},${bg},${bb},${alpha})`);
+    ctx.strokeStyle = grad;
+    ctx.beginPath(); ctx.moveTo(a.sx, a.sy); ctx.lineTo(b.sx, b.sy); ctx.stroke();
+  }
+
+  // Nodes, back to front
+  const order = nodes.slice().sort((a, b) => a.sz - b.sz);
+  for (const n of order) {
+    const [r, g, b] = rgb(n.color);
+    const depthFade = 0.4 + 0.6 * (n.sz + 1) / 2;
+    const isActive = n === selected || n === hovered;
+    const alpha = Math.min(1, n.em * depthFade * (isActive ? 1.6 : 1));
+    if (alpha < 0.02) continue;
+    const size = n.r * n.ss * (isActive ? 1.5 : 1);
+    const halo = size * (isActive ? 5 : 3.2);
+
+    const gr = ctx.createRadialGradient(n.sx, n.sy, 0, n.sx, n.sy, halo);
+    gr.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.62})`);
+    gr.addColorStop(0.45, `rgba(${r},${g},${b},${alpha * 0.16})`);
+    gr.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(n.sx, n.sy, halo, 0, Math.PI * 2);
+    ctx.fillStyle = gr; ctx.fill();
+
+    ctx.beginPath(); ctx.arc(n.sx, n.sy, size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+    ctx.fill();
+
+    // A hot white core sells the "emitting light" read at small sizes, where a
+    // flat coloured disc would just look like a dot.
+    ctx.beginPath(); ctx.arc(n.sx, n.sy, size * 0.42, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${alpha * (isActive ? 0.85 : 0.45)})`;
+    ctx.fill();
+  }
+
+  ctx.globalCompositeOperation = 'source-over';
+
+  // The selection ring sits on top of the bloom, not inside it, so it stays
+  // legible however bright the neighbourhood behind it gets.
+  if (selected && selected.em > 0.02) {
+    const n = selected;
+    const [r, g, b] = rgb(n.color);
+    const size = n.r * n.ss * 1.5;
+    const pulse = reduceMotion ? 0 : Math.sin(t * 2.2) * 2.2;
+    ctx.beginPath(); ctx.arc(n.sx, n.sy, size + 7 + pulse, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(${r},${g},${b},0.9)`;
+    ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(n.sx, n.sy, size + 12 + pulse * 1.6, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(${r},${g},${b},0.22)`;
+    ctx.lineWidth = 1; ctx.stroke();
+    ctx.lineWidth = 0.8;
+  }
+
+  // Labels: pillars always; others when active, matched, or adjacent to selection.
+  const near = relatedTo(selected && selected.id);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (const n of order) {
+    const show =
+      n.kind === 'pillar' ||
+      n === hovered || n === selected ||
+      matches.has(n.id) ||
+      (near && near.has(n.id));
+    if (!show) continue;
+    const alpha = Math.min(1, n.em * (0.45 + 0.55 * (n.sz + 1) / 2));
+    if (alpha < 0.1) continue;
+    const big = n.kind === 'pillar';
+    ctx.font = `${big ? 700 : 400} ${(big ? 11 : 10) * Math.min(1.3, n.ss)}px ${getComputedStyle(document.body).fontFamily}`;
+    const label = big ? n.label : n.label.toUpperCase();
+    const y = n.sy - n.r * n.ss - 9;
+    ctx.fillStyle = `rgba(0,0,0,${alpha * 0.65})`;
+    ctx.fillText(label, n.sx + 1, y + 1);
+    ctx.fillStyle = big ? `rgba(255,255,255,${alpha})` : `rgba(200,225,240,${alpha})`;
+    ctx.fillText(label, n.sx, y);
+  }
+}
+if (DATA) frame();
+
+// ── Hit testing ─────────────────────────────────────────────────
+function nodeAt(px, py) {
+  // Nearest node whose own hit radius contains the point. No global distance
+  // cap: a zoomed pillar draws well past 22px, and clicks on its visible body
+  // must land.
+  let best = null, bestD = Infinity;
+  for (const n of nodes) {
+    if (n.em < 0.2) continue;
+    const d = Math.hypot(n.sx - px, n.sy - py);
+    const hit = Math.max(12, n.r * n.ss + 8);
+    if (d < hit && d < bestD) { best = n; bestD = d; }
+  }
+  return best;
+}
+
+// ── Pointer interaction ─────────────────────────────────────────
+const pointers = new Map();
+let dragging = false, moved = 0, lastX = 0, lastY = 0, lastPinch = 0;
+
+canvas.addEventListener('pointerdown', (e) => {
+  // Right/middle click is the context menu or paste, not a drag — letting it
+  // in would also make its release select or clear the selection.
+  if (e.pointerType === 'mouse' && e.button !== 0) return;
+  // Capture can throw if the pointer is already gone by the time the handler
+  // runs (fast taps); an uncaught throw here would abort gesture tracking and
+  // leave the pointer map inconsistent.
+  try { canvas.setPointerCapture(e.pointerId); } catch (_) { /* pointer already released */ }
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointers.size === 1) {
+    dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY;
+    canvas.classList.add('dragging');
+    cam.auto = false;
+  } else if (pointers.size === 2) {
+    // A gesture that became a pinch can never be a tap again, and its drag
+    // anchor is dead: without this, lifting one finger rotated the camera by
+    // the whole inter-finger distance, and lifting both selected whatever
+    // node sat under the second finger (or cleared the selection).
+    dragging = false;
+    moved = 1e9;
+    canvas.classList.remove('dragging');
+    const [a, b] = [...pointers.values()];
+    lastPinch = Math.hypot(a.x - b.x, a.y - b.y);
+  }
+});
+
+canvas.addEventListener('pointermove', (e) => {
+  const p = pointers.get(e.pointerId);
+  if (p) { p.x = e.clientX; p.y = e.clientY; }
+
+  if (pointers.size === 1 && dragging) {
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    moved += Math.abs(dx) + Math.abs(dy);
+    cam.tYaw += dx * 0.005;
+    cam.tPitch = Math.max(-1.3, Math.min(1.3, cam.tPitch + dy * 0.005));
+    lastX = e.clientX; lastY = e.clientY;
+  } else if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    const d = Math.hypot(a.x - b.x, a.y - b.y);
+    if (lastPinch > 0) cam.tZoom = clampZoom(cam.tZoom * (d / lastPinch));
+    lastPinch = d;
+  } else if (!pointers.size) {
+    const hit = nodeAt(e.clientX, e.clientY);
+    if (hit !== hovered) {
+      hovered = hit;
+      canvas.classList.toggle('pointing', !!hit);
+    }
+  }
+});
+
+function endPointer(e) {
+  const wasDragging = dragging && pointers.size === 1;
+  pointers.delete(e.pointerId);
+  if (pointers.size < 2) lastPinch = 0;
+  if (pointers.size === 1) {
+    // Pinch tail: hand control back to the surviving finger, anchored where
+    // that finger actually is. `moved` stays huge, so the eventual release
+    // can still never read as a tap.
+    const [p] = pointers.values();
+    lastX = p.x; lastY = p.y;
+    dragging = true;
+    canvas.classList.add('dragging');
+  }
+  if (!pointers.size) {
+    dragging = false;
+    canvas.classList.remove('dragging');
+    if (wasDragging && moved < 8) {
+      const hit = nodeAt(e.clientX, e.clientY);
+      if (hit) select(hit); else clearSelection();
+    }
+  }
+}
+canvas.addEventListener('pointerup', endPointer);
+canvas.addEventListener('pointercancel', endPointer);
+
+function clampZoom(z) { return Math.max(0.45, Math.min(3.2, z)); }
+
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  cam.tZoom = clampZoom(cam.tZoom - e.deltaY * 0.0013);
+}, { passive: false });
+
+// ── Selection + detail panel ────────────────────────────────────
+const detailEl = $('detail');
+const stSel = $('st-sel');
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (ch) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+  ));
+}
+
+function focusOn(node) {
+  // Inverting project(): x1 = x·cosY + z·sinY must be 0 with the node on the
+  // near side (z2 > 0), which needs yaw = atan2(-x, z); then z1 = |(x,z)| and
+  // y1 = y·cosP - z1·sinP = 0 needs pitch = +atan2(y, |(x,z)|). Flipping
+  // either sign swings the camera away from the node instead of onto it.
+  const [x, y, z] = node.p;
+  cam.tYaw = Math.atan2(-x, z);
+  cam.tPitch = Math.max(-1.3, Math.min(1.3, Math.atan2(y, Math.hypot(x, z))));
+  cam.tZoom = clampZoom(node.kind === 'pillar' ? 1.35 : 1.9);
+  cam.auto = false;
+}
+
+function select(node, opts) {
+  // A stale isolation pin would render the new selection at 4% emphasis —
+  // nearly invisible, with the control that caused it shown as off. Keep the
+  // pin only when navigating within its own neighbourhood.
+  if (isolated && isolated !== node.id) {
+    const pinned = relatedTo(isolated);
+    if (!pinned || !pinned.has(node.id)) isolated = null;
+  }
+  selected = node;
+  focusOn(node);
+  renderDetail(node);
+  stSel.textContent = node.label.toUpperCase().slice(0, 42);
+  if (window.innerWidth <= 900 && !(opts && opts.quiet)) openPanel('right');
+}
+
+function clearSelection() {
+  selected = null;
+  isolated = null;
+  detailTab = 'info';
+  stSel.textContent = 'NO SELECTION';
+  detailEl.innerHTML =
+    '<div class="d-empty">Click any node in the graph, or search above.</div>';
+}
+
+function toolsFor(nodeId) {
+  return DATA.tools.filter((tool) => tool.node === nodeId);
+}
+
+// ── Per-node workspace data ─────────────────────────────────────
+// Notes, tags and flags the user attaches to a node. Deliberately stored under
+// its own key rather than inside the graph: brain-data.js is regenerated from
+// the vault, so anything merged into it would be destroyed on the next build.
+let userData = null;
+function allNodeData() {
+  if (userData === null) {
+    const raw = store.read('zero.nodes', {});
+    // Arrays pass typeof 'object' but JSON.stringify drops their string keys,
+    // so an array-shaped record would silently eat every subsequent save.
+    userData = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+  }
+  return userData;
+}
+
+function nodeData(id) {
+  const d = allNodeData()[id];
+  return {
+    note: d && typeof d.note === 'string' ? d.note : '',
+    tags: d && Array.isArray(d.tags) ? d.tags : [],
+    fav: !!(d && d.fav),
+    status: d && typeof d.status === 'string' ? d.status : '',
+  };
+}
+
+function saveNodeData(id, patch) {
+  const all = allNodeData();
+  const next = Object.assign(nodeData(id), patch);
+  // Drop empty records so the store stays small and exports stay clean.
+  if (!next.note && !next.tags.length && !next.fav && !next.status) delete all[id];
+  else all[id] = next;
+  store.write('zero.nodes', all);
+}
+
+const STATUSES = ['', 'learning', 'active', 'mastered', 'parked'];
+
+// Hops from the nearest pillar. Computed once; surfaced in the DATA tab and
+// used to explain where a node sits in the hierarchy.
+const depthFromPillar = (() => {
+  const depth = new Map();
+  const queue = [];
+  for (const n of nodes) {
+    if (n.kind === 'pillar') { depth.set(n.id, 0); queue.push(n.id); }
+  }
+  for (let i = 0; i < queue.length; i++) {
+    for (const nb of adj.get(queue[i]) || []) {
+      if (!depth.has(nb)) { depth.set(nb, depth.get(queue[i]) + 1); queue.push(nb); }
+    }
+  }
+  return depth;
+})();
+
+function nodeMarkdown(n) {
+  const d = nodeData(n.id);
+  const tools = n.kind === 'subcategory' ? toolsFor(n.id) : [];
+  const nb = (adj.get(n.id) || []).map((id) => byId.get(id)).filter(Boolean);
+  const out = [`# ${n.label}`, ''];
+  out.push(`- kind: ${n.kind}`);
+  if (n.pillar) out.push(`- pillar: ${n.pillar}`);
+  if (n.invoke) out.push(`- invoke: \`${n.invoke}\``);
+  if (n.path) out.push(`- source: ${DATA.repo}/blob/master/${n.path}`);
+  if (d.status) out.push(`- status: ${d.status}`);
+  if (d.tags.length) out.push(`- tags: ${d.tags.map((t) => '#' + t).join(' ')}`);
+  out.push('');
+  if (n.detail) out.push(n.detail, '');
+  if (n.sections && n.sections.length) out.push('## Contents', ...n.sections.map((s) => `- ${s}`), '');
+  if (tools.length) {
+    out.push('## Tools', ...tools.map((t) =>
+      `- [${t.name}](${t.url})` + (t.desc ? ` — ${t.desc}` : '')), '');
+  }
+  if (nb.length) out.push('## Connected', ...nb.map((x) => `- [[${x.label}]]`), '');
+  if (d.note) out.push('## Notes', d.note, '');
+  return out.join('\n');
+}
+
+function statTile(label, value) {
+  return `<div class="d-stat"><b>${escapeHtml(String(value))}</b><span>${escapeHtml(label)}</span></div>`;
+}
+
+function renderDetail(n) {
+  if (!n) return;
+  const d = nodeData(n.id);
+  const neighbours = (adj.get(n.id) || []).map((id) => byId.get(id)).filter(Boolean);
+  const tools = n.kind === 'subcategory' ? toolsFor(n.id) : [];
+  const parts = [];
+
+  parts.push(
+    '<div class="d-head">',
+    `<span class="d-kind" style="background:${escapeHtml(n.color)}">${escapeHtml(n.kind)}</span>`,
+    `<button class="d-fav${d.fav ? ' on' : ''}" data-act="fav" type="button" ` +
+    `title="Pin this node" aria-pressed="${d.fav}">${d.fav ? '★' : '☆'}</button>`,
+    '</div>',
+    `<div class="d-name">${escapeHtml(n.label)}</div>`
+  );
+
+  parts.push(
+    '<div class="d-stats">',
+    statTile('LINKS', neighbours.length),
+    statTile('TOOLS', tools.length),
+    statTile('DEPTH', depthFromPillar.has(n.id) ? depthFromPillar.get(n.id) : '–'),
+    '</div>'
+  );
+
+  parts.push(
+    '<div class="d-acts">',
+    '<button class="tbtn" data-act="focus" type="button" title="Centre the camera">FOCUS</button>',
+    `<button class="tbtn${isolated === n.id ? ' on' : ''}" data-act="isolate" type="button" ` +
+    'title="Dim everything except this neighbourhood">ISOLATE</button>',
+    '<button class="tbtn" data-act="link" type="button" title="Copy a deep link">LINK</button>',
+    n.invoke ? '<button class="tbtn" data-act="invoke" type="button" title="Copy the invoke command">INVOKE</button>' : '',
+    '<button class="tbtn" data-act="md" type="button" title="Download as Markdown">.MD</button>',
+    '</div>'
+  );
+
+  parts.push('<div class="d-tabs">');
+  for (const [key, label] of [['info', 'INFO'], ['notes', 'NOTES'], ['data', 'DATA']]) {
+    const badge = key === 'notes' && (d.note || d.tags.length) ? ' •' : '';
+    parts.push(
+      `<button class="d-tab${detailTab === key ? ' on' : ''}" data-tab="${key}" type="button">` +
+      `${label}${badge}</button>`
+    );
+  }
+  parts.push('</div>');
+
+  if (detailTab === 'info') {
+    parts.push(`<div class="d-desc">${escapeHtml(n.detail || 'No description.')}</div>`);
+
+    if (n.kind === 'skill') {
+      parts.push(`<div class="d-meta">Invoke <code>${escapeHtml(n.invoke)}</code></div>`);
+      if (n.sections && n.sections.length) {
+        parts.push('<div class="d-sec">WHAT IS INSIDE</div><ul class="d-list">');
+        parts.push(n.sections.map((s) => `<li>› ${escapeHtml(s)}</li>`).join(''));
+        parts.push('</ul>');
+      }
+      if (n.links && n.links.length) {
+        parts.push('<div class="d-sec">EXTERNAL REFERENCES</div><ul class="d-list">');
+        parts.push(n.links.map((u) =>
+          `<li><a href="${escapeHtml(u)}" target="_blank" rel="noopener">${escapeHtml(u)}</a></li>`
+        ).join(''));
+        parts.push('</ul>');
+      }
+      parts.push(
+        '<div class="d-sec">SOURCE</div>',
+        `<ul class="d-list"><li><a href="${escapeHtml(DATA.repo)}/blob/master/${escapeHtml(n.path)}" ` +
+        `target="_blank" rel="noopener">${escapeHtml(n.path)}</a></li></ul>`
+      );
+    }
+
+    if (tools.length) {
+      parts.push(`<div class="d-sec">TOOLS · ${tools.length}</div><ul class="d-list">`);
+      parts.push(tools.map((tool) =>
+        `<li><a href="${escapeHtml(tool.url)}" target="_blank" rel="noopener">${escapeHtml(tool.name)}</a>` +
+        (tool.desc ? ` — ${escapeHtml(tool.desc)}` : '') + '</li>'
+      ).join(''));
+      parts.push('</ul>');
+    }
+
+    if (neighbours.length) {
+      parts.push(`<div class="d-sec">CONNECTED · ${neighbours.length}</div><div>`);
+      parts.push(neighbours.map((nb) =>
+        `<span class="chiplink" data-goto="${escapeHtml(nb.id)}">${escapeHtml(nb.label)}</span>`
+      ).join(''));
+      parts.push('</div>');
+    }
+  } else if (detailTab === 'notes') {
+    parts.push(
+      '<div class="d-sec">YOUR NOTE</div>',
+      `<textarea class="d-note" id="d-note" rows="7" placeholder="Write anything about ${escapeHtml(n.label)}…">${escapeHtml(d.note)}</textarea>`,
+      '<div class="d-sec">TAGS</div>',
+      `<input class="d-input" id="d-tags" type="text" spellcheck="false" placeholder="comma, separated, tags" value="${escapeHtml(d.tags.join(', '))}">`,
+      '<div class="d-sec">STATUS</div>',
+      '<div class="d-acts">'
+    );
+    for (const s of STATUSES) {
+      parts.push(
+        `<button class="tbtn${d.status === s ? ' on' : ''}" data-status="${escapeHtml(s)}" ` +
+        `type="button">${escapeHtml(s ? s.toUpperCase() : 'NONE')}</button>`
+      );
+    }
+    parts.push('</div>', '<div class="d-meta">Saved to this browser as you type.</div>');
+  } else {
+    const rows = [
+      ['id', n.id],
+      ['kind', n.kind],
+      ['pillar', n.pillar || '—'],
+      ['connections', neighbours.length],
+      ['tools', tools.length],
+      ['depth from pillar', depthFromPillar.has(n.id) ? depthFromPillar.get(n.id) : '—'],
+      ['sections', (n.sections || []).length],
+      ['external links', (n.links || []).length],
+      ['invoke', n.invoke || '—'],
+      ['source path', n.path || '—'],
+      ['colour', n.color],
+      ['status', d.status || '—'],
+      ['tags', d.tags.length ? d.tags.join(', ') : '—'],
+      ['note', d.note ? `${d.note.length} chars` : '—'],
+    ];
+    parts.push('<table class="d-table">');
+    for (const [k, v] of rows) {
+      parts.push(`<tr><th>${escapeHtml(k)}</th><td>${escapeHtml(String(v))}</td></tr>`);
+    }
+    parts.push('</table>');
+
+    const byKind = {};
+    for (const nb of neighbours) byKind[nb.kind] = (byKind[nb.kind] || 0) + 1;
+    const kinds = Object.keys(byKind);
+    if (kinds.length) {
+      parts.push('<div class="d-sec">NEIGHBOURS BY KIND</div><div>');
+      parts.push(kinds.map((k) =>
+        `<span class="chiplink" data-nofocus="1">${escapeHtml(k)} · ${byKind[k]}</span>`
+      ).join(''));
+      parts.push('</div>');
+    }
+  }
+
+  detailEl.innerHTML = parts.join('');
+}
+
+function download(name, text, type) {
+  // The anchor must be in the document and the blob URL must outlive the
+  // click — fetching a blob: URL is asynchronous, and a synchronous revoke
+  // can abort the download before it starts.
+  const url = URL.createObjectURL(new Blob([text], { type: type || 'text/plain' }));
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function copyText(text, label) {
+  const done = () => toast(label + ' copied');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, () => toast('Copy blocked by the browser'));
+  } else {
+    // file:// and older browsers have no async clipboard.
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); done(); } catch (_) { toast('Copy blocked by the browser'); }
+    ta.remove();
+  }
+}
+
+detailEl.addEventListener('click', (e) => {
+  const goto = e.target.closest('[data-goto]');
+  if (goto) {
+    const node = byId.get(goto.getAttribute('data-goto'));
+    if (node) select(node);
+    return;
+  }
+
+  const tab = e.target.closest('[data-tab]');
+  if (tab) {
+    detailTab = tab.getAttribute('data-tab');
+    renderDetail(selected);
+    return;
+  }
+
+  const statusBtn = e.target.closest('[data-status]');
+  if (statusBtn && selected) {
+    // Clicking the active status (or NONE) clears it; NONE while nothing is
+    // set is a no-op — logging it would put fabricated entries in the trail.
+    const current = nodeData(selected.id).status;
+    const next = statusBtn.getAttribute('data-status');
+    const target = current === next ? '' : next;
+    if (current !== target) {
+      saveNodeData(selected.id, { status: target });
+      logEvent('status', target
+        ? `${selected.label} → ${target}`
+        : `Cleared status on ${selected.label}`);
+    }
+    renderDetail(selected);
+    return;
+  }
+
+  const act = e.target.closest('[data-act]');
+  if (!act || !selected) return;
+  const n = selected;
+
+  switch (act.getAttribute('data-act')) {
+    case 'fav': {
+      const next = !nodeData(n.id).fav;
+      saveNodeData(n.id, { fav: next });
+      logEvent('pin', (next ? 'Pinned ' : 'Unpinned ') + n.label);
+      renderDetail(n);
+      break;
+    }
+    case 'focus':
+      focusOn(n);
+      break;
+    case 'isolate':
+      isolated = isolated === n.id ? null : n.id;
+      renderDetail(n);
+      toast(isolated ? 'Isolated · press ESC to clear' : 'Isolation cleared');
+      break;
+    case 'link':
+      copyText(location.origin + location.pathname + '#node=' + encodeURIComponent(n.id), 'Link');
+      break;
+    case 'invoke':
+      copyText(n.invoke, 'Command');
+      break;
+    case 'md':
+      download(slugForFile(n.label) + '.md', nodeMarkdown(n), 'text/markdown');
+      toast('Exported ' + n.label);
+      break;
+  }
+});
+
+function slugForFile(label) {
+  return label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'node';
+}
+
+// Typing must not re-render, or the caret jumps to the end on every keystroke.
+detailEl.addEventListener('input', (e) => {
+  if (!selected) return;
+  if (e.target.id === 'd-note') {
+    saveNodeData(selected.id, { note: e.target.value });
+  } else if (e.target.id === 'd-tags') {
+    const tags = e.target.value.split(',').map((s) => s.trim()).filter(Boolean);
+    saveNodeData(selected.id, { tags });
+  }
+});
+
+// Logged on change rather than input: `change` fires on blur, so the trail gets
+// one entry per edit instead of one per keystroke.
+detailEl.addEventListener('change', (e) => {
+  if (!selected) return;
+  if (e.target.id === 'd-note') logEvent('note', `Edited note on ${selected.label}`);
+  else if (e.target.id === 'd-tags') logEvent('tags', `Tagged ${selected.label}`);
+});
+
+// ── Search ──────────────────────────────────────────────────────
+const qEl = $('q');
+const resultsEl = $('results');
+
+const searchIndex = DATA ? [
+  ...nodes.map((n) => ({
+    kind: n.kind, name: n.label, ctx: n.pillar || '', hay:
+      (n.label + ' ' + (n.detail || '') + ' ' + (n.sections || []).join(' ')).toLowerCase(),
+    nodeId: n.id,
+  })),
+  ...DATA.tools.map((tool) => ({
+    kind: 'tool', name: tool.name, ctx: tool.sub, url: tool.url,
+    hay: (tool.name + ' ' + tool.desc + ' ' + tool.cat + ' ' + tool.sub).toLowerCase(),
+    nodeId: tool.node,
+  })),
+] : [];
+
+let resultRows = [];
+let resultCursor = -1;
+
+function runSearch(raw) {
+  const query = raw.trim().toLowerCase();
+  if (!query) {
+    matches = new Set();
+    resultRows = [];
+    resultsEl.classList.remove('on');
+    resultsEl.innerHTML = '';
+    return;
+  }
+
+  const terms = query.split(/\s+/);
+  const scored = [];
+  for (const item of searchIndex) {
+    if (!terms.every((term) => item.hay.includes(term))) continue;
+    const name = item.name.toLowerCase();
+    let score = 0;
+    if (name === query) score += 100;
+    else if (name.startsWith(query)) score += 50;
+    else if (name.includes(query)) score += 25;
+    if (item.kind === 'skill') score += 8;
+    if (item.kind === 'pillar') score += 6;
+    scored.push({ item, score: score - name.length * 0.02 });
+  }
+  scored.sort((a, b) => b.score - a.score);
+
+  resultRows = scored.slice(0, 60).map((s) => s.item);
+  matches = new Set(resultRows.map((r) => r.nodeId).filter(Boolean));
+  resultCursor = -1;
+
+  if (!resultRows.length) {
+    resultsEl.innerHTML = `<div class="res-empty">No match for “${escapeHtml(raw.trim())}”.</div>`;
+  } else {
+    resultsEl.innerHTML = resultRows.map((r, i) =>
+      `<div class="res" data-i="${i}" role="option">` +
+      `<span class="res-kind ${r.kind === 'tool' ? 'tool' : ''}">${escapeHtml(r.kind)}</span>` +
+      `<span class="res-name">${escapeHtml(r.name)}</span>` +
+      `<span class="res-ctx">${escapeHtml(r.ctx || '')}</span></div>`
+    ).join('');
+  }
+  resultsEl.classList.add('on');
+}
+
+function openResult(row) {
+  if (!row) return;
+  if (row.kind === 'tool' && row.url) {
+    // Keep the dropdown for tools — opening one link often leads to the next.
+    window.open(row.url, '_blank', 'noopener');
+    return;
+  }
+  const node = byId.get(row.nodeId);
+  if (node) {
+    select(node);
+    // The search has done its job; leaving it active would keep the dropdown
+    // over the graph and the rest of the nodes dimmed by stale matches.
+    qEl.value = '';
+    runSearch('');
+    qEl.blur();
+  }
+}
+
+qEl.addEventListener('input', () => runSearch(qEl.value));
+
+qEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    // Dismiss the search only. Without stopPropagation the same event reaches
+    // the document handler, which — because blur() has already moved focus to
+    // BODY — would also clear the selection and isolation in one keypress.
+    e.stopPropagation();
+    qEl.value = ''; runSearch(''); qEl.blur();
+    return;
+  }
+  if (!resultRows.length) return;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (resultCursor === -1) resultCursor = e.key === 'ArrowDown' ? 0 : resultRows.length - 1;
+    else resultCursor = (resultCursor + (e.key === 'ArrowDown' ? 1 : -1) + resultRows.length) % resultRows.length;
+    [...resultsEl.children].forEach((el, i) => el.classList.toggle('sel', i === resultCursor));
+    const active = resultsEl.children[resultCursor];
+    if (active) active.scrollIntoView({ block: 'nearest' });
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    openResult(resultRows[resultCursor >= 0 ? resultCursor : 0]);
+  }
+});
+
+resultsEl.addEventListener('click', (e) => {
+  const row = e.target.closest('.res');
+  if (row) openResult(resultRows[Number(row.getAttribute('data-i'))]);
+});
+
+document.addEventListener('keydown', (e) => {
+  const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+  const mod = e.metaKey || e.ctrlKey || e.altKey;
+  // '/' must not run under mission control: it would focus the search box
+  // hidden beneath the overlay, and every later keystroke — including the M
+  // to leave — would type into an input nobody can see.
+  if (e.key === '/' && !typing && !mod && !mcOpen) { e.preventDefault(); qEl.focus(); qEl.select(); }
+  else if ((e.key === 'm' || e.key === 'M') && !typing && !mod) { setMC(!mcOpen); }
+  else if (e.key === 'Escape' && !typing) {
+    // Mission control is the top layer, so ESC dismisses it before it starts
+    // tearing down the graph's search and selection underneath.
+    if (mcOpen) { setMC(false); return; }
+    qEl.value = ''; runSearch(''); clearSelection();
+  }
+});
+
+// ── Left panel: metrics, legend, roadmap ────────────────────────
+if (DATA) {
+  $('m-skills').textContent = DATA.counts.skills;
+  $('m-tools').textContent = DATA.counts.tools;
+  $('m-cats').textContent = DATA.counts.categories;
+  $('m-nodes').textContent = nodes.length;
+  $('m-edges').textContent = edges.length;
+
+  $('legend').innerHTML = DATA.pillars.map((p) => {
+    const count = nodes.filter((n) => n.pillar === p.id && n.kind !== 'pillar').length;
+    return `<div class="leg" data-pillar="${escapeHtml(p.id)}">` +
+      `<span class="leg-dot" style="background:${escapeHtml(p.color)}"></span>` +
+      `<span class="leg-name">${escapeHtml(p.emoji + ' ' + p.name)}</span>` +
+      `<span class="leg-n">${count}</span></div>`;
+  }).join('');
+
+  $('legend').addEventListener('click', (e) => {
+    const row = e.target.closest('[data-pillar]');
+    if (!row) return;
+    const node = byId.get('pillar:' + row.getAttribute('data-pillar'));
+    if (node) select(node);
+  });
+}
+
+// ── Persistence ─────────────────────────────────────────────────
+let storeWarned = false;
+const store = {
+  read(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw === null ? fallback : JSON.parse(raw);
+    } catch (_) { return fallback; }
+  },
+  write(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (_) {
+      // Quota or private mode. Warn once — the UI otherwise confirms saves
+      // that never happened, and the user finds out on the next reload.
+      if (!storeWarned) {
+        storeWarned = true;
+        toast('Storage unavailable — changes will not survive a reload');
+      }
+      return false;
+    }
+  },
+};
+
+// Roadmap — defaults come from the generated data, ticks are remembered.
+const roadmapEl = $('roadmap');
+let roadDone = store.read('zero.roadmap', null);
+
+function renderRoadmap() {
+  if (!DATA) return;
+  // An array would pass typeof 'object', but its string-keyed ticks are
+  // dropped by JSON.stringify — every tick would silently stop persisting.
+  if (!roadDone || typeof roadDone !== 'object' || Array.isArray(roadDone)) {
+    roadDone = {};
+    for (const phase of DATA.roadmap) roadDone[phase.id] = phase.done;
+  }
+  // New phases added by the generator show up with their shipped default.
+  for (const phase of DATA.roadmap) {
+    if (!(phase.id in roadDone)) roadDone[phase.id] = phase.done;
+  }
+
+  roadmapEl.innerHTML = DATA.roadmap.map((phase) =>
+    `<div class="road-item ${roadDone[phase.id] ? 'done' : ''}" data-phase="${escapeHtml(phase.id)}">` +
+    `<span class="road-box">${roadDone[phase.id] ? '✓' : ''}</span>` +
+    `<span class="road-label">${escapeHtml(phase.label)}</span></div>`
+  ).join('');
+
+  const done = DATA.roadmap.filter((p) => roadDone[p.id]).length;
+  $('road-count').textContent = `${done}/${DATA.roadmap.length}`;
+}
+
+roadmapEl.addEventListener('click', (e) => {
+  const row = e.target.closest('[data-phase]');
+  if (!row) return;
+  const id = row.getAttribute('data-phase');
+  roadDone[id] = !roadDone[id];
+  store.write('zero.roadmap', roadDone);
+  renderRoadmap();
+  // Same action as the mission-control tick, so it earns the same trail
+  // entry — the audit trail promises to show every mission ticked.
+  const label = (DATA.roadmap.find((p) => p.id === id) || {}).label || id;
+  logEvent('roadmap', (roadDone[id] ? 'Completed: ' : 'Reopened: ') + label);
+});
+renderRoadmap();
+
+// Capture inbox — local notes, exportable as Markdown for the vault.
+const capList = $('cap-list');
+const capInput = $('cap-input');
+let captures = store.read('zero.captures', []);
+// One malformed element would crash renderCaptures() during startup and take
+// every later listener registration down with it — drop bad records instead.
+captures = Array.isArray(captures)
+  ? captures.filter((n) => n && typeof n.text === 'string' && Number.isFinite(n.at))
+  : [];
+
+function renderCaptures() {
+  $('cap-count').textContent = captures.length ? String(captures.length) : '';
+  capList.innerHTML = captures.map((note, i) =>
+    `<div class="cap-note">${escapeHtml(note.text)}` +
+    `<time>${escapeHtml(new Date(note.at).toLocaleString())}</time>` +
+    `<span class="cap-del" data-del="${i}" title="Delete">×</span></div>`
+  ).join('');
+}
+
+$('cap-add').addEventListener('click', () => {
+  const text = capInput.value.trim();
+  if (!text) { toast('Nothing to capture'); return; }
+  captures.unshift({ text, at: Date.now() });
+  store.write('zero.captures', captures);
+  capInput.value = '';
+  renderCaptures();
+  logEvent('capture', 'Captured: ' + text.slice(0, 60) + (text.length > 60 ? '…' : ''));
+  toast('Captured');
+});
+
+capInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) $('cap-add').click();
+});
+
+capList.addEventListener('click', (e) => {
+  const del = e.target.closest('[data-del]');
+  if (!del) return;
+  captures.splice(Number(del.getAttribute('data-del')), 1);
+  store.write('zero.captures', captures);
+  renderCaptures();
+});
+
+$('cap-clear').addEventListener('click', () => {
+  if (!captures.length) return;
+  if (!window.confirm(`Delete all ${captures.length} captured notes?`)) return;
+  captures = [];
+  store.write('zero.captures', captures);
+  renderCaptures();
+  toast('Capture inbox cleared');
+});
+
+$('cap-export').addEventListener('click', () => {
+  if (!captures.length) { toast('Nothing to export'); return; }
+  const lines = [
+    '---',
+    'title: Capture Inbox',
+    'tags:',
+    '  - capture',
+    '---',
+    '',
+    '# Capture Inbox',
+    '',
+    'Exported from the [[Z.E.R.O. Console]]. Link each note to its pillar, then delete it here.',
+    '',
+  ];
+  for (const note of captures) {
+    lines.push(`## ${new Date(note.at).toISOString().slice(0, 16).replace('T', ' ')}`, '', note.text, '');
+  }
+  const blob = new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Capture Inbox.md';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  toast('Exported — drop it into vault/');
+});
+renderCaptures();
+
+// ── Uptime ──────────────────────────────────────────────────────
+const sessionStart = Date.now();
+const priorUptime = Number(store.read('zero.uptime', 0)) || 0;
+function totalUptime() { return priorUptime + Math.floor((Date.now() - sessionStart) / 1000); }
+setInterval(() => {
+  const s = totalUptime();
+  $('sys-uptime').textContent = [s / 3600, (s % 3600) / 60, s % 60]
+    .map((v) => String(Math.floor(v)).padStart(2, '0')).join(':');
+}, 1000);
+setInterval(() => store.write('zero.uptime', totalUptime()), 10000);
+window.addEventListener('pagehide', () => store.write('zero.uptime', totalUptime()));
+
+// ── Toast ───────────────────────────────────────────────────────
+let toastTimer = null;
+function toast(message) {
+  const el = $('toast');
+  el.textContent = message;
+  el.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('on'), 1900);
+}
+
+// ── Panel toggles + reset ───────────────────────────────────────
+// Two regimes share one API. Narrow windows only have room for one panel at a
+// time, so there `.open` reveals and opening one closes the other. On desktop
+// both panels are up by default and `.collapsed` takes one down — which is what
+// makes SYS/INFO useful for reclaiming graph space instead of being mobile-only.
+const isNarrow = () => window.innerWidth <= 900;
+const panelEl = (side) => (side === 'left' ? $('p-left') : $('p-right'));
+const panelBtn = (side) => (side === 'left' ? $('btn-left') : $('btn-right'));
+const panelIsOpen = (side) => panelEl(side).offsetWidth > 0;
+
+function setPanel(side, open) {
+  const panel = panelEl(side);
+  if (isNarrow()) {
+    panel.classList.remove('collapsed');
+    panel.classList.toggle('open', open);
+    if (open) {
+      const other = side === 'left' ? 'right' : 'left';
+      panelEl(other).classList.remove('open');
+      panelBtn(other).classList.remove('on');
+    }
+  } else {
+    panel.classList.remove('open');
+    panel.classList.toggle('collapsed', !open);
+  }
+  panelBtn(side).classList.toggle('on', open);
+  measureStage();          // reads layout back, so the graph re-centres at once
+}
+
+function openPanel(side) { setPanel(side, true); }
+function togglePanel(side) { setPanel(side, !panelIsOpen(side)); }
+
+// Buttons reflect whatever the current breakpoint actually shows.
+function syncPanelButtons() {
+  for (const side of ['left', 'right']) {
+    panelBtn(side).classList.toggle('on', panelIsOpen(side));
+  }
+}
+window.addEventListener('resize', syncPanelButtons);
+syncPanelButtons();   // both panels start open on desktop; the buttons should say so
+$('btn-left').addEventListener('click', () => togglePanel('left'));
+$('btn-right').addEventListener('click', () => togglePanel('right'));
+
+$('btn-reset').addEventListener('click', () => {
+  cam.tYaw = CAM_HOME.yaw; cam.tPitch = CAM_HOME.pitch; cam.tZoom = CAM_HOME.zoom;
+  cam.auto = true;
+  qEl.value = ''; runSearch('');
+  clearSelection();
+  toast('View reset');
+});
+
+// ── Voice search (optional, never required) ─────────────────────
+// "Hey Zero" wakes it; the next utterance is typed into the search box.
+const micBtn = $('btn-mic');
+const stMic = $('st-mic');
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null, micOn = false, awake = false, wakeTimer = null;
+
+function setMicStatus(text, on) {
+  stMic.textContent = text;
+  stMic.className = on ? 'on' : '';
+  micBtn.classList.toggle('on', micOn);
+}
+
+function stopMic() {
+  micOn = false; awake = false;
+  clearTimeout(wakeTimer);
+  if (rec) { try { rec.stop(); } catch (_) { /* already stopped */ } }
+  setMicStatus('MIC OFF', false);
+}
+
+function startMic() {
+  if (!SR) { toast('This browser has no Web Speech API'); return; }
+  if (!rec) {
+    rec = new SR();
+    rec.continuous = true;
+    rec.interimResults = false;
+    rec.lang = 'en-US';
+
+    rec.onstart = () => setMicStatus('MIC LIVE · SAY "HEY ZERO"', true);
+
+    rec.onresult = (ev) => {
+      for (let i = ev.resultIndex; i < ev.results.length; i++) {
+        const said = ev.results[i][0].transcript.trim();
+        const lower = said.toLowerCase();
+        if (!awake) {
+          const m = lower.match(/\b(?:hey|hi|ok)[, ]+(?:zero|hero)\b[,.]?\s*(.*)$/);
+          if (!m) continue;
+          awake = true;
+          setMicStatus('LISTENING…', true);
+          clearTimeout(wakeTimer);
+          wakeTimer = setTimeout(() => {
+            awake = false;
+            setMicStatus('MIC LIVE · SAY "HEY ZERO"', true);
+          }, 9000);
+          if (m[1]) { awake = false; voiceQuery(m[1]); }
+        } else {
+          awake = false;
+          clearTimeout(wakeTimer);
+          voiceQuery(said);
+        }
+      }
+    };
+
+    rec.onerror = (ev) => {
+      if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') {
+        micOn = false;
+        setMicStatus('MIC BLOCKED', false);
+        toast('Microphone permission denied');
+      }
+    };
+
+    rec.onend = () => {
+      if (!micOn) { setMicStatus('MIC OFF', false); return; }
+      // Chrome ends the session periodically; restart while the user wants it on.
+      setTimeout(() => { if (micOn) { try { rec.start(); } catch (_) { /* racing restart */ } } }, 400);
+    };
+  }
+  micOn = true;
+  try { rec.start(); } catch (_) { /* already running */ }
+  setMicStatus('MIC LIVE · SAY "HEY ZERO"', true);
+}
+
+function voiceQuery(text) {
+  const query = text.replace(/[.?!]+$/, '').trim();
+  if (!query) { setMicStatus('MIC LIVE · SAY "HEY ZERO"', true); return; }
+  qEl.value = query;
+  runSearch(query);
+  setMicStatus('MIC LIVE · SAY "HEY ZERO"', true);
+  if (resultRows.length) { openResult(resultRows[0]); toast('Voice: ' + query); }
+  else toast('No match for “' + query + '”');
+}
+
+micBtn.addEventListener('click', () => (micOn ? stopMic() : startMic()));
+if (!SR) setMicStatus('MIC UNAVAILABLE', false);
+
+// ── Service worker (shares the site-root registration) ──────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('../sw.js').catch(() => { /* offline-only feature */ });
+  });
+}
+
+// ── Deep link: #node=<id> ───────────────────────────────────────
+// ── Event log ───────────────────────────────────────────────────
+// Backs the audit trail. Only real actions are recorded — nothing here is
+// synthesised, so an empty trail honestly means "you have not done anything
+// yet" rather than showing invented activity.
+let events = store.read('zero.events', []);
+events = Array.isArray(events)
+  ? events.filter((ev) => ev && typeof ev.text === 'string' && Number.isFinite(ev.at))
+  : [];
+
+function logEvent(kind, text) {
+  events.unshift({ kind, text, at: Date.now() });
+  events = events.slice(0, 80);
+  store.write('zero.events', events);
+  if (mcOpen) renderMC();
+}
+
+// ── Mission control ─────────────────────────────────────────────
+const mcEl = $('mc');
+const mcBody = $('mc-body');
+const mcStrip = $('mc-strip');
+let mcOpen = false;
+let mcView = 'dashboard';
+let vitals = null;              // filled in asynchronously where available
+
+const STATUS_COLOR = {
+  mastered: '#4ff5d2', active: '#7ee787', learning: '#ffcf6b', parked: '#6f8a92',
+};
+
+function roadStats() {
+  const total = DATA.roadmap.length;
+  const done = DATA.roadmap.filter((p) => roadDone[p.id]).length;
+  return { total, done, pct: total ? Math.round((done / total) * 100) : 0 };
+}
+
+// Everything the user has actually written, across all nodes. Records whose
+// node vanished in a vault regeneration are kept in storage (the node may
+// come back) but must not inflate the live statistics.
+function workspaceStats() {
+  const all = allNodeData();
+  const ids = Object.keys(all).filter((id) => byId.has(id));
+  let notes = 0, pinned = 0;
+  const tags = new Set();
+  const statuses = {};
+  for (const id of ids) {
+    const d = nodeData(id);
+    if (d.note) notes++;
+    if (d.fav) pinned++;
+    for (const t of d.tags) tags.add(t);
+    if (d.status) statuses[d.status] = (statuses[d.status] || 0) + 1;
+  }
+  return { touched: ids.length, notes, pinned, tags: tags.size, statuses };
+}
+
+function tile(value, label) {
+  return `<div class="mc-tile"><b>${escapeHtml(String(value))}</b><span>${escapeHtml(label)}</span></div>`;
+}
+function card(title, meta, inner) {
+  return `<div class="mc-card"><h3>${escapeHtml(title)}` +
+    (meta ? `<em>${escapeHtml(meta)}</em>` : '') + `</h3>${inner}</div>`;
+}
+
+function renderStrip() {
+  if (!DATA) return;   // called on a timer, so it must tolerate a failed data load
+  const road = roadStats();
+  const ws = workspaceStats();
+  const now = new Date();
+  const bits = [
+    ['SYSTEM', 'ONLINE'],
+    ['GRAPH', `${nodes.length} NODES`],
+    ['SKILLS', DATA.counts.skills],
+    ['TOOLS', DATA.counts.tools],
+    ['ROADMAP', `${road.done}/${road.total}`],
+    ['NOTES', ws.notes],
+    ['CAPTURES', captures.length],
+    ['LOCAL', now.toLocaleTimeString()],
+  ];
+  mcStrip.innerHTML = bits.map(([k, v]) =>
+    `<div><span>${escapeHtml(k)}</span><b>${escapeHtml(String(v))}</b></div>`).join('');
+}
+
+function viewMissions() {
+  const road = roadStats();
+  const rows = DATA.roadmap.map((p, i) => {
+    const done = !!roadDone[p.id];
+    return `<div class="mc-row${done ? ' done' : ''}">` +
+      `<span class="pri">P${i}</span>` +
+      `<span class="lbl" data-phase="${escapeHtml(p.id)}">${escapeHtml(p.label)}</span>` +
+      `<span class="badge${done ? ' ok' : ''}">${done ? 'DONE' : 'OPEN'}</span></div>`;
+  }).join('');
+  return card('MISSION QUEUE', `${road.done}/${road.total} complete`,
+    `<div class="mc-tiles" style="margin-bottom:12px">${tile(road.done, 'DONE')}${tile(road.total - road.done, 'OPEN')}${tile(road.pct + '%', 'PROGRESS')}</div>` +
+    `<div class="bar" style="margin-bottom:12px"><i style="width:${road.pct}%"></i></div>` + rows);
+}
+
+function viewNexus() {
+  // Nodes carry their pillar's *id* ("memory"), not its display name.
+  const cards = DATA.pillars.map((p) => {
+    const node = nodes.find((n) => n.kind === 'pillar' && n.pillar === p.id);
+    const members = nodes.filter((n) => n.pillar === p.id && n.kind !== 'pillar');
+    const tools = members.reduce((sum, n) => sum + toolsFor(n.id).length, 0);
+    return `<div class="mc-mini" data-focus="${escapeHtml(node ? node.id : '')}">` +
+      `<div class="nm">${escapeHtml(p.name)}</div>` +
+      `<div class="ct"><span class="dot" style="background:${escapeHtml(node ? node.color : '#6f8a92')}"></span>` +
+      `${members.length} NODES · ${tools} TOOLS</div></div>`;
+  }).join('');
+  return card('KNOWLEDGE NEXUS', `${DATA.pillars.length} pillars`,
+    `<div class="mc-cards">${cards}</div>`);
+}
+
+function viewAgents(limit) {
+  const all = nodes.filter((n) => n.kind === 'skill');
+  const skills = limit ? all.slice(0, limit) : all;
+  const rows = skills.map((n) => {
+    const d = nodeData(n.id);
+    const colour = STATUS_COLOR[d.status] || 'rgba(111,138,146,.5)';
+    return `<div class="mc-mini" data-focus="${escapeHtml(n.id)}">` +
+      `<div class="nm">${escapeHtml(n.label)}</div>` +
+      `<div class="ct"><span class="dot" style="background:${colour}"></span>` +
+      `${escapeHtml((d.status || 'unset').toUpperCase())}${d.fav ? ' · PINNED' : ''}</div></div>`;
+  }).join('');
+  const ws = workspaceStats();
+  const counts = Object.entries(ws.statuses)
+    .map(([k, v]) => `${k} ${v}`).join(' · ') || 'no status set yet';
+  const meta = limit && all.length > limit
+    ? `${counts} · showing ${limit} of ${all.length}` : counts;
+  return card('AGENT ROSTER', meta, `<div class="mc-cards">${rows}</div>`);
+}
+
+function viewActivity() {
+  if (!events.length) {
+    return card('AUDIT TRAIL', 'no activity yet',
+      '<div class="mc-empty">Nothing recorded yet. Ticking a mission, writing a note, ' +
+      'setting a status or adding a capture will appear here.<br><br>' +
+      'This trail only ever shows things you actually did — it is never populated with sample data.</div>');
+  }
+  const rows = events.map((e) =>
+    `<div><time>${escapeHtml(new Date(e.at).toLocaleString())}</time>` +
+    `${escapeHtml(e.text)}</div>`).join('');
+  return card('AUDIT TRAIL', `${events.length} events`, `<div class="mc-feed">${rows}</div>`);
+}
+
+// What THIS console has written, measured directly. navigator.storage.estimate
+// is origin-wide (dominated by the service-worker caches), so it gets its own
+// honestly-labelled row instead of masquerading as "local storage".
+function localStorageBytes() {
+  try {
+    let chars = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      chars += k.length + (localStorage.getItem(k) || '').length;
+    }
+    return (chars * 2 / 1024).toFixed(1) + ' KB';   // UTF-16: 2 bytes per unit
+  } catch (_) { return 'unavailable'; }
+}
+
+function viewVitals() {
+  const ws = workspaceStats();
+  const rows = [
+    ['graph nodes', nodes.length],
+    ['graph links', edges.length],
+    ['skills', DATA.counts.skills],
+    ['tools', DATA.counts.tools],
+    ['categories', DATA.counts.categories],
+    ['nodes you have touched', ws.touched],
+    ['notes written', ws.notes],
+    ['distinct tags', ws.tags],
+    ['pinned nodes', ws.pinned],
+    ['captures held', captures.length],
+    ['logged events', events.length],
+    ['connection', navigator.onLine ? 'online' : 'offline'],
+    ['cpu threads', navigator.hardwareConcurrency || 'unavailable'],
+    ['device memory', navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'unavailable'],
+    ['console data (localStorage)', localStorageBytes()],
+    ['origin storage incl. caches', vitals && vitals.usage != null ? vitals.usage : 'measuring…'],
+  ];
+  const table = '<table class="d-table">' + rows.map(([k, v]) =>
+    `<tr><th>${escapeHtml(k)}</th><td>${escapeHtml(String(v))}</td></tr>`).join('') + '</table>';
+  return card('SYSTEM VITALS', 'measured, not simulated', table +
+    '<div class="mc-empty" style="margin-top:10px">Browsers cannot report CPU or GPU load, ' +
+    'so those are absent rather than faked.</div>');
+}
+
+function viewDashboard() {
+  const road = roadStats();
+  const ws = workspaceStats();
+  const recent = events.slice(0, 6);
+  const feed = recent.length
+    ? `<div class="mc-feed">${recent.map((e) =>
+        `<div><time>${escapeHtml(new Date(e.at).toLocaleTimeString())}</time>${escapeHtml(e.text)}</div>`).join('')}</div>`
+    : '<div class="mc-empty">No activity recorded yet.</div>';
+
+  const open = DATA.roadmap.filter((p) => !roadDone[p.id]).slice(0, 4);
+  const next = open.length
+    ? open.map((p, i) => `<div class="mc-row"><span class="pri">P${DATA.roadmap.indexOf(p)}</span>` +
+        `<span class="lbl" data-phase="${escapeHtml(p.id)}">${escapeHtml(p.label)}</span>` +
+        `<span class="badge${i === 0 ? ' live' : ''}">${i === 0 ? 'NEXT' : 'QUEUED'}</span></div>`).join('')
+    : '<div class="mc-empty">Every phase is complete.</div>';
+
+  return (
+    card('OVERVIEW', '', `<div class="mc-tiles">${
+      tile(DATA.counts.skills, 'SKILLS')}${tile(DATA.counts.tools, 'TOOLS')}${
+      tile(nodes.length, 'NODES')}${tile(road.pct + '%', 'ROADMAP')}${
+      tile(ws.notes, 'NOTES')}${tile(captures.length, 'CAPTURES')}</div>`) +
+    card('UP NEXT', `${road.total - road.done} open`, next) +
+    card('RECENT ACTIVITY', '', feed) +
+    // The dashboard is the landing view, so it carries a live slice of the
+    // other sections rather than making you click through to see anything.
+    viewNexus() +
+    viewAgents(8)
+  );
+}
+
+const MC_VIEWS = {
+  dashboard: viewDashboard, missions: viewMissions, nexus: viewNexus,
+  agents: viewAgents, activity: viewActivity, vitals: viewVitals,
+};
+
+function renderMC() {
+  if (!DATA) return;
+  renderStrip();
+  // Repaints happen mid-scroll (a tick, a logged event); losing the reading
+  // position on every one makes long views unusable.
+  const scroll = mcBody.scrollTop;
+  mcBody.innerHTML = `<div class="mc-grid">${(MC_VIEWS[mcView] || viewDashboard)()}</div>`;
+  mcBody.scrollTop = scroll;
+}
+
+let mcClock = null;
+function setMC(open) {
+  mcOpen = open;
+  mcEl.hidden = !open;
+  $('btn-mc').classList.toggle('on', open);
+  clearInterval(mcClock);
+  if (open) {
+    renderMC();
+    // Only the strip re-renders on the tick — it holds no user input, and the
+    // LOCAL cell would otherwise freeze at whatever time the overlay opened.
+    mcClock = setInterval(renderStrip, 1000);
+    // Storage size is async; fill it in and repaint once it lands.
+    if (navigator.storage && navigator.storage.estimate) {
+      navigator.storage.estimate().then((est) => {
+        vitals = { usage: est.usage != null ? (est.usage / 1024).toFixed(1) + ' KB' : 'unavailable' };
+        if (mcOpen && mcView === 'vitals') renderMC();
+      }, () => { vitals = { usage: 'unavailable' }; });
+    } else {
+      vitals = { usage: 'unavailable' };
+    }
+  }
+}
+
+$('btn-mc').addEventListener('click', () => setMC(!mcOpen));
+$('mc-close').addEventListener('click', () => setMC(false));
+
+mcEl.addEventListener('click', (e) => {
+  const nav = e.target.closest('[data-view]');
+  if (nav) {
+    mcView = nav.getAttribute('data-view');
+    for (const b of mcEl.querySelectorAll('.mc-nav')) b.classList.toggle('on', b === nav);
+    renderMC();
+    return;
+  }
+
+  // Ticking a mission here is the same action as in the side panel.
+  const phase = e.target.closest('[data-phase]');
+  if (phase) {
+    const id = phase.getAttribute('data-phase');
+    roadDone[id] = !roadDone[id];
+    store.write('zero.roadmap', roadDone);
+    renderRoadmap();
+    const label = (DATA.roadmap.find((p) => p.id === id) || {}).label || id;
+    // logEvent repaints mission control itself while it is open — a second
+    // renderMC() here would render twice per tick for nothing.
+    logEvent('roadmap', (roadDone[id] ? 'Completed: ' : 'Reopened: ') + label);
+    return;
+  }
+
+  // Jumping to a node closes the centre so you land on the graph.
+  const focus = e.target.closest('[data-focus]');
+  if (focus) {
+    const node = byId.get(focus.getAttribute('data-focus'));
+    if (node) { setMC(false); select(node); }
+  }
+});
+
+// ── Cross-tab sync ──────────────────────────────────────────────
+// Every save serialises a whole store, so a tab holding a stale in-memory
+// copy used to erase edits made in another tab or PWA window. The storage
+// event fires in all OTHER tabs whenever a key changes; folding the new value
+// back in here means this tab's next write already includes them — and the
+// visible UI follows along live.
+window.addEventListener('storage', (e) => {
+  if (!e.key || !e.key.startsWith('zero.')) return;
+  const incoming = store.read(e.key, null);
+  switch (e.key) {
+    case 'zero.nodes': {
+      userData = incoming && typeof incoming === 'object' && !Array.isArray(incoming)
+        ? incoming : {};
+      // Never repaint under an active editor — it would clobber the caret and
+      // whatever is being typed. Saves fire per keystroke, so local edits to
+      // the same node win on the next key anyway.
+      const editing = document.activeElement && /^(d-note|d-tags)$/.test(document.activeElement.id || '');
+      if (selected && !editing) renderDetail(selected);
+      break;
+    }
+    case 'zero.roadmap':
+      roadDone = incoming;          // renderRoadmap re-validates the shape
+      renderRoadmap();
+      break;
+    case 'zero.captures':
+      captures = Array.isArray(incoming)
+        ? incoming.filter((n) => n && typeof n.text === 'string' && Number.isFinite(n.at))
+        : [];
+      renderCaptures();
+      break;
+    case 'zero.events':
+      events = Array.isArray(incoming)
+        ? incoming.filter((ev) => ev && typeof ev.text === 'string' && Number.isFinite(ev.at))
+        : [];
+      break;
+    default:
+      return;                       // zero.uptime etc — nothing rendered from them
+  }
+  if (mcOpen) renderMC();
+});
+
+function applyHash() {
+  const m = location.hash.match(/^#node=(.+)$/);
+  if (!m) return;
+  const node = byId.get(decodeURIComponent(m[1]));
+  if (node) select(node, { quiet: true });
+}
+window.addEventListener('hashchange', applyHash);
+if (DATA) applyHash();
+</script>
+</body>
+</html>
