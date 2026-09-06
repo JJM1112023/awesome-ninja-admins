@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance for AI assistants working with the **awesome-ninja-admins** repository.
+This file provides guidance for AI assistants working with the **second-brain** repository (formerly `awesome-ninja-admins`).
 
 ## Project Type
 
