@@ -3,7 +3,7 @@ window.__BRAIN__ = {
  "schema": 1,
  "repo": "https://github.com/JJM1112023/second-brain",
  "counts": {
-  "skills": 34,
+  "skills": 35,
   "pillars": 7,
   "categories": 12,
   "subcategories": 35,
@@ -351,22 +351,37 @@ window.__BRAIN__ = {
    "kind": "skill",
    "label": "always-on-agents",
    "color": "#cc44ff",
-   "detail": "Always-on agentic OS — running 3 AI agents 24/7 for 30 days. Covers the complete stack: CLAUDE.md for persistent memory, MCP for tool connections, and a setup you can build in under 30 minutes.",
+   "detail": "Design and operate bounded, observable, least-privilege background agents for AS-OS. Use for scheduled Claude Code work, MCP-connected automation, recurring monitoring, handoffs, retries, budgets, and approval gates.",
    "pillar": "agents",
    "sections": [
-    "The experiment",
-    "Why CLAUDE.md is the backbone",
-    "The three-layer CLAUDE.md stack",
-    "MCP: the tool layer",
-    "The 30-minute agentic OS setup",
-    "What 30 days of running 3 agents taught",
-    "State persistence pattern",
-    "Running 3 agents in parallel",
-    "Key principle"
+    "Separate the persistent layers",
+    "Bound every job",
+    "MCP rules",
+    "Permission modes",
+    "Safe recurring loop",
+    "Minimum rollout",
+    "Verification checklist"
    ],
    "links": [],
    "path": ".claude/skills/always-on-agents/SKILL.md",
    "invoke": "/always-on-agents"
+  },
+  {
+   "id": "skill:as-os-build-guard",
+   "kind": "skill",
+   "label": "as-os-build-guard",
+   "color": "#cc44ff",
+   "detail": "Automatically protect this AS-OS second-brain build from material changes in MCP, Claude/OpenAI APIs and models, Copilot, GitHub Actions, Replit, Android tooling, authentication, pricing, limits, and automation. Use whenever planning, changing, testing, deploying, reviewing, or resuming those surfaces.",
+   "pillar": "agents",
+   "sections": [
+    "Automatic workflow",
+    "Required checks",
+    "AS-OS boundaries",
+    "Verification"
+   ],
+   "links": [],
+   "path": ".claude/skills/as-os-build-guard/SKILL.md",
+   "invoke": "/as-os-build-guard"
   },
   {
    "id": "skill:autoresearch",
@@ -434,17 +449,15 @@ window.__BRAIN__ = {
    "kind": "skill",
    "label": "claude-security",
    "color": "#cc44ff",
-   "detail": "Security practices for Claude Code projects — auto-mode classifier, OAuth, permission scoping, secrets management, and protecting against prompt injection.",
+   "detail": "Secure Claude Code projects with current permission modes, scoped rules, protected data boundaries, MCP review, secret handling, prompt-injection defenses, and approval-gated external actions.",
    "pillar": "agents",
    "sections": [
     "Permission modes",
-    "Auto-mode classifier",
-    "OAuth and credential safety",
-    "Secrets management skill",
-    "Prompt injection protection",
-    "Permission allowlists",
-    "Hooks as a security gate",
-    "Security checklist"
+    "Permission rules",
+    "Secrets and data",
+    "MCP and plugins",
+    "Prompt-injection defenses",
+    "Verification"
    ],
    "links": [],
    "path": ".claude/skills/claude-security/SKILL.md",
@@ -1344,6 +1357,10 @@ window.__BRAIN__ = {
   {
    "s": "pillar:agents",
    "t": "skill:always-on-agents"
+  },
+  {
+   "s": "pillar:agents",
+   "t": "skill:as-os-build-guard"
   },
   {
    "s": "pillar:agents",

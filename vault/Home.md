@@ -3,7 +3,7 @@ title: Home
 tags:
   - moc
   - home
-skills: 34
+skills: 35
 tools: 180
 ---
 
@@ -15,7 +15,7 @@ tools: 180
 
 - 🧠 [[Memory & Second Brain]] — The core. Where knowledge is stored, structured, and survives between sessions. *(5 notes)*
 - 🎙️ [[Jarvis Interface]] — How you talk to the brain — voice, dashboards, and the daily briefing. *(4 notes)*
-- 🤖 [[Agent Engine]] — The automation muscle — orchestration, parallelism, safety rails. *(11 notes)*
+- 🤖 [[Agent Engine]] — The automation muscle — orchestration, parallelism, safety rails. *(12 notes)*
 - 💼 [[Business Launchpad]] — Turning the brain into revenue — the LLC, client sites, and service lines. *(9 notes)*
 - 🛠️ [[Repo Maintenance]] — Keeping the repository itself healthy and consistent. *(2 notes)*
 - 🗡️ [[Tool Arsenal]] — The curated sysadmin tool library in README.md, grouped by domain. *(12 notes)*
@@ -32,7 +32,7 @@ tools: 180
 
 | Metric | Count |
 |---|---|
-| Skills | 34 |
+| Skills | 35 |
 | Pillars | 7 |
 | Tool categories | 12 |
 | Tool subcategories | 35 |

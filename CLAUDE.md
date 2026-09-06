@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance for AI assistants working with the **awesome-ninja-admins** repository.
+This file provides guidance for AI assistants working with the **second-brain** repository (formerly `awesome-ninja-admins`).
 
 ## Identity / Session Context
 
@@ -12,10 +12,29 @@ This file provides guidance for AI assistants working with the **awesome-ninja-a
 
 - NEVER commit without a signed-off-by line
 - PR target is `testing` branch, NOT `master` (if `testing` doesn't exist yet, create it before opening a PR)
+- Automatically apply `.claude/skills/as-os-build-guard/SKILL.md` whenever work touches AI assistants, MCP, provider APIs or models, authentication, Copilot, GitHub Actions, Replit, Android tooling, or automation
 - ALWAYS read README.md before adding entries (avoid duplicates)
 - ALWAYS place entries in existing categories before creating new ones
 - Zero truncation — complete code blocks only
 - Speculative execution: state assumptions, then build
+- **Status-dot naming**: every PR title, session title, and project/task name starts with a status dot as its FIRST character (see "Status-dot naming" below). Set it on creation, update it whenever the status changes, and fix any name missing its dot when you touch that item.
+
+## Status-dot naming
+
+Names double as a status board: the FIRST character of every PR title, session title, and project/task name is a status dot, so the owner can scan any list and see what needs them without opening items.
+
+| Dot | Meaning | Owner action |
+| --- | ------- | ------------ |
+| 🔴 | Broken or blocked — red CI, merge conflict, hard blocker | Needed **now** |
+| 🟡 | Waiting on the owner — review, decision, checklist, approval | Needed when convenient |
+| 🟢 | Healthy — in progress or done, CI green | None |
+| ⚪ | Parked — draft, idea, or deliberately on hold | None |
+
+Rules:
+- The dot is the first character, then a space, then the normal name (e.g. `🟡 Add private preview launcher`).
+- Update the dot the moment status changes (PR goes green → 🟢; CI breaks → 🔴; handed to owner → 🟡). A stale dot is worse than no dot.
+- Applies to: PR titles, Claude/agent session titles, and project or task names in trackers. Not commits, branches, or file names — those follow their own conventions. GitHub already dots individual CI builds (✓/✗), so workflow job names stay plain.
+- When touching an item whose name lacks a dot, add the correct one as part of the change.
 
 ## Project Type
 
