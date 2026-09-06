@@ -112,7 +112,13 @@ PILLARS = [
         "emoji": "🛠️",
         "color": "#dddd44",
         "blurb": "Keeping the repository itself healthy and consistent.",
-        "skills": ["add-entry", "review"],
+        "skills": [
+            "add-entry",
+            "add-readme-entry",
+            "review",
+            "shellcheck-fix",
+            "signed-commit",
+        ],
     },
     {
         "id": "arsenal",

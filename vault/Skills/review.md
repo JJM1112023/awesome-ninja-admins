@@ -22,3 +22,6 @@ Pillar: [[Repo Maintenance]] · Up: [[Home]]
 ## Siblings in this pillar
 
 - [[add-entry]]
+- [[add-readme-entry]]
+- [[shellcheck-fix]]
+- [[signed-commit]]

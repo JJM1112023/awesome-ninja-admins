@@ -3,12 +3,12 @@ title: Infrastructure
 tags:
   - tools
   - tools/infrastructure
-tools: 13
+tools: 14
 ---
 
 # Infrastructure
 
-13 curated tools. Pillar: [[Tool Arsenal]] · Up: [[Home]]
+14 curated tools. Pillar: [[Tool Arsenal]] · Up: [[Home]]
 
 ## Containers & Virtualization
 
@@ -25,6 +25,7 @@ tools: 13
 ## Backup & Recovery
 
 - [BorgBackup](https://www.borgbackup.org/) — deduplicating archiver with compression, encryption, and authenticated data integrity
+- [Kopia](https://kopia.io/) — fast, encrypted, deduplicated backups to cloud storage targets, with CLI and GUI
 - [rclone](https://rclone.org/) — command-line program for syncing files to and from cloud storage providers
 - [restic](https://restic.net/) — fast, secure, verifiable backup program supporting multiple backends
 

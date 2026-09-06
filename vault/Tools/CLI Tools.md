@@ -3,12 +3,12 @@ title: CLI Tools
 tags:
   - tools
   - tools/cli-tools
-tools: 29
+tools: 34
 ---
 
 # CLI Tools
 
-29 curated tools. Pillar: [[Tool Arsenal]] · Up: [[Home]]
+34 curated tools. Pillar: [[Tool Arsenal]] · Up: [[Home]]
 
 ## Shells
 
@@ -47,12 +47,17 @@ tools: 29
 - [Curl](https://curl.haxx.se/) — command line tool and library for transferring data with URLs
 - [gnutls-cli](https://gnutls.org/manual/html_node/gnutls_002dcli-Invocation.html) — client program to set up a TLS connection to some other computer
 - [HTTPie](https://github.com/jkbrzt/httpie) — user-friendly HTTP client with JSON support, syntax highlighting, and intuitive syntax
+- [iperf3](https://github.com/esnet/iperf) — active network throughput measurement tool for TCP, UDP, and SCTP
 - [netcat](http://netcat.sourceforge.net/) — networking utility which reads and writes data across network connections, using the TCP/IP protocol
 - [tcpdump](https://www.tcpdump.org/) — powerful command-line packet analyzer
+- [xh](https://github.com/ducaale/xh) — fast, friendly HTTPie-style HTTP client written in Rust
 
 ## Databases
 
+- [litecli](https://github.com/dbcli/litecli) — SQLite CLI with autocompletion and syntax highlighting
+- [mycli](https://github.com/dbcli/mycli) — MySQL and MariaDB CLI with autocompletion and syntax highlighting
 - [pgcli](https://github.com/dbcli/pgcli) — postgres CLI with autocompletion and syntax highlighting
+- [usql](https://github.com/xo/usql) — universal command-line client covering Postgres, MySQL, SQLite, SQL Server, and more
 
 ## Other categories
 
