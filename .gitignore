@@ -19,3 +19,7 @@ vault/Private/
 # Python bytecode — created whenever the test suite imports the generator.
 __pycache__/
 *.pyc
+
+# Firecrawl CLI working directory (scraped content, cache, install checks).
+# Never commit scraped web content or local Firecrawl state.
+.firecrawl/
