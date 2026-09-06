@@ -2,8 +2,8 @@
  "schema": 1,
  "repo": "https://github.com/JJM1112023/second-brain",
  "counts": {
-  "skills": 31,
-  "pillars": 6,
+  "skills": 34,
+  "pillars": 7,
   "categories": 12,
   "subcategories": 35,
   "tools": 180
@@ -50,6 +50,13 @@
    "emoji": "🗡️",
    "color": "#ff4444",
    "blurb": "The curated sysadmin tool library in README.md, grouped by domain."
+  },
+  {
+   "id": "unsorted",
+   "name": "Unsorted",
+   "emoji": "📥",
+   "color": "#8899aa",
+   "blurb": "Skills not yet assigned to a pillar. Add them to PILLARS in scripts/gen_secondbrain.py."
   }
  ],
  "nodes": [
@@ -780,6 +787,51 @@
    "pillar": "arsenal"
   },
   {
+   "id": "pillar:unsorted",
+   "kind": "pillar",
+   "label": "UNSORTED",
+   "color": "#8899aa",
+   "emoji": "📥",
+   "detail": "Skills not yet assigned to a pillar. Add them to PILLARS in scripts/gen_secondbrain.py.",
+   "pillar": "unsorted"
+  },
+  {
+   "id": "skill:add-readme-entry",
+   "kind": "skill",
+   "label": "add-readme-entry",
+   "color": "#8899aa",
+   "detail": "This skill should be used when the user asks to \"add a tool\", \"add an entry to the list\", \"insert a new resource\", or \"update README with a new link\". Enforces the HTML-in-Markdown format and correct category placement.",
+   "pillar": "unsorted",
+   "sections": [],
+   "links": [],
+   "path": ".claude/skills/add-readme-entry/SKILL.md",
+   "invoke": "/add-readme-entry"
+  },
+  {
+   "id": "skill:shellcheck-fix",
+   "kind": "skill",
+   "label": "shellcheck-fix",
+   "color": "#8899aa",
+   "detail": "This skill should be used when the user asks to \"fix shellcheck errors\", \"lint bash scripts\", \"validate scripts\", or \"check src/ files\". Runs shellcheck and resolves flagged issues.",
+   "pillar": "unsorted",
+   "sections": [],
+   "links": [],
+   "path": ".claude/skills/shellcheck-fix/SKILL.md",
+   "invoke": "/shellcheck-fix"
+  },
+  {
+   "id": "skill:signed-commit",
+   "kind": "skill",
+   "label": "signed-commit",
+   "color": "#8899aa",
+   "detail": "This skill should be used when the user asks to \"commit\", \"push changes\", \"make a commit\", or \"submit work\". Ensures signed-off-by line is always present.",
+   "pillar": "unsorted",
+   "sections": [],
+   "links": [],
+   "path": ".claude/skills/signed-commit/SKILL.md",
+   "invoke": "/signed-commit"
+  },
+  {
    "id": "cat:cli-tools",
    "kind": "category",
    "label": "CLI Tools",
@@ -1363,6 +1415,18 @@
   {
    "s": "pillar:maintenance",
    "t": "skill:review"
+  },
+  {
+   "s": "pillar:unsorted",
+   "t": "skill:add-readme-entry"
+  },
+  {
+   "s": "pillar:unsorted",
+   "t": "skill:shellcheck-fix"
+  },
+  {
+   "s": "pillar:unsorted",
+   "t": "skill:signed-commit"
   },
   {
    "s": "pillar:arsenal",

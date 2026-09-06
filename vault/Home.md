@@ -3,7 +3,7 @@ title: Home
 tags:
   - moc
   - home
-skills: 31
+skills: 34
 tools: 180
 ---
 
@@ -19,6 +19,7 @@ tools: 180
 - 💼 [[Business Launchpad]] — Turning the brain into revenue — the LLC, client sites, and service lines. *(9 notes)*
 - 🛠️ [[Repo Maintenance]] — Keeping the repository itself healthy and consistent. *(2 notes)*
 - 🗡️ [[Tool Arsenal]] — The curated sysadmin tool library in README.md, grouped by domain. *(12 notes)*
+- 📥 [[Unsorted]] — Skills not yet assigned to a pillar. Add them to PILLARS in scripts/gen_secondbrain.py. *(3 notes)*
 
 ## Fast lanes
 
@@ -31,8 +32,8 @@ tools: 180
 
 | Metric | Count |
 |---|---|
-| Skills | 31 |
-| Pillars | 6 |
+| Skills | 34 |
+| Pillars | 7 |
 | Tool categories | 12 |
 | Tool subcategories | 35 |
 | Curated tools | 180 |
