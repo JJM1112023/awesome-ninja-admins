@@ -6,7 +6,7 @@
  *   - Nav requests: network-first, fall back to cached shell (works offline)
  *   - New SW takes control immediately; page can prompt for refresh
  */
-const VERSION = "v1.3.3";
+const VERSION = "v1.4.0";
 const SHELL = "ninja-shell-" + VERSION;
 const RUNTIME = "ninja-runtime-" + VERSION;
 
@@ -23,6 +23,8 @@ const SHELL_ASSETS = [
   "./zero-brain/",
   "./zero-brain/index.html",
   "./zero-brain/brain-data.js",
+  // The landing page's category tool browser reads this at tap time.
+  "./zero-brain/brain.json",
 ];
 
 self.addEventListener("install", (event) => {
