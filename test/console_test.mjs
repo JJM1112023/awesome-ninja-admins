@@ -483,6 +483,11 @@ async function run(chromium, base) {
     await page.locator('#p-left').isVisible());
   await check('the page never scrolls sideways', () =>
     page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
+  await check('visible buttons meet the 44px touch guideline', () =>
+    page.evaluate(() =>
+      [...document.querySelectorAll('.tbtn')]
+        .filter((b) => b.offsetParent)
+        .every((b) => b.getBoundingClientRect().height >= 44)));
   await page.setViewportSize({ width: 1440, height: 900 });
 
   // ── landing page ────────────────────────────────────────────────────────
@@ -493,6 +498,27 @@ async function run(chromium, base) {
     (await page.locator('#grid > *').count()) > 0);
   await check('it links to the console', async () =>
     (await page.locator('a[href="zero-brain/"]').count()) > 0);
+  // The category cards open an in-page tool browser fed by brain.json; only
+  // a modifier-click keeps the original jump to the GitHub README anchor.
+  await check('a category card opens the in-page tool browser', async () => {
+    await page.locator('.card').first().click();
+    await page.waitForSelector('#ovl.on', { timeout: 5000 });
+    return (await page.locator('#ovl .ovl-row').count()) > 0;
+  });
+  await check('sub-chips filter the tool list', async () => {
+    const total = await page.locator('#ovl .ovl-row').count();
+    const chips = page.locator('#ovl-subs .chip');
+    if ((await chips.count()) < 2) return false;
+    await chips.nth(1).click();
+    await page.waitForTimeout(250);
+    const filtered = await page.locator('#ovl .ovl-row').count();
+    return filtered > 0 && filtered < total;
+  });
+  await check('escape closes the tool browser', async () => {
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(250);
+    return (await page.locator('#ovl.on').count()) === 0;
+  });
 
   // ── console hygiene ─────────────────────────────────────────────────────
   section('console hygiene');

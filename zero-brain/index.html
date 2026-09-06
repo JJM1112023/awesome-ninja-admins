@@ -385,6 +385,18 @@ code { background: rgba(var(--cy-rgb), .10); padding: 1px 4px; border-radius: 2p
   .p-left.open, .p-right.open { display: block; }
   .hint { display: none; }
 }
+
+/* ── Comfortable touch targets (phones + touch tablets) ──
+   Galaxy S-class phones report ~384px CSS width; Android guidance wants
+   ≥44-48px targets. The keyboard-shortcut badge means nothing on touch. */
+@media (max-width: 900px), (pointer: coarse) {
+  .tbtn { padding: 13px 12px; font-size: 10px; min-height: 44px; }
+  .toolbtns { gap: 8px; }
+  .mc-nav { padding: 12px 10px; }
+  .cap-del { font-size: 16px; padding: 6px 10px; top: 0; }
+  .search-kbd { display: none; }
+  .searchbox { min-height: 44px; }
+}
 </style>
 </head>
 <body>
@@ -1759,6 +1771,13 @@ window.addEventListener('resize', syncPanelButtons);
 syncPanelButtons();   // both panels start open on desktop; the buttons should say so
 $('btn-left').addEventListener('click', () => togglePanel('left'));
 $('btn-right').addEventListener('click', () => togglePanel('right'));
+
+// The bottom-bar gesture hint is hidden on narrow screens, so touch users
+// would never learn the vocabulary — surface it once as a toast instead.
+if (matchMedia('(pointer: coarse)').matches && !store.read('zero.touchHintShown', false)) {
+  setTimeout(() => toast('DRAG TO ORBIT · PINCH TO ZOOM · TAP A NODE'), 1400);
+  store.write('zero.touchHintShown', true);
+}
 
 $('btn-reset').addEventListener('click', () => {
   cam.tYaw = CAM_HOME.yaw; cam.tPitch = CAM_HOME.pitch; cam.tZoom = CAM_HOME.zoom;

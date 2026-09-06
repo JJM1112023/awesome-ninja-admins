@@ -149,6 +149,40 @@
   }
   .chip:hover{color:var(--ink);border-color:var(--accent)}
   .chip.active{background:var(--accent);color:#04060b;border-color:var(--accent)}
+  @media (pointer:coarse){
+    .chip{padding:13px 16px;font-size:12px}
+    .card .sub{padding:7px 10px;font-size:11px}
+  }
+
+  /* ---------- Category tool browser (in-page overlay) ---------- */
+  .ovl{position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;justify-content:center;
+    background:rgba(2,6,14,.72);backdrop-filter:blur(6px)}
+  .ovl.on{display:flex}
+  .ovl-panel{position:relative;width:min(720px,100%);max-height:82vh;display:flex;flex-direction:column;
+    background:#0a1020;border:1px solid var(--card-brd);border-radius:18px 18px 0 0;
+    box-shadow:0 -20px 80px rgba(0,255,198,.12)}
+  @media (min-width:760px){
+    .ovl{align-items:center;padding:24px}
+    .ovl-panel{border-radius:18px;max-height:80vh}
+  }
+  .ovl-head{display:flex;align-items:center;gap:12px;padding:18px 20px 10px}
+  .ovl-head .glyph{font-size:22px}
+  .ovl-head h3{margin:0;font-family:'JetBrains Mono';font-size:18px;flex:1}
+  .ovl-close{width:44px;height:44px;flex:0 0 44px;border-radius:10px;border:1px solid rgba(255,255,255,.15);
+    background:transparent;color:var(--ink);font-size:18px;cursor:pointer}
+  .ovl-close:hover{border-color:var(--accent);color:var(--accent)}
+  .ovl-subs{display:flex;flex-wrap:wrap;gap:6px;padding:4px 20px 12px}
+  .ovl-list{overflow-y:auto;padding:0 20px;flex:1;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+  .ovl-row{display:block;padding:12px 10px;border-top:1px solid rgba(255,255,255,.07);border-radius:8px}
+  .ovl-row:hover{background:rgba(0,255,198,.06);text-decoration:none}
+  .ovl-row .t{font-family:'JetBrains Mono';font-size:14px;color:var(--accent)}
+  .ovl-row .s{float:right;font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;
+    font-family:'JetBrains Mono';margin-top:3px}
+  .ovl-row p{margin:3px 0 0;color:var(--dim);font-size:13px;line-height:1.45}
+  .ovl-empty{color:var(--dim);padding:20px 0}
+  .ovl-foot{padding:12px 20px calc(14px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.08);
+    display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:'JetBrains Mono';font-size:12px}
+  .ovl-count{color:var(--dim)}
 
   .grid{
     position:relative;z-index:5;
@@ -366,6 +400,7 @@ CATS.forEach((c,i)=>{
   const el = document.createElement("a");
   el.className = "card";
   el.dataset.tag = c.tag;
+  el.dataset.catId = c.id;
   el.dataset.name = (c.title+" "+c.subs.join(" ")).toLowerCase();
   el.href = "https://github.com/JJM1112023/second-brain#"+c.id;
   el.target = "_blank"; el.rel = "noopener";
@@ -416,6 +451,101 @@ q.addEventListener("input",()=>{
 });
 document.addEventListener("keydown",(e)=>{
   if(e.key==="/" && document.activeElement!==q){e.preventDefault();q.focus();}
+});
+
+/* ============================================================
+   CATEGORY TOOL BROWSER
+   Tapping a card opens the category's actual tools in-page
+   (from the Z.E.R.O. brain payload) instead of bouncing to
+   GitHub. Falls back to the GitHub README anchor if the data
+   cannot be loaded. Modifier-clicks keep the original link.
+============================================================ */
+const esc=(s)=>String(s??"").replace(/[&<>"']/g,(ch)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+const norm=(s)=>String(s).toLowerCase().replace(/[^a-z0-9]/g,"");
+let brainPromise=null;
+function loadBrain(){
+  if(!brainPromise){
+    brainPromise=fetch("zero-brain/brain.json")
+      .then(r=>{ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+      .catch(()=>{ brainPromise=null; return null; });
+  }
+  return brainPromise;
+}
+
+const ovl=document.createElement("div");
+ovl.className="ovl"; ovl.id="ovl";
+ovl.innerHTML=`
+  <div class="ovl-panel" role="dialog" aria-modal="true" aria-labelledby="ovl-title">
+    <div class="ovl-head">
+      <span class="glyph mono" id="ovl-glyph"></span>
+      <h3 id="ovl-title"></h3>
+      <button class="ovl-close" id="ovl-close" type="button" aria-label="Close">✕</button>
+    </div>
+    <div class="ovl-subs" id="ovl-subs"></div>
+    <div class="ovl-list" id="ovl-list"></div>
+    <div class="ovl-foot">
+      <span class="ovl-count" id="ovl-count"></span>
+      <a id="ovl-gh" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+  </div>`;
+document.body.appendChild(ovl);
+
+let lastFocus=null;
+function closeOvl(){
+  ovl.classList.remove("on");
+  document.body.style.overflow="";
+  if(lastFocus&&lastFocus.focus) lastFocus.focus();
+}
+ovl.addEventListener("click",(e)=>{ if(e.target===ovl) closeOvl(); });
+document.getElementById("ovl-close").addEventListener("click",closeOvl);
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="Escape"&&ovl.classList.contains("on")) closeOvl();
+});
+
+function renderOvlList(tools,sub){
+  const rows=tools.filter(t=>!sub||t.sub===sub);
+  document.getElementById("ovl-list").innerHTML = rows.length
+    ? rows.map(t=>`<a class="ovl-row" href="${esc(t.url)}" target="_blank" rel="noopener">
+        <span class="s">${esc(t.sub)}</span><span class="t">${esc(t.name)}</span>
+        <p>${esc(t.desc)}</p></a>`).join("")
+    : `<p class="ovl-empty">No tools recorded here yet — add one to README.md.</p>`;
+  document.getElementById("ovl-count").textContent=`${rows.length} / ${tools.length} tools`;
+  document.querySelectorAll("#ovl-subs .chip").forEach(c=>
+    c.classList.toggle("active",(c.dataset.sub||"")===(sub||"")));
+  document.getElementById("ovl-list").scrollTop=0;
+}
+
+async function openOvl(card){
+  const brain=await loadBrain();
+  if(!brain||!Array.isArray(brain.tools)) return false;
+  const key=norm(card.dataset.catId||"");
+  const cat=CATS.find(c=>norm(c.id)===key);
+  const tools=brain.tools.filter(t=>norm(t.cat)===key);
+  document.getElementById("ovl-glyph").textContent=cat?cat.glyph:"✦";
+  document.getElementById("ovl-title").textContent=cat?cat.title:card.dataset.catId;
+  document.getElementById("ovl-gh").href=card.href;
+  const subs=[...new Set(tools.map(t=>t.sub).filter(Boolean))];
+  document.getElementById("ovl-subs").innerHTML=
+    [`<button class="chip active" type="button">All</button>`]
+      .concat(subs.map(s=>`<button class="chip" type="button" data-sub="${esc(s)}">${esc(s)}</button>`))
+      .join("");
+  document.getElementById("ovl-subs").onclick=(e)=>{
+    const b=e.target.closest(".chip"); if(b) renderOvlList(tools,b.dataset.sub||null);
+  };
+  renderOvlList(tools,null);
+  lastFocus=document.activeElement;
+  ovl.classList.add("on");
+  document.body.style.overflow="hidden";
+  document.getElementById("ovl-close").focus();
+  return true;
+}
+
+grid.addEventListener("click",async(e)=>{
+  const card=e.target.closest(".card"); if(!card) return;
+  if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;  // keep power-user link behavior
+  e.preventDefault();
+  const ok=await openOvl(card);
+  if(!ok) window.open(card.href,"_blank","noopener");         // no data → original GitHub jump
 });
 
 /* Reveal on scroll */
