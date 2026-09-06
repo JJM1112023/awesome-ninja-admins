@@ -2,7 +2,7 @@
   "name": "Awesome Ninja Admins — Immersive Codex",
   "short_name": "Ninja Codex",
   "description": "Curated arsenal of lists, manuals, blogs, hacks and tools for admins — presented as an immersive 3D codex.",
-  "id": "/awesome-ninja-admins/",
+  "id": "/second-brain/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
